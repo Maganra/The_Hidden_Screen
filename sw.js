@@ -2,7 +2,7 @@
    Cache-first app shell so the whole app works offline after the first visit.
    Google Fonts are cached at runtime; if they never load, the app falls back
    to Georgia/serif gracefully. Bump VERSION to push an update. */
-const VERSION = "hidden-screen-v3";
+const VERSION = "hidden-screen-v7";
 const SHELL = [
   "./",
   "./index.html",
@@ -34,7 +34,8 @@ self.addEventListener("fetch", e => {
         hit ||
         fetch(e.request).then(res => {
           const copy = res.clone();
-          caches.open(VERSION).then(c => c.put(e.request, copy));
+          // waitUntil keeps the SW alive until the cache write finishes
+          e.waitUntil(caches.open(VERSION).then(c => c.put(e.request, copy)));
           return res;
         }).catch(() => hit) // offline & uncached: let CSS font fallback handle it
       )

@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>The Hidden Screen — DM Companion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Alegreya:ital,wght@0,500;0,700;1,500&family=Alegreya+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -34,6 +35,10 @@ header{border-bottom:1px solid var(--line);padding:18px 20px 0;background:linear
 .mast{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;max-width:1100px;margin:0 auto}
 .mast h1{font-family:'Cinzel',serif;font-weight:700;font-size:24px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
 .mast .sub{font-style:italic;color:var(--parch-dim);font-size:14px}
+.campsel{margin-left:auto;display:flex;gap:6px;align-items:center}
+.campsel select{max-width:200px;padding:5px 8px;font-size:14px}
+.campsel .btn{padding:5px 10px}
+@media(max-width:640px){.campsel{margin-left:0;width:100%;justify-content:flex-start}.campsel select{flex:1;max-width:none}}
 nav{max-width:1100px;margin:10px auto 0;display:flex;gap:2px;flex-wrap:wrap}
 nav button{background:none;border:none;border-bottom:3px solid transparent;color:var(--parch-dim);
   font-family:'Alegreya Sans SC',sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;padding:10px 16px}
@@ -251,6 +256,45 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
 .warnbar{background:#3a201c;border:1px solid var(--oxblood);color:#e7b3a9;padding:8px 14px;font-size:14px;display:flex;gap:10px;align-items:center;border-radius:6px;margin-bottom:14px}
 .warnbar button{margin-left:auto}
 
+/* ---------- encounter cart + saved library + difficulty ---------- */
+.cartpanel{background:var(--panel);border:1px dashed var(--brass-dim);border-radius:6px;padding:10px 12px;margin-bottom:14px}
+.cartpanel .cline{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:14px;flex-wrap:wrap}
+.cartpanel .cline .cn{flex:1;min-width:120px}
+.cartpanel .cstep{background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:4px;width:26px;height:26px;cursor:pointer}
+.cartpanel .ctot{font-family:'Alegreya Sans SC',sans-serif;font-size:13px;color:var(--parch-dim);margin:6px 0;letter-spacing:.04em}
+.cartrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.cartrow label{font-size:13px;color:var(--parch-dim)}
+.diff{font-family:'Alegreya Sans SC',sans-serif;font-weight:700;letter-spacing:.06em;padding:1px 8px;border-radius:10px;font-size:12px}
+.diff.trivial{color:var(--parch-dim);border:1px solid var(--line)}
+.diff.easy{color:var(--sage);border:1px solid #3c5c41}
+.diff.medium{color:var(--brass);border:1px solid var(--brass-dim)}
+.diff.hard{color:#d8a93f;border:1px solid #8a6d36}
+.diff.deadly{color:#d98a7f;border:1px solid var(--oxblood)}
+.libpanel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:14px}
+.libpanel .lrow{display:flex;gap:8px;align-items:center;margin-bottom:5px;flex-wrap:wrap}
+.libpanel .lrow .ln{flex:1;min-width:120px;color:var(--parch)}
+
+/* ---------- clues, sessions, burial-site doom ---------- */
+.clueform,.sessform{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-start}
+.clueform input,.sessform input{flex:1;min-width:140px}
+.cluecard{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px}
+.cluecard.st-open{border-left-color:var(--brass-dim)}.cluecard.st-active{border-left-color:var(--brass)}
+.cluecard.st-resolved{border-left-color:var(--sage)}.cluecard.st-dead{border-left-color:var(--oxblood);opacity:.7}
+.cluehead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cluehead b{font-size:16px}
+.statuspill{font-family:'Alegreya Sans SC',sans-serif;font-size:12px;letter-spacing:.05em;border:1px solid var(--line);border-radius:10px;padding:1px 10px;cursor:pointer;margin-left:auto}
+.st-open .statuspill{color:var(--brass)}.st-active .statuspill{color:#e6b84e;border-color:#6a5526}
+.st-resolved .statuspill{color:var(--sage);border-color:#3c5c41}.st-dead .statuspill{color:#d98a7f;border-color:var(--oxblood)}
+.cluenote{margin-top:5px;font-size:14px;color:#d9cdb2;line-height:1.5}
+.recap{background:#221c15;border:1px solid var(--brass-dim);border-radius:6px;padding:12px 14px;margin-bottom:16px}
+.recap h3{font-family:'Cinzel',serif;color:var(--brass);font-size:15px;letter-spacing:.1em;margin-bottom:4px}
+.recap .rdate{color:var(--parch-dim);font-size:12.5px;font-style:italic}
+.sessentry{border-bottom:1px solid #2e2820;padding:8px 0;font-size:14px}
+.sessentry .sdate{color:var(--brass);font-family:'Alegreya Sans SC',sans-serif;font-size:12.5px;letter-spacing:.05em}
+.sitecell{cursor:pointer;font-family:'Alegreya Sans SC',sans-serif;font-size:12px;letter-spacing:.05em;border-radius:10px;padding:1px 9px;border:1px solid var(--line)}
+.sitecell.sealed{color:var(--sage);border-color:#3c5c41}.sitecell.cracked{color:#e6b84e;border-color:#6a5526}.sitecell.broken{color:#d98a7f;border-color:var(--oxblood);background:#2a1714}
+.npctag{font-family:'Alegreya Sans SC',sans-serif;font-size:11px;letter-spacing:.05em;color:var(--parch-dim);border:1px solid var(--line);border-radius:10px;padding:1px 8px;margin-right:5px}
+
 /* ---------- campaign (DM canon) ---------- */
 .camp .secretline{color:#d98a7f;font-family:'Alegreya Sans SC',sans-serif;font-size:13.5px;letter-spacing:.04em;filter:blur(5px);cursor:pointer;transition:filter .12s}
 .camp .secretline.shown{filter:none}
@@ -283,7 +327,13 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
 </head>
 <body>
 <header>
-  <div class="mast"><h1>The Hidden Screen</h1><span class="sub">a dungeon master's companion</span></div>
+  <div class="mast"><h1>The Hidden Screen</h1><span class="sub">a dungeon master's companion</span>
+    <span class="campsel">
+      <select id="campSel" title="active campaign" aria-label="active campaign"></select>
+      <button class="btn ghost" id="campNew" title="new campaign">＋</button>
+      <button class="btn ghost" id="campRen" title="rename campaign">✎</button>
+      <button class="btn ghost" id="campDel" title="delete campaign">✕</button>
+    </span></div>
   <nav>
     <button class="on" data-tab="rules">Rules</button>
     <button data-tab="bestiary">Bestiary</button>
@@ -305,6 +355,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
     <div class="searchrow">
       <input id="monSearch" type="search" placeholder="Search monsters…">
       <select id="crFilter"><option value="">All CRs</option></select>
+      <select id="envFilter"><option value="">All biomes</option><option value="forest">Forest</option><option value="swamp">Swamp</option><option value="urban">Urban</option><option value="underground">Underground</option><option value="mountain">Mountain</option><option value="coastal">Coastal</option><option value="arctic">Arctic</option><option value="desert">Desert</option><option value="grassland">Grassland</option><option value="planar">Planar</option></select>
       <button class="btn" id="hbToggle">⚒ Custom Creature</button>
     </div>
     <div class="hbform hidden" id="hbForm">
@@ -338,6 +389,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
         <span style="color:var(--parch-dim);font-size:13px;font-style:italic;align-self:center">Saved creatures persist in this browser and join the Bestiary, tracker, and Encounter Builder.</span>
       </div>
     </div>
+    <div class="cartpanel hidden" id="cartPanel"></div>
     <div class="bestgrid">
       <div class="monlist" id="monList"></div>
       <div id="monView"><p style="color:var(--parch-dim);font-style:italic">Select a creature from the list.</p></div>
@@ -365,20 +417,23 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
       <button class="btn ghost" id="prevTurn" title="previous turn (P)">◂ Prev</button>
       <button class="btn" id="nextTurn" title="next turn (N / Space)">Next Turn ▸</button>
       <span class="turn-now" id="turnNow"></span>
+      <span class="diff" id="trkDiff" style="display:none"></span>
       <button class="btn ghost" id="sortInit">Sort by Initiative</button>
       <button class="btn ghost" id="groupBtn" title="apply damage/healing to several at once">⚡ Group</button>
+      <button class="btn ghost" id="libBtn" title="save / load named encounters">📚 Library</button>
       <button class="btn ghost" id="undoBtn" title="undo (Ctrl+Z)">↶ Undo</button>
       <button class="btn" id="playerViewBtn">⧉ Player View</button>
       <button class="btn ghost" id="exportBtn">Export</button>
       <button class="btn ghost" id="importBtn">Import</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
       <button class="btn red" id="clearTrk">Clear Encounter</button>
-      <span id="saveInd"></span>
+      <span id="saveInd" aria-live="polite"></span>
     </div>
     <div class="ptybar">
       <button class="btn" id="ptyToCombat">⚑ Summon the Party</button>
       <button class="btn ghost" id="ptyToggle">Manage Party</button>
-      <span style="color:var(--parch-dim);font-size:13px;font-style:italic">Set each hero's max HP &amp; AC once — remembered forever. Click any initiative number to set rolls.</span>
+      <label style="color:var(--parch-dim);font-size:13px">Party level <input id="partyLevel" class="num" type="number" min="1" max="20" value="3" style="width:54px"></label>
+      <span style="color:var(--parch-dim);font-size:13px;font-style:italic">Set each hero's max HP &amp; AC once — remembered forever. Tap any initiative to edit it.</span>
     </div>
     <div class="ptyedit hidden" id="ptyEdit">
       <div id="ptyRows"></div>
@@ -402,6 +457,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
       <button class="btn ghost" id="grpFoes">Select foes</button>
       <button class="btn ghost" id="grpNone">Clear sel.</button>
     </div>
+    <div class="libpanel hidden" id="libPanel"></div>
     <div id="trkHost"></div>
   </section>
 
@@ -416,6 +472,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
           <label>Party</label><input id="encN" class="num" type="number" value="4" min="1" max="10" style="width:60px">
           <label>Level</label><input id="encL" class="num" type="number" value="3" min="1" max="20" style="width:60px">
           <select id="encD"><option>Easy</option><option selected>Medium</option><option>Hard</option><option>Deadly</option></select>
+          <select id="encEnv"><option value="">Any biome</option><option value="forest">Forest</option><option value="swamp">Swamp</option><option value="urban">Urban</option><option value="underground">Underground</option><option value="mountain">Mountain</option><option value="coastal">Coastal</option><option value="arctic">Arctic</option><option value="desert">Desert</option><option value="grassland">Grassland</option><option value="planar">Planar</option></select>
         </div>
         <button class="btn" id="genEnc">Build Encounter</button>
         <div class="out" id="encOut">Steel sharpens. Choose your difficulty.</div>
@@ -459,7 +516,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
   <div class="dice-row">
     <input id="diceExpr" placeholder="e.g. 2d6+3" aria-label="Dice expression">
     <button class="d" id="rollExpr">Roll</button>
-    <div class="diceout" id="diceOut"><small>The dice are listening.</small></div>
+    <div class="diceout" id="diceOut" aria-live="polite"><small>The dice are listening.</small></div>
   </div>
 </div>
 
@@ -600,7 +657,7 @@ const MONS=[
 {n:"Brown Bear",cr:"1",xp:200,st:"Large beast, unaligned",acx:"11 (natural armor)",hp:34,hd:"4d10+12",sp:"40 ft., climb 30 ft.",ab:[19,10,16,2,13,7],sk:"Perception +3",sen:"passive Perception 13",lg:"—",tr:[["Keen Smell","Advantage on smell-based Perception checks."]],axn:[["Multiattack","One bite and one claws attack."],["Bite","Melee: +6 to hit. Hit: 8 (1d8+4) piercing."],["Claws","Melee: +6 to hit. Hit: 11 (2d6+4) slashing."]]},
 {n:"Bugbear",cr:"1",xp:200,st:"Medium humanoid (goblinoid), chaotic evil",acx:"16 (hide armor, shield)",hp:27,hd:"5d8+5",sp:"30 ft.",ab:[15,14,13,8,11,9],sk:"Stealth +6, Survival +2",sen:"darkvision 60 ft., passive Perception 10",lg:"Common, Goblin",tr:[["Brute","A melee weapon deals one extra die of damage (included)."],["Surprise Attack","If it surprises a creature and hits in the first round, +7 (2d6) damage."]],axn:[["Morningstar","Melee: +4 to hit, reach 5 ft. Hit: 11 (2d8+2) piercing."],["Javelin","Melee or Ranged: +4, reach 5 ft. or 30/120. Hit: 9 (2d6+2) melee or 5 (1d6+2) ranged piercing."]]},
 {n:"Dire Wolf",cr:"1",xp:200,st:"Large beast, unaligned",acx:"14 (natural armor)",hp:37,hd:"5d10+10",sp:"50 ft.",ab:[17,15,15,3,12,7],sk:"Perception +3, Stealth +4",sen:"passive Perception 13",lg:"—",tr:[["Keen Hearing and Smell","Advantage on Perception using hearing or smell."],["Pack Tactics","Advantage on attacks if an ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing; DC 13 Str save or knocked prone."]]},
-{n:"Ghoul",cr:"1",xp:200,st:"Medium undead, chaotic evil",acx:"12",hp:22,hd:"5d8",sp:"30 ft.",ab:[13,15,10,7,10,6],imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[],axn:[["Bite","Melee: +2 to hit, reach 5 ft. Hit: 9 (2d6+2) piercing."],["Claws","Melee: +4 to hit, reach 5 ft. Hit: 7 (2d4+2) slashing. Non-elf, non-undead targets: DC 10 Con save or be <b>paralyzed</b> 1 minute (repeat save at end of each turn)."]]},
+{n:"Ghoul",cr:"1",xp:200,st:"Medium undead, chaotic evil",acx:"12",hp:22,hd:"5d8",sp:"30 ft.",ab:[13,15,10,7,10,6],imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[],axn:[["Bite","Melee: +2 to hit, reach 5 ft. Hit: 9 (2d6+2) piercing."],["Claws","Melee: +4 to hit, reach 5 ft. Hit: 7 (2d4+2) slashing. Non-elf, non-undead targets: DC 10 Con save or be PARALYZED 1 minute (repeat save at end of each turn)."]]},
 {n:"Giant Spider",cr:"1",xp:200,st:"Large beast, unaligned",acx:"14 (natural armor)",hp:26,hd:"4d10+4",sp:"30 ft., climb 30 ft.",ab:[14,16,12,2,11,4],sk:"Stealth +7",sen:"blindsight 10 ft., darkvision 60 ft., passive Perception 10",lg:"—",tr:[["Spider Climb","Climbs difficult surfaces, including ceilings, without a check."],["Web Sense","Knows the location of any creature touching its web."],["Web Walker","Ignores movement restrictions from webbing."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 7 (1d8+3) piercing + DC 11 Con save, taking 9 (2d8) poison on a fail (half on success). If poison drops target to 0 HP: stable but poisoned and paralyzed 1 hour."],["Web (Recharge 5–6)","Ranged: +5 to hit, range 30/60 ft. Target restrained by webbing (escape DC 12 Str; web AC 10, 5 HP, vulnerable to fire, immune to bludgeoning/poison/psychic)."]]},
 {n:"Imp",cr:"1",xp:200,st:"Tiny fiend (devil, shapechanger), lawful evil",acx:"13",hp:10,hd:"3d4+3",sp:"20 ft., fly 40 ft.",ab:[6,17,13,11,12,14],sk:"Deception +4, Insight +3, Persuasion +4, Stealth +5",res:"cold; bludgeoning/piercing/slashing from nonmagical non-silvered attacks",imm:"fire, poison",cim:"poisoned",sen:"darkvision 120 ft., passive Perception 11",lg:"Infernal, Common",tr:[["Shapechanger","Polymorph into a rat, raven, or spider, or back."],["Devil's Sight","Magical darkness doesn't impede its darkvision."],["Magic Resistance","Advantage on saves vs. spells and magical effects."]],axn:[["Sting (Bite in beast form)","Melee: +5 to hit, reach 5 ft. Hit: 5 (1d4+3) piercing + DC 11 Con save, 10 (3d6) poison on fail, half on success."],["Invisibility","Turns invisible until it attacks or drops concentration."]]},
 {n:"Specter",cr:"1",xp:200,st:"Medium undead, chaotic evil",acx:"12",hp:22,hd:"5d8",sp:"0 ft., fly 50 ft. (hover)",ab:[1,14,11,10,10,11],res:"acid, cold, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical attacks",imm:"necrotic, poison",cim:"charmed, exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",sen:"darkvision 60 ft., passive Perception 10",lg:"understands languages it knew in life but can't speak",tr:[["Incorporeal Movement","Moves through creatures and objects as difficult terrain; 1d10 force damage if it ends its turn inside an object."],["Sunlight Sensitivity","Disadvantage on attacks and sight-based Perception in sunlight."]],axn:[["Life Drain","Melee: +4 to hit, reach 5 ft. Hit: 10 (3d6) necrotic; DC 10 Con save or HP maximum reduced by the same amount until a long rest. Dies if HP max hits 0."]]},
@@ -609,12 +666,12 @@ const MONS=[
 {n:"Bandit Captain",cr:"2",xp:450,st:"Medium humanoid (any race), any non-lawful alignment",acx:"15 (studded leather)",hp:65,hd:"10d8+20",sp:"30 ft.",ab:[15,16,14,14,11,14],sv:"Str +4, Dex +5, Wis +2",sk:"Athletics +4, Deception +4",sen:"passive Perception 10",lg:"any two languages",tr:[],axn:[["Multiattack","Three melee attacks (two scimitar, one dagger) or two ranged dagger attacks."],["Scimitar","Melee: +5 to hit. Hit: 6 (1d6+3) slashing."],["Dagger","Melee or Ranged: +5, reach 5 ft. or 20/60. Hit: 5 (1d4+3) piercing."],["Parry (Reaction)","+2 AC against one melee attack it can see (must be wielding a weapon)."]]},
 {n:"Cult Fanatic",cr:"2",xp:450,st:"Medium humanoid (any race), any non-good alignment",acx:"13 (leather armor)",hp:33,hd:"6d8+6",sp:"30 ft.",ab:[11,14,12,10,13,14],sk:"Deception +4, Persuasion +4, Religion +2",sen:"passive Perception 11",lg:"any one language (usually Common)",tr:[["Dark Devotion","Advantage on saves vs. charmed/frightened."],["Spellcasting","4th-level cleric (DC 11, +3). Cantrips: light, sacred flame, thaumaturgy. 1st (4): command, inflict wounds, shield of faith. 2nd (3): hold person, spiritual weapon."]],axn:[["Multiattack","Two melee attacks."],["Dagger","Melee or Ranged: +4, reach 5 ft. or 20/60. Hit: 4 (1d4+2) piercing."]]},
 {n:"Gelatinous Cube",cr:"2",xp:450,st:"Large ooze, unaligned",acx:"6",hp:84,hd:"8d10+40",sp:"15 ft.",ab:[14,3,20,1,6,1],cim:"blinded, charmed, deafened, exhaustion, frightened, prone",sen:"blindsight 60 ft. (blind beyond), passive Perception 8",lg:"—",tr:[["Ooze Cube","Fills its space; creatures inside can be seen but have total cover. Entering its space: DC 12 Dex save or be engulfed."],["Transparent","DC 15 Perception to spot it without movement; creatures unaware of it are surprised when engulfed."]],axn:[["Pseudopod","Melee: +4 to hit, reach 5 ft. Hit: 10 (3d6) acid."],["Engulf","Moves up to speed; creatures in path: DC 12 Dex save. Fail = engulfed: restrained, can't breathe, 21 (6d6) acid at the start of each of the cube's turns. Escape: DC 12 Str check (costs the escaper or ally an action)."]]},
-{n:"Ghast",cr:"2",xp:450,st:"Medium undead, chaotic evil",acx:"13",hp:36,hd:"8d8",sp:"30 ft.",ab:[16,17,10,11,10,8],res:"necrotic",imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[["Stench","Start of turn within 5 ft.: DC 10 Con save or be poisoned until the start of your next turn; success = immune to this ghast's stench 24 hrs."],["Turning Defiance","Ghouls within 30 ft. have advantage on saves vs. turn undead."]],axn:[["Bite","Melee: +3 to hit, reach 5 ft. Hit: 12 (2d8+3) piercing."],["Claws","Melee: +5 to hit. Hit: 10 (2d6+3) slashing; non-undead DC 10 Con save or <b>paralyzed</b> 1 minute (repeat save each turn)."]]},
+{n:"Ghast",cr:"2",xp:450,st:"Medium undead, chaotic evil",acx:"13",hp:36,hd:"8d8",sp:"30 ft.",ab:[16,17,10,11,10,8],res:"necrotic",imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[["Stench","Start of turn within 5 ft.: DC 10 Con save or be poisoned until the start of your next turn; success = immune to this ghast's stench 24 hrs."],["Turning Defiance","Ghouls within 30 ft. have advantage on saves vs. turn undead."]],axn:[["Bite","Melee: +3 to hit, reach 5 ft. Hit: 12 (2d8+3) piercing."],["Claws","Melee: +5 to hit. Hit: 10 (2d6+3) slashing; non-undead DC 10 Con save or PARALYZED 1 minute (repeat save each turn)."]]},
 {n:"Mimic",cr:"2",xp:450,st:"Medium monstrosity (shapechanger), neutral",acx:"12 (natural armor)",hp:58,hd:"9d8+18",sp:"15 ft.",ab:[17,12,15,5,13,8],sk:"Stealth +5",imm:"acid",cim:"prone",sen:"darkvision 60 ft., passive Perception 11",lg:"—",tr:[["Shapechanger","Polymorphs into an object or back; statistics unchanged."],["Adhesive (Object Form)","Adheres to anything touching it; Huge or smaller creatures are grappled (escape DC 13; checks vs. it at disadvantage)."],["False Appearance","Indistinguishable from an ordinary object while motionless."],["Grappler","Advantage on attacks vs. creatures it's grappling."]],axn:[["Pseudopod","Melee: +5 to hit. Hit: 7 (1d8+3) bludgeoning; in object form, target is adhered."],["Bite","Melee: +5 to hit. Hit: 7 (1d8+3) piercing + 4 (1d8) acid."]]},
 {n:"Ogre",cr:"2",xp:450,st:"Large giant, chaotic evil",acx:"11 (hide armor)",hp:59,hd:"7d10+21",sp:"40 ft.",ab:[19,8,16,5,7,7],sen:"darkvision 60 ft., passive Perception 8",lg:"Common, Giant",tr:[],axn:[["Greatclub","Melee: +6 to hit, reach 5 ft. Hit: 13 (2d8+4) bludgeoning."],["Javelin","Melee or Ranged: +6, reach 5 ft. or 30/120. Hit: 11 (2d6+4) piercing."]]},
 {n:"Priest",cr:"2",xp:450,st:"Medium humanoid (any race), any alignment",acx:"13 (chain shirt)",hp:27,hd:"5d8+5",sp:"25 ft.",ab:[10,10,12,13,16,13],sk:"Medicine +7, Persuasion +3, Religion +4",sen:"passive Perception 13",lg:"any two languages",tr:[["Divine Eminence","Bonus action: imbue a melee weapon hit with +10 (3d6) radiant (spend higher slot for +1d6/level)."],["Spellcasting","5th-level cleric (DC 13, +5). Cantrips: light, sacred flame, thaumaturgy. 1st (4): cure wounds, guiding bolt, sanctuary. 2nd (3): lesser restoration, spiritual weapon. 3rd (2): dispel magic, spirit guardians."]],axn:[["Mace","Melee: +2 to hit, reach 5 ft. Hit: 3 (1d6) bludgeoning."]]},
 {n:"Rust Monster",cr:"1/2",xp:100,st:"Medium monstrosity, unaligned",acx:"14 (natural armor)",hp:27,hd:"5d8+5",sp:"40 ft.",ab:[13,12,13,2,13,6],sen:"darkvision 60 ft., passive Perception 11",lg:"—",tr:[["Iron Scent","Pinpoints ferrous metal within 30 ft."],["Rust Metal","Nonmagical ferrous weapons hitting it take a permanent −1 penalty; at −5 the weapon is destroyed. Nonmagical ferrous ammo is destroyed on hit."]],axn:[["Bite","Melee: +3 to hit. Hit: 5 (1d8+1) piercing."],["Antennae","Corrodes a nonmagical ferrous object within 5 ft. Unworn objects: 1-ft. cube destroyed. Worn/carried: DC 11 Dex save or armor takes permanent −1 AC (destroyed at AC 10 + Dex); shields likewise."]]},
-{n:"Basilisk",cr:"3",xp:700,st:"Medium monstrosity, unaligned",acx:"15 (natural armor)",hp:52,hd:"8d8+16",sp:"20 ft.",ab:[16,8,15,2,8,7],sen:"darkvision 60 ft., passive Perception 9",lg:"—",tr:[["Petrifying Gaze","Start of a creature's turn within 30 ft. seeing the basilisk's eyes: DC 12 Con save or begin turning to stone (restrained; repeat at end of next turn — fail = <b>petrified</b> until freed by greater restoration etc.). Creatures can avert eyes (basilisk gets advantage on attacks against them). Its own reflected gaze can petrify it."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing + 7 (2d6) poison."]]},
+{n:"Basilisk",cr:"3",xp:700,st:"Medium monstrosity, unaligned",acx:"15 (natural armor)",hp:52,hd:"8d8+16",sp:"20 ft.",ab:[16,8,15,2,8,7],sen:"darkvision 60 ft., passive Perception 9",lg:"—",tr:[["Petrifying Gaze","Start of a creature's turn within 30 ft. seeing the basilisk's eyes: DC 12 Con save or begin turning to stone (restrained; repeat at end of next turn — fail = PETRIFIED until freed by greater restoration etc.). Creatures can avert eyes (basilisk gets advantage on attacks against them). Its own reflected gaze can petrify it."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing + 7 (2d6) poison."]]},
 {n:"Doppelganger",cr:"3",xp:700,st:"Medium monstrosity (shapechanger), neutral",acx:"14",hp:52,hd:"8d8+16",sp:"30 ft.",ab:[11,18,14,11,12,14],sk:"Deception +6, Insight +3",cim:"charmed",sen:"darkvision 60 ft., passive Perception 11",lg:"Common",tr:[["Shapechanger","Polymorph into any Small/Medium humanoid it has seen, or back."],["Ambusher","Advantage on attack rolls vs. creatures it has surprised."],["Surprise Attack","If it surprises a creature and hits in round one: +10 (3d6) damage."]],axn:[["Multiattack","Two melee attacks."],["Slam","Melee: +6 to hit. Hit: 7 (1d6+4) bludgeoning."],["Read Thoughts","Magically read surface thoughts of one creature within 60 ft.; gains advantage on Deception/Insight/Intimidation/Persuasion vs. it."]]},
 {n:"Green Hag",cr:"3",xp:700,st:"Medium fey, neutral evil",acx:"17 (natural armor)",hp:82,hd:"11d8+33",sp:"30 ft.",ab:[18,12,16,13,14,14],sk:"Arcana +3, Deception +4, Perception +4, Stealth +3",sen:"darkvision 60 ft., passive Perception 14",lg:"Common, Draconic, Sylvan",tr:[["Amphibious","Breathes air and water."],["Innate Spellcasting","At will: dancing lights, minor illusion, vicious mockery (DC 12)."],["Mimicry","Imitates animal sounds and humanoid voices (DC 14 Insight to discern)."]],axn:[["Claws","Melee: +6 to hit, reach 5 ft. Hit: 13 (2d8+4) slashing."],["Illusory Appearance","Covers herself and gear in an illusion appearing as another creature of her general shape (DC 20 Investigation to discern; physical contact reveals)."],["Invisible Passage","Turns invisible until she attacks/casts or drops concentration, leaving no trace."]]},
 {n:"Hell Hound",cr:"3",xp:700,st:"Medium fiend, lawful evil",acx:"15 (natural armor)",hp:45,hd:"7d8+14",sp:"50 ft.",ab:[17,12,14,6,13,6],sk:"Perception +5",imm:"fire",sen:"darkvision 60 ft., passive Perception 15",lg:"understands Infernal but can't speak",tr:[["Keen Hearing and Smell","Advantage on Perception using hearing or smell."],["Pack Tactics","Advantage on attacks if an ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +5 to hit. Hit: 7 (1d8+3) piercing + 7 (2d6) fire."],["Fire Breath (Recharge 5–6)","15-ft. cone: DC 12 Dex save, 21 (6d6) fire, half on success."]]},
@@ -642,7 +699,23 @@ const MONS=[
 {n:"Archmage",cr:"12",xp:8400,st:"Medium humanoid (any race), any alignment",acx:"12 (15 with mage armor)",hp:99,hd:"18d8+18",sp:"30 ft.",ab:[10,14,12,20,15,16],sv:"Int +9, Wis +6",sk:"Arcana +13, History +13",res:"damage from spells; nonmagical bludgeoning/piercing/slashing (from stoneskin)",sen:"passive Perception 12",lg:"any six languages",tr:[["Magic Resistance","Advantage on saves vs. spells and magical effects."],["Spellcasting","18th-level wizard (DC 17, +9). Cantrips: fire bolt, light, mage hand, prestidigitation, shocking grasp. 1st (4): detect magic, identify, mage armor*, magic missile. 2nd (3): detect thoughts, mirror image, misty step. 3rd (3): counterspell, fly, lightning bolt. 4th (3): banishment, fire shield, stoneskin*. 5th (3): cone of cold, scrying, wall of force. 6th (1): globe of invulnerability. 7th (1): teleport. 8th (1): mind blank*. 9th (1): time stop. (*cast pre-combat)"]],axn:[["Dagger","Melee or Ranged: +6, reach 5 ft. or 20/60. Hit: 4 (1d4+2) piercing."]]},
 {n:"Vampire",cr:"13",xp:10000,st:"Medium undead (shapechanger), lawful evil",acx:"16 (natural armor)",hp:144,hd:"17d8+68",sp:"30 ft.",ab:[18,18,18,17,15,18],sv:"Dex +9, Wis +7, Cha +9",sk:"Perception +7, Stealth +9",res:"necrotic; bludgeoning/piercing/slashing from nonmagical attacks",sen:"darkvision 120 ft., passive Perception 17",lg:"the languages it knew in life",tr:[["Shapechanger","Polymorph into a Tiny bat or Medium cloud of mist, or back (if not in sunlight/running water)."],["Legendary Resistance (3/day)","Choose to succeed on a failed save."],["Misty Escape","At 0 HP outside its resting place: turns to mist (instead of falling unconscious) and must reach its coffin within 2 hours; paralyzed at 0 HP in its coffin, regains 1 HP after 1 hour there."],["Regeneration","20 HP at start of turn (1+ HP, no sunlight/running water; off after radiant or holy water)."],["Spider Climb","Any surface, including ceilings."],["Vampire Weaknesses","Can't enter residences uninvited; running water deals 20 acid; stake while incapacitated in resting place = paralyzed; sunlight: 20 radiant/turn, disadvantage on attacks and checks."]],axn:[["Multiattack (Vampire Form)","Two attacks, only one a bite."],["Unarmed Strike","Melee: +9 to hit. Hit: 8 (1d8+4) bludgeoning; instead of damage can grapple (escape DC 18)."],["Bite","Melee: +9 to hit vs. willing/grappled/incapacitated/restrained. Hit: 7 (1d6+4) piercing + 10 (3d6) necrotic; HP max reduced by the necrotic amount; vampire heals the same. Humanoid drained to 0 this way rises the next night as a vampire spawn."],["Charm","One humanoid within 30 ft.: DC 17 Wis save or be charmed 24 hrs (regards vampire as trusted; willing bite target). Repeats on damage."],["Children of the Night (1/day)","Summons 2d4 swarms of bats/rats (or 3d6 wolves outdoors), arriving in 1d4 rounds."]],lax:[["Move","Up to its speed without provoking opportunity attacks."],["Unarmed Strike","Makes one unarmed strike."],["Bite (2 actions)","Makes one bite attack."]]},
 {n:"Adult Red Dragon",cr:"17",xp:18000,st:"Huge dragon, chaotic evil",acx:"19 (natural armor)",hp:256,hd:"19d12+133",sp:"40 ft., climb 40 ft., fly 80 ft.",ab:[27,10,25,16,13,21],sv:"Dex +6, Con +13, Wis +7, Cha +11",sk:"Perception +13, Stealth +6",imm:"fire",sen:"blindsight 60 ft., darkvision 120 ft., passive Perception 23",lg:"Common, Draconic",tr:[["Legendary Resistance (3/day)","Choose to succeed on a failed save."]],axn:[["Multiattack","Frightful Presence, then one bite and two claws."],["Bite","Melee: +14 to hit, reach 10 ft. Hit: 19 (2d10+8) piercing + 7 (2d6) fire."],["Claw","Melee: +14 to hit. Hit: 15 (2d6+8) slashing."],["Tail","Melee: +14 to hit, reach 15 ft. Hit: 17 (2d8+8) bludgeoning."],["Frightful Presence","Creatures of its choice within 120 ft.: DC 19 Wis save or frightened 1 min (repeat each turn; success = immune 24 hrs)."],["Fire Breath (Recharge 5–6)","60-ft. cone: DC 21 Dex save, 63 (18d6) fire, half on success."]],lax:[["Detect","Wisdom (Perception) check."],["Tail Attack","One tail attack."],["Wing Attack (2 actions)","Creatures within 10 ft.: DC 22 Dex save, 15 (2d6+8) bludgeoning + prone; dragon can then fly half its speed."]]},
-{n:"Lich",cr:"21",xp:33000,st:"Medium undead, any evil alignment",acx:"17 (natural armor)",hp:135,hd:"18d8+54",sp:"30 ft.",ab:[11,16,16,20,14,16],sv:"Con +10, Int +12, Wis +9",sk:"Arcana +19, History +12, Insight +9, Perception +9",res:"cold, lightning, necrotic",imm:"poison; bludgeoning/piercing/slashing from nonmagical attacks",cim:"charmed, exhaustion, frightened, paralyzed, poisoned",sen:"truesight 120 ft., passive Perception 19",lg:"Common plus up to five others",tr:[["Legendary Resistance (3/day)","Choose to succeed on a failed save."],["Rejuvenation","With a phylactery, a destroyed lich gains a new body in 1d10 days."],["Turn Resistance","Advantage on saves vs. turn undead."],["Spellcasting","18th-level wizard (DC 20, +12). Cantrips: mage hand, prestidigitation, ray of frost. 1st (4): detect magic, magic missile, shield, thunderwave. 2nd (3): detect thoughts, invisibility, mirror image. 3rd (3): animate dead, counterspell, dispel magic, fireball. 4th (3): blight, dimension door. 5th (3): cloudkill, scrying. 6th (1): disintegrate, globe of invulnerability. 7th (1): finger of death, plane shift. 8th (1): dominate monster, power word stun. 9th (1): power word kill."]],axn:[["Paralyzing Touch","Melee spell: +12 to hit, reach 5 ft. Hit: 10 (3d6) cold; DC 18 Con save or paralyzed 1 minute (repeat each turn)."]],lax:[["Cantrip","Casts a cantrip."],["Paralyzing Touch (2 actions)","One paralyzing touch."],["Frightening Gaze (2 actions)","One creature within 10 ft.: DC 18 Wis save or frightened 1 min."],["Disrupt Life (3 actions)","Each non-undead within 20 ft.: DC 18 Con save, 21 (6d6) necrotic, half on success."]]}
+{n:"Lich",cr:"21",xp:33000,st:"Medium undead, any evil alignment",acx:"17 (natural armor)",hp:135,hd:"18d8+54",sp:"30 ft.",ab:[11,16,16,20,14,16],sv:"Con +10, Int +12, Wis +9",sk:"Arcana +19, History +12, Insight +9, Perception +9",res:"cold, lightning, necrotic",imm:"poison; bludgeoning/piercing/slashing from nonmagical attacks",cim:"charmed, exhaustion, frightened, paralyzed, poisoned",sen:"truesight 120 ft., passive Perception 19",lg:"Common plus up to five others",tr:[["Legendary Resistance (3/day)","Choose to succeed on a failed save."],["Rejuvenation","With a phylactery, a destroyed lich gains a new body in 1d10 days."],["Turn Resistance","Advantage on saves vs. turn undead."],["Spellcasting","18th-level wizard (DC 20, +12). Cantrips: mage hand, prestidigitation, ray of frost. 1st (4): detect magic, magic missile, shield, thunderwave. 2nd (3): detect thoughts, invisibility, mirror image. 3rd (3): animate dead, counterspell, dispel magic, fireball. 4th (3): blight, dimension door. 5th (3): cloudkill, scrying. 6th (1): disintegrate, globe of invulnerability. 7th (1): finger of death, plane shift. 8th (1): dominate monster, power word stun. 9th (1): power word kill."]],axn:[["Paralyzing Touch","Melee spell: +12 to hit, reach 5 ft. Hit: 10 (3d6) cold; DC 18 Con save or paralyzed 1 minute (repeat each turn)."]],lax:[["Cantrip","Casts a cantrip."],["Paralyzing Touch (2 actions)","One paralyzing touch."],["Frightening Gaze (2 actions)","One creature within 10 ft.: DC 18 Wis save or frightened 1 min."],["Disrupt Life (3 actions)","Each non-undead within 20 ft.: DC 18 Con save, 21 (6d6) necrotic, half on success."]]},
+/* ---- mid-tier fill (CR 4–9, SRD 5.1) ---- */
+{n:"Couatl",cr:"4",xp:1100,st:"Medium celestial, lawful good",acx:"19 (natural armor)",hp:97,hd:"13d8+39",sp:"30 ft., fly 90 ft.",ab:[16,20,17,18,20,18],sv:"Con +5, Wis +7, Cha +6",res:"radiant; bludgeoning/piercing/slashing from nonmagical attacks",imm:"psychic",sen:"truesight 120 ft., passive Perception 15",lg:"all, telepathy 120 ft.",tr:[["Innate Spellcasting","DC 13 (+5). At will: detect evil and good, detect magic, detect thoughts. 3/day: bless, create food and water, dispel magic, sleep. 1/day: dream, greater restoration, scrying."],["Magic Weapons","Its weapon attacks are magical."],["Shielded Mind","Immune to scrying and to effects that sense its emotions, read its thoughts, or detect its location."]],axn:[["Bite","Melee: +8 to hit, reach 5 ft. Hit: 8 (1d6+5) piercing + DC 13 Con save or poisoned 24 hrs (unconscious while poisoned; wakes on damage or if shaken)."],["Constrict","Melee: +6 to hit, reach 10 ft., one Medium or smaller creature. Hit: 10 (2d6+3) bludgeoning; grappled (escape DC 15) and restrained."]]},
+{n:"Ettin",cr:"4",xp:1100,st:"Large giant, chaotic evil",acx:"12 (natural armor)",hp:85,hd:"10d10+30",sp:"40 ft.",ab:[21,8,21,6,10,8],sk:"Perception +4",sen:"darkvision 60 ft., passive Perception 14",lg:"Giant, Orc",tr:[["Two Heads","Advantage on Perception and on saves vs. being blinded, charmed, deafened, frightened, stunned, or knocked unconscious."],["Wakeful","While one head sleeps, the other is awake."]],axn:[["Multiattack","One battleaxe and one morningstar attack."],["Battleaxe","Melee: +7 to hit, reach 5 ft. Hit: 14 (2d8+5) slashing."],["Morningstar","Melee: +7 to hit, reach 5 ft. Hit: 14 (2d8+5) piercing."]]},
+{n:"Black Pudding",cr:"4",xp:1100,st:"Large ooze, unaligned",acx:"7",hp:85,hd:"10d10+30",sp:"20 ft., climb 20 ft.",ab:[16,5,16,1,6,1],imm:"acid, cold, lightning, slashing",cim:"blinded, charmed, deafened, exhaustion, frightened, prone",sen:"blindsight 60 ft. (blind beyond), passive Perception 8",lg:"—",tr:[["Amorphous","Can move through a space as narrow as 1 inch without squeezing."],["Corrosive Form","A creature touching it or hitting it with a melee attack within 5 ft. takes 4 (1d8) acid. Nonmagical weapons take a permanent −1 damage penalty on a hit (destroyed at −5). Eats through 2-inch wood or metal in 1 round."],["Spider Climb","Climbs difficult surfaces, including ceilings, without a check."]],axn:[["Pseudopod","Melee: +5 to hit, reach 5 ft. Hit: 6 (1d6+3) bludgeoning + 18 (4d8) acid; nonmagical armor hit takes a permanent −1 AC penalty (destroyed at AC 10)."]]},
+{n:"Flameskull",cr:"4",xp:1100,st:"Tiny undead, neutral evil",acx:"13",hp:40,hd:"9d4+18",sp:"0 ft., fly 40 ft. (hover)",ab:[1,17,16,16,10,11],sk:"Arcana +5",res:"lightning, necrotic, piercing",imm:"cold, fire, poison",cim:"charmed, frightened, paralyzed, prone",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[["Illumination","Sheds dim or bright light (5/15 ft.) in green or violet, as it chooses."],["Magic Resistance","Advantage on saves vs. spells and other magical effects."],["Rejuvenation","If destroyed, re-forms in 1 hour with all HP unless doused with holy water or hit by dispel magic."],["Spellcasting","5th-level wizard (DC 13, +5). Cantrips: mage hand. 1st (3): magic missile, shield. 2nd (2): blur, flaming sphere. 3rd (1): fireball."]],axn:[["Multiattack","Two Fire Ray attacks."],["Fire Ray","Ranged spell: +5 to hit, range 30 ft. Hit: 10 (3d6) fire."]]},
+{n:"Bulette",cr:"5",xp:1800,st:"Large monstrosity, unaligned",acx:"17 (natural armor)",hp:94,hd:"9d10+45",sp:"40 ft., burrow 40 ft.",ab:[19,11,21,2,10,5],sk:"Perception +4",sen:"darkvision 60 ft., tremorsense 60 ft., passive Perception 14",lg:"—",tr:[["Standing Leap","Long jump up to 30 ft., high jump up to 15 ft., with or without a run-up."]],axn:[["Bite","Melee: +7 to hit, reach 5 ft. Hit: 30 (4d12+4) piercing."],["Deadly Leap","Jumps and lands; creatures within 5 ft. of the landing: DC 16 Str or Dex save, or 14 (3d6+4) bludgeoning + 14 (3d6+4) slashing and knocked prone (half and no prone on success)."]]},
+{n:"Gladiator",cr:"5",xp:1800,st:"Medium humanoid (any race), any alignment",acx:"16 (studded leather, shield)",hp:112,hd:"15d8+45",sp:"30 ft.",ab:[18,15,16,10,12,15],sv:"Str +7, Dex +5, Con +6",sk:"Athletics +10, Intimidation +5",sen:"passive Perception 11",lg:"any one language",tr:[["Brave","Advantage on saves against being frightened."]],axn:[["Multiattack","Three melee attacks or two ranged attacks."],["Spear","Melee or Ranged: +7 to hit, reach 5 ft. or range 20/60 ft. Hit: 11 (2d6+4) piercing, or 13 (2d8+4) two-handed in melee."],["Shield Bash","Melee: +7 to hit, reach 5 ft. Hit: 9 (2d4+4) bludgeoning; Medium or smaller target: DC 15 Str save or knocked prone."],["Parry (Reaction)","+3 AC against one melee attack it can see (must wield a melee weapon)."]]},
+{n:"Earth Elemental",cr:"5",xp:1800,st:"Large elemental, neutral",acx:"17 (natural armor)",hp:126,hd:"12d10+60",sp:"30 ft., burrow 30 ft.",ab:[20,8,20,5,10,5],vul:"thunder",res:"bludgeoning/piercing/slashing from nonmagical non-adamantine attacks",imm:"poison",cim:"exhaustion, paralyzed, petrified, poisoned, unconscious",sen:"darkvision 60 ft., tremorsense 60 ft., passive Perception 10",lg:"Terran",tr:[["Earth Glide","Burrows through nonmagical, unworked earth and stone without disturbing it."],["Siege Monster","Deals double damage to objects and structures."]],axn:[["Multiattack","Two slam attacks."],["Slam","Melee: +8 to hit, reach 10 ft. Hit: 14 (2d8+5) bludgeoning."]]},
+{n:"Medusa",cr:"6",xp:2300,st:"Medium monstrosity, lawful evil",acx:"15 (natural armor)",hp:127,hd:"17d8+51",sp:"30 ft.",ab:[10,15,16,12,13,15],sk:"Deception +5, Insight +4, Perception +4, Stealth +5",sen:"darkvision 60 ft., passive Perception 14",lg:"Common",tr:[["Petrifying Gaze","A creature starting its turn within 30 ft. that sees the medusa's eyes: DC 14 Con save or start to turn to stone (restrained, then petrified on a 2nd failed save at the end of its next turn; success ends it). Averting eyes gives the medusa advantage on its attacks against that creature. Its own reflected gaze can petrify it."]],axn:[["Multiattack","Three Snake Hair attacks and one Shortsword attack, or two Longbow attacks."],["Snake Hair","Melee: +5 to hit, reach 5 ft. Hit: 4 (1d4+2) piercing + 14 (4d6) poison."],["Shortsword","Melee: +5 to hit, reach 5 ft. Hit: 5 (1d6+2) piercing."],["Longbow","Ranged: +5 to hit, range 150/600 ft. Hit: 6 (1d8+2) piercing + 7 (2d6) poison."]]},
+{n:"Vrock",cr:"6",xp:2300,st:"Large fiend (demon), chaotic evil",acx:"15 (natural armor)",hp:104,hd:"11d10+44",sp:"40 ft., fly 60 ft.",ab:[17,15,18,8,13,8],sv:"Dex +5, Wis +5, Cha +3",res:"cold, fire, lightning; bludgeoning/piercing/slashing from nonmagical attacks",imm:"poison",cim:"poisoned",sen:"darkvision 120 ft., passive Perception 11",lg:"Abyssal, telepathy 120 ft.",tr:[["Magic Resistance","Advantage on saves vs. spells and other magical effects."]],axn:[["Multiattack","One beak and one talons attack."],["Beak","Melee: +6 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing."],["Talons","Melee: +6 to hit, reach 5 ft. Hit: 14 (2d10+3) slashing."],["Spores (Recharge 6)","Creatures within 5 ft.: DC 14 Con save or infested — 5 (1d10) poison at the start of each of its turns (ends on a later save or lesser restoration)."],["Stunning Screech (1/day)","Creatures within 20 ft. (not demons): DC 14 Con save or stunned until the end of the vrock's next turn."]]},
+{n:"Young Black Dragon",cr:"7",xp:2900,st:"Large dragon, chaotic evil",acx:"18 (natural armor)",hp:127,hd:"15d10+45",sp:"40 ft., fly 80 ft., swim 40 ft.",ab:[19,14,17,12,11,15],sv:"Dex +5, Con +6, Wis +3, Cha +5",sk:"Perception +6, Stealth +5",imm:"acid",sen:"blindsight 30 ft., darkvision 120 ft., passive Perception 16",lg:"Common, Draconic",tr:[["Amphibious","Breathes air and water."]],axn:[["Multiattack","One bite and two claw attacks."],["Bite","Melee: +7 to hit, reach 10 ft. Hit: 15 (2d10+4) piercing + 4 (1d8) acid."],["Claw","Melee: +7 to hit, reach 5 ft. Hit: 11 (2d6+4) slashing."],["Acid Breath (Recharge 5–6)","60-ft. line, 5 ft. wide: DC 14 Dex save, 49 (11d8) acid, half on success."]]},
+{n:"Oni",cr:"7",xp:2900,st:"Large giant, lawful evil",acx:"16 (chain mail)",hp:110,hd:"13d10+39",sp:"30 ft., fly 60 ft.",ab:[19,11,16,14,12,15],sv:"Dex +3, Con +6, Wis +4, Cha +5",sk:"Arcana +5, Deception +8, Perception +4",sen:"darkvision 60 ft., passive Perception 14",lg:"Common, Giant",tr:[["Innate Spellcasting","DC 13. At will: darkness, invisibility. 1/day each: charm person, cone of cold, gaseous form, sleep."],["Magic Weapons","Its weapon attacks are magical."],["Regeneration","Regains 10 HP at the start of its turn if it has at least 1 HP."]],axn:[["Multiattack","Two attacks, with its claws or glaive."],["Claw (Oni Form)","Melee: +7 to hit, reach 5 ft. Hit: 8 (1d8+4) slashing."],["Glaive","Melee: +7 to hit, reach 10 ft. Hit: 15 (2d10+4) slashing (9 (1d10+4) in a smaller form)."],["Change Shape","Polymorphs into a Small or Medium humanoid, or back; statistics unchanged except size."]]},
+{n:"Hydra",cr:"8",xp:3900,st:"Huge monstrosity, unaligned",acx:"15 (natural armor)",hp:172,hd:"15d12+75",sp:"30 ft., swim 30 ft.",ab:[20,12,20,2,10,7],sk:"Perception +6",sen:"darkvision 60 ft., passive Perception 16",lg:"—",tr:[["Hold Breath","Can hold its breath for 1 hour."],["Multiple Heads","Has five heads. Whenever it takes 25+ damage in a single turn, one head dies; it dies only if all heads die. At the end of its turn it grows two heads for each that died since its last turn, regaining 10 HP per new head (no regrowth if it took fire damage that turn)."],["Reactive Heads","Has one reaction per surviving head."],["Wakeful","While it sleeps, at least one head is awake."]],axn:[["Multiattack","One bite attack per surviving head."],["Bite","Melee: +8 to hit, reach 10 ft. Hit: 10 (1d10+5) piercing."]]},
+{n:"Cloud Giant",cr:"9",xp:5000,st:"Huge giant, neutral good or neutral evil",acx:"14 (natural armor)",hp:200,hd:"16d12+96",sp:"40 ft.",ab:[27,10,22,12,16,16],sv:"Con +10, Wis +7, Cha +7",sk:"Insight +7, Perception +7",sen:"passive Perception 17",lg:"Common, Giant",tr:[["Keen Smell","Advantage on Perception checks that rely on smell."],["Innate Spellcasting","DC 15. At will: detect magic, fog cloud, light. 3/day each: feather fall, fly, misty step, telekinesis. 1/day each: control weather, gaseous form."]],axn:[["Multiattack","Two morningstar attacks."],["Morningstar","Melee: +12 to hit, reach 10 ft. Hit: 21 (3d8+8) piercing."],["Rock","Ranged: +12 to hit, range 60/240 ft. Hit: 30 (4d10+8) bludgeoning."]]},
+{n:"Bone Devil",cr:"9",xp:5000,st:"Large fiend (devil), lawful evil",acx:"19 (natural armor)",hp:142,hd:"15d10+60",sp:"40 ft., fly 40 ft.",ab:[18,16,18,13,14,16],sv:"Int +5, Wis +6, Cha +7",sk:"Deception +7, Insight +6",res:"cold; bludgeoning/piercing/slashing from nonmagical non-silvered attacks",imm:"fire, poison",cim:"poisoned",sen:"darkvision 120 ft., passive Perception 12",lg:"Infernal, telepathy 120 ft.",tr:[["Devil's Sight","Magical darkness doesn't impede its darkvision."],["Magic Resistance","Advantage on saves vs. spells and other magical effects."]],axn:[["Multiattack","Two claw attacks and one sting attack."],["Claw","Melee: +8 to hit, reach 10 ft. Hit: 8 (1d8+4) slashing."],["Sting","Melee: +8 to hit, reach 10 ft. Hit: 13 (2d8+4) piercing + 17 (5d6) poison + DC 14 Con save or poisoned 1 hr (can't regain HP); repeats save at end of each turn."]]},
+{n:"Treant",cr:"9",xp:5000,st:"Huge plant, chaotic good",acx:"16 (natural armor)",hp:138,hd:"12d12+60",sp:"30 ft.",ab:[23,8,21,12,16,12],vul:"fire",res:"bludgeoning, piercing",sen:"passive Perception 13",lg:"Common, Druidic, Elvish, Sylvan",tr:[["False Appearance","While motionless, indistinguishable from a normal tree."],["Siege Monster","Deals double damage to objects and structures."]],axn:[["Multiattack","Two slam attacks."],["Slam","Melee: +10 to hit, reach 5 ft. Hit: 16 (3d6+6) bludgeoning."],["Rock","Ranged: +10 to hit, range 60/180 ft. Hit: 28 (4d10+6) bludgeoning."],["Animate Trees (1/day)","Animates one or two trees within 60 ft. (stats as a treant without this action) to fight for it for 1 day or until destroyed."]]}
 ];
 
 /* ============ HELPERS ============ */
@@ -667,7 +740,7 @@ const toDetail=sel=>{if(matchMedia("(max-width:820px)").matches)
 const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const pick=a=>a[ri(0,a.length-1)];
 const mod=v=>{const m=Math.floor((v-10)/2);return (m>=0?"+":"")+m};
-const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 
 /* ============ TABS ============ */
 $$("nav button").forEach(b=>b.addEventListener("click",()=>{
@@ -706,18 +779,114 @@ $("#ruleSearch").addEventListener("input",e=>{
 async function storeGet(k,d){try{const r=await window.storage.get(k);return r&&r.value!=null?JSON.parse(r.value):d}catch(e){return d}}
 async function storeSet(k,v){try{await window.storage.set(k,JSON.stringify(v))}catch(e){}}
 let HOMEBREW=[];                       // custom creatures (async-loaded below)
-let PARTY=[                            // saved heroes — prefilled from Blood in the Bayou
-  {name:"Cersei (Gooby)",ac:14,max:38,type:"pc"},
-  {name:"Braith",ac:15,max:36,type:"pc"},
-  {name:"Magos",ac:18,max:44,type:"pc"},
-  {name:"Jeremy's Monk",ac:16,max:40,type:"pc"},
-  {name:"Xerox",ac:15,max:38,type:"pc"}
-];
+let PARTY=[];                          // saved heroes — set up via Manage Party, restored from storage/Import
+                                       // (deliberately empty in source: the deployed file carries no personal table data)
 let storageOK=true;   // flipped false by the startup probe if the browser blocks persistence
 function flashSaved(){const el=$("#saveInd");if(!el)return;
   if(!storageOK){el.textContent="⚠ not saved — Export!";el.style.color="#d98a7f";return}
   const t=new Date();el.textContent="saved "+t.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
-function bcast(){try{localStorage.setItem("dmscreen:bcast",String(Date.now()))}catch(e){}} // nudge any open Player View
+/* Player View sync: BroadcastChannel is the primary channel (survives a severed window.opener, e.g. in
+   installed PWAs); the localStorage write fires a storage event as a fallback nudge for the popup. */
+const pvChan=("BroadcastChannel" in window)?new BroadcastChannel("dmscreen_pv"):null;
+if(pvChan)pvChan.onmessage=e=>{if(e.data==="hello")pvPush()};   // popup announces itself, we answer with state
+function pvPush(){if(pvChan)try{pvChan.postMessage({round:TRK.round,rows:window.pvRowsFor()})}catch(e){}}
+function bcast(){pvPush();try{localStorage.setItem("dmscreen:bcast",String(Date.now()))}catch(e){}}
+let partyLevel=3;   // used by the encounter cart + tracker difficulty readout (persisted per campaign)
+
+/* ============ CAMPAIGNS — every key below is stored per campaign under dmscreen:c:<id>:* ============
+   Shared across campaigns: the homebrew bestiary (dmscreen:homebrew) — creatures are a library, not story.
+   Switching saves the active id and reloads the app: with this many globals (tracker, undo, cart, canon…)
+   a clean reload is the only swap that can't leak state, and it's instant under the cache-first SW. */
+const PERCAMP=["tracker","party","partyLevel","encounters","canon","sites","clues","sessions","campNotes","npcs","partyNotes"];
+let CAMPS={list:[],active:null};   // {list:[{id,name}],active:id} — persisted at dmscreen:campaigns
+const ck=k=>"dmscreen:c:"+CAMPS.active+":"+k;
+const campName=()=>(CAMPS.list.find(c=>c.id===CAMPS.active)||{}).name||"campaign";
+function renderCampSel(){
+  const s=$("#campSel");if(!s)return;
+  s.innerHTML=CAMPS.list.map(c=>`<option value="${esc(c.id)}"${c.id===CAMPS.active?" selected":""}>${esc(c.name)}</option>`).join("");
+}
+async function setActiveCamp(id){CAMPS.active=id;await storeSet("dmscreen:campaigns",CAMPS);location.reload()}
+async function bootCampaigns(){
+  const saved=await storeGet("dmscreen:campaigns",null);
+  if(saved&&saved.list&&saved.list.length){CAMPS=saved}
+  else{
+    // first run on this device: create a campaign and migrate any pre-campaign (flat-key) data into it
+    const id="c"+Date.now().toString(36);
+    CAMPS={list:[{id,name:"My Campaign"}],active:id};
+    for(const k of PERCAMP){
+      try{
+        const r=await window.storage.get("dmscreen:"+k);
+        if(r&&r.value!=null){
+          await window.storage.set("dmscreen:c:"+id+":"+k,r.value);
+          try{if(window.storage.delete)await window.storage.delete("dmscreen:"+k)}catch(e){}
+        }
+      }catch(e){}   // key absent — nothing to migrate
+    }
+    await storeSet("dmscreen:campaigns",CAMPS);
+  }
+  if(!CAMPS.list.some(c=>c.id===CAMPS.active))CAMPS.active=CAMPS.list[0].id;
+  renderCampSel();
+}
+$("#campSel").addEventListener("change",e=>setActiveCamp(e.target.value));
+$("#campNew").addEventListener("click",()=>{
+  const name=(prompt("Name the new campaign:")||"").trim();if(!name)return;
+  const id="c"+Date.now().toString(36);
+  CAMPS.list.push({id,name});
+  setActiveCamp(id);   // persists the registry, then reloads into the fresh (empty) campaign
+});
+$("#campRen").addEventListener("click",()=>{
+  const c=CAMPS.list.find(x=>x.id===CAMPS.active);if(!c)return;
+  const name=(prompt("Rename this campaign:",c.name)||"").trim();if(!name)return;
+  c.name=name;storeSet("dmscreen:campaigns",CAMPS);renderCampSel();
+});
+$("#campDel").addEventListener("click",async()=>{
+  if(CAMPS.list.length<2){alert("This is your only campaign — create another one before deleting this.");return}
+  const c=CAMPS.list.find(x=>x.id===CAMPS.active);if(!c)return;
+  if(!confirm(`Delete "${c.name}" and ALL its prep — encounter, party, canon, journal, clues, notes, session log? This cannot be undone. (Export first if unsure.)`))return;
+  for(const k of PERCAMP){try{if(window.storage.delete)await window.storage.delete("dmscreen:c:"+c.id+":"+k)}catch(e){}}
+  CAMPS.list=CAMPS.list.filter(x=>x.id!==c.id);
+  setActiveCamp(CAMPS.list[0].id);
+});
+
+/* Biome tags for filtering/improvising themed fights. Untagged creatures are shown for every biome. */
+const ENV={
+Commoner:["urban","grassland"],Guard:["urban"],Bandit:["forest","grassland","urban"],"Bandit Captain":["forest","grassland","urban"],Thug:["urban"],Spy:["urban"],Scout:["forest","grassland","mountain"],Cultist:["urban","underground"],"Cult Fanatic":["urban","underground"],Acolyte:["urban"],Priest:["urban"],Knight:["urban","grassland"],Veteran:["urban"],Gladiator:["urban"],Assassin:["urban"],Mage:["urban"],Archmage:["urban","planar"],
+Kobold:["underground","mountain"],"Giant Rat":["urban","underground"],"Giant Spider":["forest","underground"],Goblin:["forest","mountain","underground"],Hobgoblin:["forest","mountain"],Bugbear:["forest","underground"],Worg:["forest","mountain"],Gnoll:["grassland","desert"],Orc:["mountain","underground","forest"],
+Wolf:["forest","arctic","grassland"],"Dire Wolf":["forest","arctic"],"Brown Bear":["forest","mountain"],Owlbear:["forest"],
+Skeleton:["underground","urban"],Zombie:["underground","urban","swamp"],Ghoul:["underground","urban"],Ghast:["underground","urban"],Wight:["underground","swamp"],Specter:["underground","urban"],Shadow:["underground","urban"],Wraith:["underground","swamp"],Ghost:["urban","underground"],Banshee:["forest","underground"],Vampire:["urban","underground"],"Vampire Spawn":["urban","underground"],Lich:["underground","planar"],Flameskull:["underground"],
+Lizardfolk:["swamp","coastal"],Mimic:["underground"],"Gelatinous Cube":["underground"],"Black Pudding":["underground"],"Rust Monster":["underground"],Basilisk:["underground","desert"],Ankheg:["grassland","underground"],Bulette:["grassland","desert","underground"],
+"Green Hag":["swamp","forest"],Doppelganger:["urban"],"Hell Hound":["planar","mountain"],Imp:["planar","urban"],Vrock:["planar"],"Bone Devil":["planar"],Couatl:["forest","planar"],Medusa:["underground","urban"],Oni:["forest","mountain"],Hydra:["swamp","coastal"],Treant:["forest"],
+Manticore:["mountain","desert"],Chimera:["mountain"],Wyvern:["mountain"],
+"Hill Giant":["grassland","mountain"],"Stone Giant":["mountain","underground"],"Frost Giant":["arctic","mountain"],"Fire Giant":["mountain"],"Cloud Giant":["mountain"],Ogre:["mountain","forest","grassland"],Ettin:["mountain","forest"],Troll:["swamp","mountain","arctic"],
+"Fire Elemental":["planar","mountain"],"Earth Elemental":["planar","underground","mountain"],
+"Young Green Dragon":["forest","swamp"],"Young Black Dragon":["swamp","coastal"],"Young Red Dragon":["mountain"],"Adult Red Dragon":["mountain"]
+};
+function inBiome(m,env){return !env||!ENV[m.n]||ENV[m.n].includes(env)||m.hb}
+
+/* ---------- encounter XP budgeting (shared by builder, cart, tracker readout) ---------- */
+const XPT={ // [easy,medium,hard,deadly] thresholds per character, by level 1-20
+1:[25,50,75,100],2:[50,100,150,200],3:[75,150,225,400],4:[125,250,375,500],5:[250,500,750,1100],
+6:[300,600,900,1400],7:[350,750,1100,1700],8:[450,900,1400,2100],9:[550,1100,1600,2400],10:[600,1200,1900,2800],
+11:[800,1600,2400,3600],12:[1000,2000,3000,4500],13:[1100,2200,3400,5100],14:[1250,2500,3800,5700],15:[1400,2800,4300,6400],
+16:[1600,3200,4800,7200],17:[2000,3900,5900,8800],18:[2100,4200,6300,9500],19:[2400,4900,7300,10900],20:[2800,5700,8500,12700]};
+function encMult(n,party){
+  // DMG p.82: 1 monster ×1 · 2 ×1.5 · 3–6 ×2 · 7–10 ×2.5 · 11–14 ×3 · 15+ ×4
+  const t=[1,1.5,2,2,2,2,2.5,2.5,2.5,2.5,3,3,3,3,4];
+  const ladder=[.5,1,1.5,2,2.5,3,4];   // small party: next step up; party of 6+: next step down (×0.5 floor)
+  let i=ladder.indexOf(t[Math.min(Math.max(1,n),15)-1]);
+  if(party<3)i=Math.min(ladder.length-1,i+1);
+  else if(party>5)i=Math.max(0,i-1);
+  return ladder[i];
+}
+function diffOf(adjXP,partyN,level){
+  const L=Math.min(20,Math.max(1,level||3)),n=Math.max(1,partyN||1),t=XPT[L];
+  if(!t||!adjXP)return{label:"Trivial",cls:"trivial"};
+  if(adjXP<t[0]*n)return{label:"Trivial",cls:"trivial"};
+  if(adjXP<t[1]*n)return{label:"Easy",cls:"easy"};
+  if(adjXP<t[2]*n)return{label:"Medium",cls:"medium"};
+  if(adjXP<t[3]*n)return{label:"Hard",cls:"hard"};
+  return{label:"Deadly",cls:"deadly"};
+}
 
 /* ============ BESTIARY ============ */
 MONS.sort((a,b)=>crval(a.cr)-crval(b.cr)||a.n.localeCompare(b.n));
@@ -725,19 +894,19 @@ const crSet=[...new Set(MONS.map(m=>m.cr))];
 crSet.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent="CR "+c;$("#crFilter").appendChild(o)});
 let selMon=null;
 function renderMonList(){
-  const q=$("#monSearch").value.trim().toLowerCase(), f=$("#crFilter").value;
+  const q=$("#monSearch").value.trim().toLowerCase(), f=$("#crFilter").value, env=$("#envFilter")?.value||"";
   const all=[...MONS,...HOMEBREW];
   all.sort((a,b)=>crval(a.cr)-crval(b.cr)||a.n.localeCompare(b.n));
-  $("#monList").innerHTML=all.filter(m=>(!q||m.n.toLowerCase().includes(q)||(m.st||"").toLowerCase().includes(q))&&(!f||m.cr===f))
-    .map(m=>`<button data-n="${esc(m.n)}" class="${selMon===m.n?'sel':''}">${m.n}${m.hb?'<span class="hbmark"> ⚒</span>':''}<span class="cr">CR ${m.cr}</span></button>`).join("")
+  $("#monList").innerHTML=all.filter(m=>(!q||m.n.toLowerCase().includes(q)||(m.st||"").toLowerCase().includes(q))&&(!f||m.cr===f)&&inBiome(m,env))
+    .map(m=>`<button data-n="${esc(m.n)}" class="${selMon===m.n?'sel':''}">${esc(m.n)}${m.hb?'<span class="hbmark"> ⚒</span>':''}<span class="cr">CR ${esc(m.cr)}</span></button>`).join("")
     ||`<p style="padding:12px;color:var(--parch-dim);font-style:italic">Nothing stirs…</p>`;
   $$("#monList button").forEach(b=>b.addEventListener("click",()=>{selMon=b.dataset.n;renderMonList();renderStat(all.find(m=>m.n===selMon));toDetail("#monView")}));
 }
-function line(lbl,v){return v?`<p class="ln"><b>${lbl}</b> ${v}</p>`:""}
+function line(lbl,v){return v?`<p class="ln"><b>${lbl}</b> ${esc(v)}</p>`:""}
 function renderStat(m){
   const AB=["STR","DEX","CON","INT","WIS","CHA"];
   $("#monView").innerHTML=`<div class="statblock">
-    <h3>${m.n}</h3><div class="meta">${m.st}</div><div class="taper"></div>
+    <h3>${esc(m.n)}</h3><div class="meta">${esc(m.st)}</div><div class="taper"></div>
     ${line("Armor Class",m.acx)}${line("Hit Points",m.hp+(m.hd?" ("+m.hd+")":""))}${line("Speed",m.sp)}
     <div class="taper"></div>
     <div class="abil">${m.ab.map((v,i)=>`<div><b>${AB[i]}</b>${v} (${mod(v)})</div>`).join("")}</div>
@@ -745,24 +914,50 @@ function renderStat(m){
     ${line("Saving Throws",m.sv)}${line("Skills",m.sk)}${line("Damage Vulnerabilities",m.vul)}
     ${line("Damage Resistances",m.res)}${line("Damage Immunities",m.imm)}${line("Condition Immunities",m.cim)}
     ${line("Senses",m.sen)}${line("Languages",m.lg)}
-    <p class="ln"><b>Challenge</b> ${m.cr} (${m.xp.toLocaleString()} XP)</p>
-    ${m.tr&&m.tr.length?'<div class="taper"></div>'+m.tr.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
-    ${m.axn&&m.axn.length?'<h4>Actions</h4>'+m.axn.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
-    ${m.lax&&m.lax.length?'<h4>Legendary Actions</h4><p>Three legendary actions per round, one at a time at the end of other turns; regained at the start of its turn.</p>'+m.lax.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
+    <p class="ln"><b>Challenge</b> ${esc(m.cr)} (${m.xp.toLocaleString()} XP)</p>
+    ${m.tr&&m.tr.length?'<div class="taper"></div>'+m.tr.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join(""):""}
+    ${m.axn&&m.axn.length?'<h4>Actions</h4>'+m.axn.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join(""):""}
+    ${m.lax&&m.lax.length?'<h4>Legendary Actions</h4><p>Three legendary actions per round, one at a time at the end of other turns; regained at the start of its turn.</p>'+m.lax.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join(""):""}
   </div>
   <div class="sb-actions"><button class="btn" id="sbAddTrk">⚔ Add to Combat Tracker</button>
     <label>×<input type="number" id="sbQty" value="1" min="1" max="20" title="how many to add"></label>
-    <label><input type="checkbox" id="sbRoll" style="width:auto"> roll HP</label></div>`;
+    <label><input type="checkbox" id="sbRoll" style="width:auto"> roll HP</label>
+    <button class="btn ghost" id="sbCart">＋ Cart</button></div>`;
   $("#sbAddTrk").onclick=()=>{   // bind in JS so names with apostrophes/quotes can't break the handler
     const m2=[...MONS,...HOMEBREW].find(x=>x.n===m.n)||m;
     const qty=Math.max(1,Math.min(20,+$("#sbQty").value||1)),roll=$("#sbRoll").checked;
     for(let k=0;k<qty;k++)addOneMon(m2,roll);
     saveTrk();$$("nav button").find(b=>b.dataset.tab==="tracker").click();
   };
+  $("#sbCart").onclick=()=>{addToCart(m.n,Math.max(1,Math.min(20,+$("#sbQty").value||1)))};
   linkifyDice($("#monView"));   // make printed dice (damage, hit dice) tappable
+}
+
+/* ============ ENCOUNTER CART (stage a mixed group, send it all at once) ============ */
+let cart=[];
+function cartPartyN(){return PARTY.filter(p=>p.name.trim()).length||4}
+function cartAdjusted(){
+  let raw=0,n=0;cart.forEach(it=>{const m=[...MONS,...HOMEBREW].find(x=>x.n===it.n);if(m){raw+=(m.xp||0)*it.count;n+=it.count}});
+  const adj=Math.round(raw*encMult(Math.max(1,n),cartPartyN()));
+  return {raw,adj,n,...diffOf(adj,cartPartyN(),partyLevel)};
+}
+function addToCart(name,qty){const it=cart.find(c=>c.n===name);if(it)it.count+=(qty||1);else cart.push({n:name,count:qty||1});renderCart()}
+window.cartStep=(i,d)=>{if(!cart[i])return;cart[i].count=Math.max(1,cart[i].count+d);renderCart()};
+window.cartDel=i=>{cart.splice(i,1);renderCart()};
+function renderCart(){
+  const p=$("#cartPanel");if(!p)return;
+  if(!cart.length){p.classList.add("hidden");p.innerHTML="";return}
+  p.classList.remove("hidden");
+  const d=cartAdjusted();
+  p.innerHTML=`<div class="ctot">Encounter cart — Raw ${d.raw.toLocaleString()} XP · Adjusted ${d.adj.toLocaleString()} · <span class="diff ${d.cls}">${d.label}</span> vs ${cartPartyN()} PCs at level ${partyLevel}</div>`+
+    cart.map((it,i)=>`<div class="cline"><span class="cn">${esc(it.n)}</span><button class="cstep" onclick="cartStep(${i},-1)">−</button><b>${it.count}</b><button class="cstep" onclick="cartStep(${i},1)">+</button><button class="btn ghost" onclick="cartDel(${i})">remove</button></div>`).join("")+
+    `<div class="cartrow"><label><input type="checkbox" id="cartRoll" style="width:auto"> roll HP</label><button class="btn" id="cartSend">Send all to Tracker</button><button class="btn ghost" id="cartClear">Clear cart</button></div>`;
+  $("#cartSend").onclick=()=>{const roll=$("#cartRoll")?.checked;cart.forEach(it=>{const m=[...MONS,...HOMEBREW].find(x=>x.n===it.n);if(m)for(let k=0;k<it.count;k++)addOneMon(m,roll)});cart=[];renderCart();saveTrk();$$("nav button").find(b=>b.dataset.tab==="tracker").click()};
+  $("#cartClear").onclick=()=>{cart=[];renderCart()};
 }
 $("#monSearch").addEventListener("input",renderMonList);
 $("#crFilter").addEventListener("change",renderMonList);
+$("#envFilter").addEventListener("change",renderMonList);
 renderMonList();
 
 /* ============ COMBAT TRACKER ============ */
@@ -774,16 +969,17 @@ const openActs=new Set(),grpSel=new Set();   // transient UI state (open drawers
 const CONDS=["Blinded","Charmed","Deafened","Frightened","Grappled","Incapacitated","Invisible","Paralyzed","Petrified","Poisoned","Prone","Restrained","Stunned","Unconscious","Concentrating","Exhaustion"];
 /* saveTrk pushes the prior state onto the undo stack, re-renders, flashes the indicator, nudges the Player View,
    and persists fire-and-forget (only once hydration is done, so an early click can't overwrite the saved encounter) */
-function persistTrk(){if(trkHydrated)Promise.resolve(window.storage.set("dmscreen:tracker",JSON.stringify(TRK))).catch(()=>{})}
+function persistTrk(){if(trkHydrated)Promise.resolve(window.storage.set(ck("tracker"),JSON.stringify(TRK))).catch(()=>{})}
 function saveTrk(){if(lastSnap!==null){undoStack.push(lastSnap);if(undoStack.length>30)undoStack.shift()}lastSnap=JSON.stringify(TRK);renderTrk();flashSaved();bcast();persistTrk()}
 function commitTrk(){if(lastSnap!==null){undoStack.push(lastSnap);if(undoStack.length>30)undoStack.shift()}lastSnap=JSON.stringify(TRK);flashSaved();bcast();persistTrk()}  // persist + undo snapshot WITHOUT a full re-render (keeps focus/clicks on inline inputs)
 function resolveConc(){while(concQueue.length){const q=concQueue.shift();if(!TRK.list.includes(q.c))continue;if(!confirm(`${q.c.name} is concentrating. Con save DC ${q.dc} (½ of ${q.amt}). Did the save SUCCEED?\n\nOK = kept concentration · Cancel = broken`)){q.c.conc=false;}}}
 function undoTrk(){if(!undoStack.length)return;TRK=JSON.parse(undoStack.pop());lastSnap=JSON.stringify(TRK);if(TRK.turn>=TRK.list.length)TRK.turn=Math.max(0,TRK.list.length-1);renderTrk();flashSaved();bcast();persistTrk()}
-async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value&&!trkHydrated)TRK=JSON.parse(r.value)}catch(e){}trkHydrated=true;lastSnap=JSON.stringify(TRK);renderTrk()}
+async function loadTrk(){try{const r=await window.storage.get(ck("tracker"));if(r&&r.value&&!trkHydrated)TRK=JSON.parse(r.value)}catch(e){}trkHydrated=true;lastSnap=JSON.stringify(TRK);renderTrk()}
 function renderTrk(){
   $("#roundLbl").textContent="Round "+TRK.round;
   const cur=TRK.list[TRK.turn];
   const tn=$("#turnNow");if(tn)tn.innerHTML=(TRK.list.length&&cur)?`<b>${esc(cur.name)}</b>${cur.max?` · ${Math.max(0,cur.hp)}/${cur.max} HP`:""}`:"";
+  const dEl=$("#trkDiff");if(dEl){const d=trackerDifficulty();if(d.n>0){dEl.style.display="";dEl.className="diff "+d.cls;dEl.textContent=`${d.label} · ${d.adj.toLocaleString()} XP`;}else dEl.style.display="none";}
   if(!TRK.list.length){$("#trkHost").innerHTML=`<p style="color:var(--parch-dim);font-style:italic">The battlefield is empty. Summon the party, add combatants above, or send in monsters from the Bestiary.</p>`;return}
   $("#trkHost").innerHTML=TRK.list.map((c,i)=>{
     const pct=c.max>0?Math.max(0,Math.min(100,100*c.hp/c.max)):0;
@@ -815,7 +1011,7 @@ function renderTrk(){
       ${down&&type!=="pc"?`<div class="dsrow"><span class="ded">DEFEATED</span></div>`:""}
       ${dying&&ds.s>=3?`<div class="dsrow"><span class="stab">STABLE</span></div>`:""}
       ${dying&&ds.f>=3?`<div class="dsrow"><span class="ded">DEAD</span></div>`:""}
-      ${a&&((a.tr&&a.tr.length)||(a.axn&&a.axn.length)||(a.lax&&a.lax.length))?`<details class="trkacts" ${openActs.has(i)?"open":""} ontoggle="trkActsToggle(${i},this.open)"><summary></summary><div class="trkacts-body">${(a.tr||[]).map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join("")}${a.axn&&a.axn.length?'<h5>Actions</h5>'+a.axn.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join(""):""}${a.lax&&a.lax.length?'<h5>Legendary Actions</h5>'+a.lax.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join(""):""}</div></details>`:""}
+      ${a&&((a.tr&&a.tr.length)||(a.axn&&a.axn.length)||(a.lax&&a.lax.length))?`<details class="trkacts" ${openActs.has(i)?"open":""} ontoggle="trkActsToggle(${i},this.open)"><summary></summary><div class="trkacts-body">${(a.tr||[]).map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join("")}${a.axn&&a.axn.length?'<h5>Actions</h5>'+a.axn.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join(""):""}${a.lax&&a.lax.length?'<h5>Legendary Actions</h5>'+a.lax.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${esc(t[1])}</p>`).join(""):""}</div></details>`:""}
       <div class="condrow">${(c.conds||[]).map((cd,j)=>`<button class="condtag" title="remove" onclick="rmCond(${i},${j})">${cd} ✕</button>`).join("")}
         <select class="condtag add" onchange="addCond(${i},this.value);this.value=''"><option value="">+ condition</option>${CONDS.map(x=>`<option>${x}</option>`).join("")}</select></div>
     </div>`}).join("");
@@ -856,8 +1052,9 @@ $("#addC").addEventListener("click",()=>{
   saveTrk();
 });
 $("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;grpSel.clear();openActs.clear();saveTrk()});
-$("#nextTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk()});
-$("#prevTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn--;if(TRK.turn<0){if(TRK.round>1){TRK.round--;TRK.turn=TRK.list.length-1}else{TRK.turn=0}}saveTrk()});
+/* blur after click so the Space shortcut keeps working (a focused button would otherwise swallow Space) */
+$("#nextTurn").addEventListener("click",e=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk();e.currentTarget&&e.currentTarget.blur()});
+$("#prevTurn").addEventListener("click",e=>{if(!TRK.list.length)return;TRK.turn--;if(TRK.turn<0){if(TRK.round>1){TRK.round--;TRK.turn=TRK.list.length-1}else{TRK.turn=0}}saveTrk();e.currentTarget&&e.currentTarget.blur()});
 $("#undoBtn").addEventListener("click",undoTrk);
 $("#groupBtn").addEventListener("click",()=>{$("#groupBar").classList.toggle("hidden");$("#tab-tracker").classList.toggle("grpmode")});
 function flashGrpHint(msg){const h=$("#grpHint");if(!h)return;h.textContent=msg;setTimeout(()=>{h.textContent="Tick the targets, then:"},1600);}
@@ -879,6 +1076,37 @@ $("#grpFoes").addEventListener("click",()=>{grpSel.clear();TRK.list.forEach((c,i
 $("#grpNone").addEventListener("click",()=>{grpSel.clear();renderTrk()});
 window.grpToggle=(i,on)=>{on?grpSel.add(i):grpSel.delete(i)};
 window.trkActsToggle=(i,open)=>{open?openActs.add(i):openActs.delete(i)};
+
+/* live difficulty readout: adjusted monster XP vs the party's thresholds */
+function trackerDifficulty(){
+  const monsters=TRK.list.filter(c=>(c.type||"monster")==="monster");
+  const raw=monsters.reduce((s,c)=>{const base=String(c.name).replace(/\s+\d+$/,"");const m=MONS.find(x=>x.n===base);return s+(m?m.xp:0)},0);
+  const partyN=TRK.list.filter(c=>(c.type||"monster")==="pc").length||cartPartyN();
+  const adj=Math.round(raw*encMult(Math.max(1,monsters.length),partyN));
+  return {raw,adj,n:monsters.length,...diffOf(adj,partyN,partyLevel)};
+}
+$("#partyLevel").addEventListener("change",e=>{partyLevel=Math.min(20,Math.max(1,+e.target.value||3));storeSet(ck("partyLevel"),partyLevel);renderTrk()});
+
+/* saved-encounter library: store/recall named monster rosters (append so second waves work mid-fight) */
+let library=[];
+function saveLibrary(){storeSet(ck("encounters"),library)}
+$("#libBtn").addEventListener("click",()=>{$("#libPanel").classList.toggle("hidden");renderLib()});
+function renderLib(){
+  const p=$("#libPanel");if(!p)return;
+  p.innerHTML=`<div class="lrow"><input id="libName" placeholder="Name this encounter…"><button class="btn" id="libSave">Save current</button><span style="color:var(--parch-dim);font-size:13px;font-style:italic">monsters &amp; NPCs only, stored at full HP</span></div>`+
+    (library.length?library.map((e,i)=>`<div class="lrow"><span class="ln">${esc(e.name)} <span style="color:var(--parch-dim)">(${e.list.length})</span></span><button class="btn" onclick="libLoad(${i})">Load</button><button class="btn ghost" onclick="libDel(${i})">delete</button></div>`).join(""):`<p style="color:var(--parch-dim);font-style:italic;padding:4px 2px">No saved encounters yet — build one on the tracker, then Save current.</p>`);
+  $("#libSave").onclick=()=>{
+    const nm=$("#libName").value.trim();if(!nm){$("#libName").focus();return}
+    const list=TRK.list.filter(c=>(c.type||"monster")!=="pc").map(c=>({name:c.name,max:c.max,ac:c.ac,type:c.type||"monster",acts:c.acts||null}));
+    if(!list.length){alert("Add some monsters or NPCs to the tracker first.");return}
+    library.push({name:nm,list});saveLibrary();renderLib();
+  };
+}
+window.libLoad=i=>{const e=library[i];if(!e)return;
+  e.list.forEach(t=>TRK.list.push({name:t.name,init:ri(1,20),hp:t.max,max:t.max,ac:t.ac??null,type:t.type||"monster",conds:[],acts:t.acts||null}));
+  saveTrk();$$("nav button").find(b=>b.dataset.tab==="tracker").click();
+};
+window.libDel=i=>{if(!confirm('Delete saved encounter "'+(library[i]?library[i].name:"")+'"?'))return;library.splice(i,1);saveLibrary();renderLib()};
 $("#clearTrk").addEventListener("click",()=>{if(!confirm("Clear the whole encounter? (Your saved party and custom creatures are kept.)"))return;TRK={round:1,turn:0,list:[]};grpSel.clear();openActs.clear();saveTrk()});
 function rollHD(hd,fallback){
   if(!hd)return fallback;
@@ -910,9 +1138,9 @@ function renderParty(){
     <input class="num" type="number" value="${p.ac||''}" onchange="ptyEdit(${i},'ac',+this.value)" placeholder="AC">
     <button class="btn ghost" onclick="ptyDel(${i})">remove</button></div>`).join("");
 }
-window.ptyEdit=(i,k,v)=>{PARTY[i][k]=v;storeSet("dmscreen:party",PARTY)};
-window.ptyDel=i=>{PARTY.splice(i,1);storeSet("dmscreen:party",PARTY);renderParty()};
-$("#ptyAddRow").addEventListener("click",()=>{PARTY.push({name:"",ac:10,max:10,type:"pc"});storeSet("dmscreen:party",PARTY);renderParty()});
+window.ptyEdit=(i,k,v)=>{PARTY[i][k]=v;storeSet(ck("party"),PARTY)};
+window.ptyDel=i=>{PARTY.splice(i,1);storeSet(ck("party"),PARTY);renderParty()};
+$("#ptyAddRow").addEventListener("click",()=>{PARTY.push({name:"",ac:10,max:10,type:"pc"});storeSet(ck("party"),PARTY);renderParty()});
 $("#ptyToggle").addEventListener("click",()=>{$("#ptyEdit").classList.toggle("hidden");renderParty()});
 $("#ptyToCombat").addEventListener("click",()=>{
   PARTY.filter(p=>p.name.trim()).forEach(p=>{
@@ -924,24 +1152,64 @@ $("#ptyToCombat").addEventListener("click",()=>{
 
 /* ============ EXPORT / IMPORT ============ */
 $("#exportBtn").addEventListener("click",()=>{
-  const data={v:2,exported:new Date().toISOString(),tracker:TRK,party:PARTY,homebrew:HOMEBREW,
-    npcs:NPCS,campNotes:$("#campNotes")?.value||"",partyNotes:$("#partyNotes")?.value||""};
+  const data={v:5,exported:new Date().toISOString(),campaign:campName(),tracker:TRK,party:PARTY,homebrew:HOMEBREW,partyLevel,
+    npcs:NPCS,campNotes:$("#campNotes")?.value||"",partyNotes:$("#partyNotes")?.value||"",
+    clues,sessions,canon:CANON,sites:siteStatus,encounters:library};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="hidden-screen-"+new Date().toISOString().slice(0,10)+".json";a.click();
+  const slug=campName().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"campaign";
+  a.download="hidden-screen-"+slug+"-"+new Date().toISOString().slice(0,10)+".json";a.click();
   URL.revokeObjectURL(a.href);
 });
 $("#importBtn").addEventListener("click",()=>$("#importFile").click());
+/* Shared homebrew must MERGE on import (overwriting could delete creatures other campaigns rely on). */
+function mergeHomebrew(list){if(!list||!list.length)return;
+  list.forEach(m=>{const i=HOMEBREW.findIndex(x=>x.n===m.n);if(i>=0)HOMEBREW[i]=m;else HOMEBREW.push(m)});
+}
+/* Device-to-device transfer: write the file's data straight into a NEW campaign's keys (no live state
+   touched — we reload into the imported campaign, which rehydrates everything cleanly). */
+async function importIntoNewCampaign(d){
+  const base=(String(d.campaign||"").trim())||"Imported Campaign";
+  let name=base,k=2;while(CAMPS.list.some(c=>c.name===name))name=base+" ("+(k++)+")";
+  const id="c"+Date.now().toString(36);
+  const put=(key,v)=>window.storage.set("dmscreen:c:"+id+":"+key,JSON.stringify(v));
+  const jobs=[];
+  if(d.tracker)jobs.push(put("tracker",d.tracker));
+  if(d.party)jobs.push(put("party",d.party));
+  if(d.partyLevel)jobs.push(put("partyLevel",d.partyLevel));
+  if(d.encounters)jobs.push(put("encounters",d.encounters));
+  if(d.canon&&typeof d.canon==="object")jobs.push(put("canon",{npcs:d.canon.npcs||[],factions:d.canon.factions||[],sites:d.canon.sites||[]}));
+  if(Array.isArray(d.sites))jobs.push(put("sites",d.sites));
+  if(d.clues)jobs.push(put("clues",d.clues));
+  if(d.sessions)jobs.push(put("sessions",d.sessions));
+  if(typeof d.campNotes==="string")jobs.push(put("campNotes",d.campNotes));
+  if(d.npcs)jobs.push(put("npcs",d.npcs));
+  if(typeof d.partyNotes==="string")jobs.push(put("partyNotes",d.partyNotes));
+  if(d.homebrew&&d.homebrew.length){mergeHomebrew(d.homebrew);jobs.push(window.storage.set("dmscreen:homebrew",JSON.stringify(HOMEBREW)))}
+  await Promise.all(jobs);
+  CAMPS.list.push({id,name});
+  await setActiveCamp(id);   // persists the registry and reloads straight into the imported campaign
+}
 $("#importFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
-    if(d.tracker){TRK=d.tracker;lastSnap=JSON.stringify(TRK);storeSet("dmscreen:tracker",TRK)}
-    if(d.party){PARTY=d.party;storeSet("dmscreen:party",PARTY)}
-    if(d.homebrew){HOMEBREW=d.homebrew;storeSet("dmscreen:homebrew",HOMEBREW)}
-    if(d.npcs){NPCS=d.npcs;storeSet("dmscreen:npcs",NPCS);renderNPCCards()}
-    if(typeof d.campNotes==="string"){storeSet("dmscreen:campNotes",d.campNotes);if($("#campNotes"))$("#campNotes").value=d.campNotes}
-    if(typeof d.partyNotes==="string"){storeSet("dmscreen:partyNotes",d.partyNotes);if($("#partyNotes"))$("#partyNotes").value=d.partyNotes}
+  const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);
+    if(d&&d.campaign&&confirm(`This file contains the campaign "${d.campaign}".\n\nOK = add it as a NEW campaign on this device\nCancel = load it into "${campName()}" (replacing that campaign's prep)`)){
+      await importIntoNewCampaign(d);return;
+    }
+    if(d.tracker){TRK=d.tracker;lastSnap=JSON.stringify(TRK);storeSet(ck("tracker"),TRK)}
+    if(d.party){PARTY=d.party;storeSet(ck("party"),PARTY)}
+    if(d.homebrew){mergeHomebrew(d.homebrew);storeSet("dmscreen:homebrew",HOMEBREW)}
+    if(d.npcs){NPCS=d.npcs;storeSet(ck("npcs"),NPCS);renderNPCCards()}
+    if(typeof d.campNotes==="string"){storeSet(ck("campNotes"),d.campNotes);if($("#campNotes"))$("#campNotes").value=d.campNotes}
+    if(typeof d.partyNotes==="string"){storeSet(ck("partyNotes"),d.partyNotes);if($("#partyNotes"))$("#partyNotes").value=d.partyNotes}
+    if(d.clues){clues=d.clues;storeSet(ck("clues"),clues);renderClues()}
+    if(d.sessions){sessions=d.sessions;storeSet(ck("sessions"),sessions);renderSessions()}
+    if(d.canon&&typeof d.canon==="object"){CANON={npcs:d.canon.npcs||[],factions:d.canon.factions||[],sites:d.canon.sites||[]};storeSet(ck("canon"),CANON)}
+    if(Array.isArray(d.sites)){siteStatus=d.sites;storeSet(ck("sites"),siteStatus)}
+    renderCanon();   // re-render canon, sites & seals, and journal dropdowns together
+    if(d.encounters){library=d.encounters;saveLibrary();if(!$("#libPanel").classList.contains("hidden"))renderLib()}
+    if(d.partyLevel){partyLevel=d.partyLevel;storeSet(ck("partyLevel"),partyLevel);if($("#partyLevel"))$("#partyLevel").value=partyLevel}
     refreshCRFilter();renderMonList();renderParty();renderTrk();bcast();
-    alert("Loaded: encounter, party, custom creatures, NPC journal, and notes.");
+    alert('Loaded into "'+campName()+'": encounter, party, creatures, campaign canon, NPC journal, notes, clues, sessions, and seals.');
   }catch(err){alert("That file couldn't be read.")}};r.readAsText(f);e.target.value="";});
 
 /* ============ PLAYER VIEW (pop-out window, live-synced) ============ */
@@ -989,11 +1257,16 @@ function playerHTML(){
    <p style="color:var(--parch-dim);font-style:italic;font-size:13px;margin-top:20px">The Hidden Screen · live from the DM's table</p>
   </div></div>
   <script>
-   /* read the DM's live in-memory tracker through window.opener — correct under both the async
-      window.storage backend and the standalone localStorage shim */
+   function pvApply(d){document.getElementById("pvRound").textContent="Round "+d.round;
+     document.getElementById("pvRows").innerHTML=d.rows;}
+   /* primary: BroadcastChannel pushes from the DM window (works even when window.opener is severed,
+      as happens in installed PWAs / custom tabs) */
+   var pvChan=("BroadcastChannel" in window)?new BroadcastChannel("dmscreen_pv"):null;
+   if(pvChan){pvChan.onmessage=function(e){if(e.data&&e.data.rows!==undefined)pvApply(e.data)};
+     try{pvChan.postMessage("hello")}catch(err){}}
+   /* fallback: read the DM's live in-memory tracker through window.opener */
    function pvSync(){try{ if(window.opener&&!window.opener.closed){
-     document.getElementById("pvRound").textContent="Round "+window.opener.pvRound();
-     document.getElementById("pvRows").innerHTML=window.opener.pvRowsFor();
+     pvApply({round:window.opener.pvRound(),rows:window.opener.pvRowsFor()});
    } }catch(err){}}
    window.addEventListener("storage",function(e){if(e.key==="dmscreen:bcast"||e.key==="dmscreen:tracker")pvSync();});
    setInterval(pvSync,1000);   // polling backstop: storage events can be unreliable for popups under storage partitioning
@@ -1001,7 +1274,7 @@ function playerHTML(){
 }
 $("#playerViewBtn").addEventListener("click",()=>{
   const w=window.open("","dmscreen_player","width=900,height=700");
-  if(!w){alert("Allow pop-ups for this page to open the Player View.");return}
+  if(!w){alert("The browser blocked the pop-up. Allow pop-ups for this site — or open the app in a regular browser tab; the Player View needs a second window.");return}
   w.document.write(playerHTML());w.document.close();
 });
 
@@ -1035,26 +1308,22 @@ $("#hbSave").addEventListener("click",()=>{
   alert(`"${n}" forged and saved. Find it in the bestiary (marked ⚒) — you can add it to the tracker like any other creature.`);
 });
 
-/* ============ ASYNC INIT: load homebrew, party, and the saved encounter ============ */
-(async()=>{
-  const hb=await storeGet("dmscreen:homebrew",null);if(hb)HOMEBREW=hb;
-  const pty=await storeGet("dmscreen:party",null);if(pty)PARTY=pty;
-  refreshCRFilter();renderMonList();renderParty();
-})();
-loadTrk();
+/* ============ ASYNC LOADER: homebrew (shared), party, library — called by the boot sequence ============ */
+async function loadRoster(){
+  const hb=await storeGet("dmscreen:homebrew",null);if(hb)HOMEBREW=hb;   // homebrew is a shared library across campaigns
+  const pty=await storeGet(ck("party"),null);if(pty)PARTY=pty;
+  library=await storeGet(ck("encounters"),[]);
+  partyLevel=await storeGet(ck("partyLevel"),3);const plEl=$("#partyLevel");if(plEl)plEl.value=partyLevel;
+  refreshCRFilter();renderMonList();renderParty();renderTrk();
+}
 
 /* ============ ENCOUNTER BUILDER ============ */
-const XPT={ // [easy,medium,hard,deadly] per character level 1-20
-1:[25,50,75,100],2:[50,100,150,200],3:[75,150,225,400],4:[125,250,375,500],5:[250,500,750,1100],
-6:[300,600,900,1400],7:[350,750,1100,1700],8:[450,900,1400,2100],9:[550,1100,1600,2400],10:[600,1200,1900,2800],
-11:[800,1600,2400,3600],12:[1000,2000,3000,4500],13:[1100,2200,3400,5100],14:[1250,2500,3800,5700],15:[1400,2800,4300,6400],
-16:[1600,3200,4800,7200],17:[2000,3900,5900,8800],18:[2100,4200,6300,9500],19:[2400,4900,7300,10900],20:[2800,5700,8500,12700]};
-function encMult(n,party){const t=[1,1,1.5,2,2,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4];let m=t[Math.min(n,15)-1]||4;
-  if(party<3)m=t[Math.min(n+1,15)-1]||4; else if(party>5)m=n===1?1:t[Math.min(n-1,15)]||1; return m}
+/* XPT, encMult, diffOf are defined up top — shared with the encounter cart and the tracker difficulty readout. */
 $("#genEnc").addEventListener("click",()=>{
   const n=Math.max(1,+$("#encN").value||4),L=Math.min(20,Math.max(1,+$("#encL").value||3)),di=$("#encD").selectedIndex;
   const budget=XPT[L][di]*n;
-  const pool=MONS.filter(m=>m.xp<=budget&&m.xp>=budget/30&&m.cr!=="0");
+  const env=$("#encEnv")?.value||"";
+  const pool=MONS.filter(m=>m.xp<=budget&&m.xp>=budget/30&&m.cr!=="0"&&(!env||!ENV[m.n]||ENV[m.n].includes(env)));
   let best=null;
   for(let tries=0;tries<200&&!best;tries++){
     const m=pick(pool);if(!m)break;
@@ -1081,9 +1350,16 @@ trait:["laughs at the wrong moments","never makes eye contact","quotes proverbs 
 want:["to pay off a debt to someone dangerous","to find a sibling who vanished years ago","to be remembered for something — anything","to leave this town before winter","revenge on a guild that ruined them","to protect a secret child","to buy back the family farm","to impress a noble patron","to atone for a betrayal","a quiet life, violently defended"],
 secret:["is informing on the party to a third party","is not who they claim to be","owes their soul, quite literally","witnessed a murder and stayed silent","is secretly wealthy","carries a forged identity paper","is dying and hiding it","serves a cult — reluctantly","stole their good name from a dead traveler","knows the location of something the party seeks"]};
 $("#genNPC").addEventListener("click",()=>{
-  $("#npcOut").innerHTML=`<b>${pick(NPC.fn)} ${pick(NPC.ln)}</b>, ${pick(NPC.anc)} ${pick(NPC.job)}<br>
-  <b>Look:</b> ${pick(NPC.look)}<br><b>Manner:</b> ${pick(NPC.trait)}<br>
-  <b>Wants:</b> ${pick(NPC.want)}<br><b>Secret:</b> ${pick(NPC.secret)}`;
+  const fn=pick(NPC.fn),ln=pick(NPC.ln),anc=pick(NPC.anc),job=pick(NPC.job),look=pick(NPC.look),trait=pick(NPC.trait),want=pick(NPC.want),secret=pick(NPC.secret);
+  $("#npcOut").innerHTML=`<b>${fn} ${ln}</b>, ${anc} ${job}<br>
+  <b>Look:</b> ${look}<br><b>Manner:</b> ${trait}<br>
+  <b>Wants:</b> ${want}<br><b>Secret:</b> ${secret}<br>
+  <button class="btn ghost" id="npcSave" style="margin-top:8px">Save to Journal</button>`;
+  $("#npcSave").onclick=()=>{
+    if(typeof addNPCRecord!=="function")return;
+    addNPCRecord({name:`${fn} ${ln}`,role:`${anc} ${job}`,loc:"",disp:"Unknown",faction:"",site:"",notes:`Look: ${look}\nManner: ${trait}\nWants: ${want}\nSecret: ${secret}`});
+    $("#npcSave").textContent="✓ Saved to Journal";$("#npcSave").disabled=true;
+  };
 });
 
 /* ============ LOOT GENERATOR ============ */
@@ -1298,53 +1574,139 @@ document.addEventListener("click",e=>{const d=e.target.closest&&e.target.closest
   $("#diceExpr").value=d.textContent.replace(/\s+/g,"");rollExpr();});
 linkifyDice($("#rulesHost"));   // rules are rendered above; make their printed dice tappable too
 
-/* ============ CAMPAIGN TAB (Blood in the Bayou — DM canon) ============ */
+/* ============ CAMPAIGN TAB (DM canon — lives ONLY in browser storage + Export files, never in page source) ============ */
+let CANON={npcs:[],factions:[],sites:[]};   // npcs:[{n,role,pub,sec}] factions:[{n,note}] sites:[{n,domain}]
 $("#campaignHost").innerHTML=`
 <div class="camp">
-  <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your canon, behind the screen — NPC secrets, factions, and the seven burial sites.</p>
-  <div class="cat"><h2>Key NPCs</h2><div class="cards">
-    ${[
-      ["Marshall","Quest-giver · Neil's Tavern","Ageless gnome who has watched the burial sites for millennia.","SECRET: an Avatar of Pelor."],
-      ["Lord Cassius Morne","Noble Council","Orchestrates the ritual murders along the bayou ley lines.","SECRET: the true villain the party will uncover."],
-      ["Mayor Unu Apxick","City leadership","Doesn't smuggle — he guides existing killers like a 'Jiminy Cricket.' The murders ARE the ritual.","SECRET: the ultimate hand; an agent of Orcus."],
-      ["Aldric Vane","City Watch officer","Believes he is doing good; manipulated into killing.","SECRET: red herring — one of two active killers."],
-      ["Aldara Voss","Merchant Guild leader (half-elf)","Controls the shipping routes.","SECRET: her routes smuggle the ritual components."],
-      ["The Harbormaster","Thieves Guild leader","Running a parallel investigation.","SECRET: several victims were Guild members."],
-      ["Tim / Timothy","Head of the magic school","The party's current destination.","SECRET: descendant of 'the Mother'; his death breaks the Site 7 seal."]
-    ].map(p=>`<div class="rule open"><button>${esc(p[0])}<span class="chev">▸</span></button>
-      <div class="body"><i>${esc(p[1])}</i><br>${esc(p[2])}<br><span class="secretline" title="tap to reveal / hide">${esc(p[3])}</span></div></div>`).join("")}
-  </div></div>
-  <div class="cat"><h2>Factions</h2><div class="cards">
-    ${[
-      ["City Watch","Captain loyal to Cassius; obstructionist."],
-      ["Noble Council","Cassius is the villain; two members blackmailed."],
-      ["Thieves Guild","Victims among them; running their own investigation."],
-      ["Merchant Guild","Shipping routes exploited to smuggle ritual components."]
-    ].map(f=>`<div class="rule open"><button>${esc(f[0])}<span class="chev">▸</span></button><div class="body">${esc(f[1])}</div></div>`).join("")}
-  </div></div>
-  <div class="cat"><h2>The Seven Burial Sites</h2>
-    <table><tr><th>#</th><th>Site</th><th>Domain</th><th>Note</th></tr>
-    <tr><td>1</td><td>The Bayou</td><td>Harmony</td><td></td></tr>
-    <tr><td>2</td><td>Well / Tim's Property</td><td>Renewal</td><td></td></tr>
-    <tr><td>3</td><td>Mayor's Mansion</td><td>Hope</td><td></td></tr>
-    <tr><td>4</td><td>Merchant Compound</td><td>Luck</td><td></td></tr>
-    <tr><td>5</td><td>Coppervein's Location</td><td>Memory</td><td></td></tr>
-    <tr><td>6</td><td>Austhenon Park / Eausthar</td><td>Order</td><td>★ Keystone (intact)</td></tr>
-    <tr><td>7</td><td>Magic School / the Mother</td><td>Life</td><td>death cannot occur here</td></tr>
-    </table>
+  <div id="recapHost"></div>
+  <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your canon, behind the screen — NPC secrets, factions, sites, your leads, and a session log. Stored only in this browser (and in your Export backups); the deployed page ships empty, so players can't View&#8209;Source your spoilers.</p>
+  <div class="cat"><h2>Key NPCs <button class="btn ghost" id="canonEditBtn" style="margin-left:10px">✎ edit canon</button></h2>
+    <div class="hbform hidden" id="canonEditor">
+      <label>Key NPCs — one per line, written as <b>Name | role / where | public note | secret</b></label>
+      <textarea id="cn_npcs" style="min-height:110px" placeholder="Lady Vex | Noble Council | Charming patron of the arts. | Actually the cult's paymaster."></textarea>
+      <label style="margin-top:8px">Factions — one per line, written as <b>Name | note</b></label>
+      <textarea id="cn_factions" placeholder="City Watch | Captain is compromised."></textarea>
+      <label style="margin-top:8px">Sites — one per line, written as <b>Name | domain</b> (each site gets a seal in the doom tracker)</label>
+      <textarea id="cn_sites" placeholder="The Old Well | Renewal"></textarea>
+      <div class="frow" style="margin-top:10px"><button class="btn" id="canonSave">Save Canon</button>
+        <span style="color:var(--parch-dim);font-size:13px;font-style:italic;align-self:center">Saved in this browser only — and included in Export, so back up after big changes.</span></div>
+    </div>
+    <div class="cards" id="canonNpcHost"></div></div>
+  <div class="cat"><h2>Factions</h2><div class="cards" id="canonFactionHost"></div></div>
+  <div class="cat"><h2>Sites &amp; Seals</h2><div id="sitesHost"></div></div>
+  <div class="cat"><h2>Clues &amp; Leads</h2>
+    <div class="clueform"><input id="clueTitle" placeholder="Lead or clue…"><input id="clueNote" placeholder="detail (optional)"><button class="btn" id="clueAdd">Add</button></div>
+    <div id="cluesHost"></div>
   </div>
   <div class="cat"><h2>Session Notes</h2>
     <textarea id="campNotes" style="width:100%;min-height:140px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:6px;padding:12px;font-family:inherit;font-size:15px" placeholder="Scratchpad — saved automatically in this browser…"></textarea>
   </div>
+  <div class="cat"><h2>Session Log</h2>
+    <div class="sessform"><input id="sessTitle" placeholder="Session title…"><button class="btn" id="sessEnd">End Session ▸ log it</button><span style="color:var(--parch-dim);font-size:13px;font-style:italic;align-self:center">captures your Session Notes into a dated recap</span></div>
+    <div id="sessHost"></div>
+  </div>
 </div>`;
-(async()=>{const cn=$("#campNotes");if(cn){cn.value=await storeGet("dmscreen:campNotes","");
-  cn.addEventListener("input",()=>storeSet("dmscreen:campNotes",cn.value))}})();
+async function loadCampNotes(){const cn=$("#campNotes");if(cn){cn.value=await storeGet(ck("campNotes"),"");
+  cn.addEventListener("input",()=>storeSet(ck("campNotes"),cn.value))}}
 /* secrets render blurred; tap to reveal/hide so you can open this tab in front of players */
 $("#campaignHost").addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".secretline");if(s)s.classList.toggle("shown")});
+
+/* ---- canon rendering + editor (plain-text pipe format, like the homebrew forge) ---- */
+const canonEmpty=msg=>`<p style="color:var(--parch-dim);font-style:italic;padding:4px 2px">${msg}</p>`;
+function renderCanon(){
+  $("#canonNpcHost").innerHTML=CANON.npcs.length?CANON.npcs.map(p=>`<div class="rule open"><button>${esc(p.n)}<span class="chev">▸</span></button>
+      <div class="body">${p.role?`<i>${esc(p.role)}</i><br>`:""}${p.pub?esc(p.pub)+"<br>":""}${p.sec?`<span class="secretline" title="tap to reveal / hide">SECRET: ${esc(p.sec)}</span>`:""}</div></div>`).join("")
+    :canonEmpty("No canon yet — ✎ edit canon above, or restore it via Import (Combat Tracker toolbar).");
+  $("#canonFactionHost").innerHTML=CANON.factions.length?CANON.factions.map(f=>`<div class="rule open"><button>${esc(f.n)}<span class="chev">▸</span></button><div class="body">${esc(f.note||"")}</div></div>`).join("")
+    :canonEmpty("No factions recorded.");
+  if(siteStatus.length!==CANON.sites.length)siteStatus=CANON.sites.map((s,i)=>siteStatus[i]||"sealed");
+  renderSites();
+  refreshJournalOptions();   // keep the NPC journal's faction/site dropdowns in sync with canon
+}
+$("#canonEditBtn").addEventListener("click",()=>{
+  const ed=$("#canonEditor");ed.classList.toggle("hidden");
+  if(!ed.classList.contains("hidden")){
+    $("#cn_npcs").value=CANON.npcs.map(p=>[p.n,p.role||"",p.pub||"",p.sec||""].join(" | ")).join("\n");
+    $("#cn_factions").value=CANON.factions.map(f=>[f.n,f.note||""].join(" | ")).join("\n");
+    $("#cn_sites").value=CANON.sites.map(s=>[s.n,s.domain||""].join(" | ")).join("\n");
+  }
+});
+$("#canonSave").addEventListener("click",()=>{
+  const rows=txt=>txt.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>l.split("|").map(x=>x.trim()));
+  CANON={
+    npcs:rows($("#cn_npcs").value).map(p=>({n:p[0]||"?",role:p[1]||"",pub:p[2]||"",sec:p[3]||""})),
+    factions:rows($("#cn_factions").value).map(p=>({n:p[0]||"?",note:p[1]||""})),
+    sites:rows($("#cn_sites").value).map(p=>({n:p[0]||"?",domain:p[1]||""}))
+  };
+  storeSet(ck("canon"),CANON);
+  siteStatus=CANON.sites.map((s,i)=>siteStatus[i]||"sealed");storeSet(ck("sites"),siteStatus);
+  $("#canonEditor").classList.add("hidden");renderCanon();
+});
+
+/* ---- site doom tracker (sites come from canon) ---- */
+const SITECYCLE=["sealed","cracked","broken"];
+let siteStatus=[];
+function renderSites(){
+  const host=$("#sitesHost");if(!host)return;
+  if(!CANON.sites.length){host.innerHTML=canonEmpty("No sites yet — add them via ✎ edit canon.");return}
+  const broken=siteStatus.filter(s=>s==="broken").length;
+  host.innerHTML=`<p class="ctot">${broken} of ${CANON.sites.length} seals broken — tap a seal to cycle it.</p><table><tr><th>#</th><th>Site</th><th>Domain</th><th>Seal</th></tr>`+
+    CANON.sites.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.n)}</td><td>${esc(s.domain||"")}</td><td><span class="sitecell ${siteStatus[i]}" onclick="cycleSite(${i})">${siteStatus[i]}</span></td></tr>`).join("")+`</table>`;
+}
+window.cycleSite=i=>{siteStatus[i]=SITECYCLE[(SITECYCLE.indexOf(siteStatus[i])+1)%3];storeSet(ck("sites"),siteStatus);renderSites()};
+
+/* ---- clues & leads ---- */
+let clues=[];
+const CLUEST=["open","active","resolved","dead"],CLUELBL={open:"Open",active:"Active",resolved:"Resolved",dead:"Dead-end"};
+function saveClues(){storeSet(ck("clues"),clues)}
+function renderClues(){
+  const host=$("#cluesHost");if(!host)return;
+  host.innerHTML=clues.length?clues.map((c,i)=>`<div class="cluecard st-${c.status}"><div class="cluehead"><b>${esc(c.title)}</b><span class="statuspill" onclick="cycleClue(${i})">${CLUELBL[c.status]||"Open"}</span><button class="btn ghost" onclick="delClue(${i})">remove</button></div>${c.note?`<div class="cluenote">${esc(c.note)}</div>`:""}</div>`).join(""):`<p style="color:var(--parch-dim);font-style:italic;padding:4px 2px">No leads yet — add the first thread your party is chasing.</p>`;
+}
+window.cycleClue=i=>{clues[i].status=CLUEST[(CLUEST.indexOf(clues[i].status)+1)%CLUEST.length];saveClues();renderClues()};
+window.delClue=i=>{clues.splice(i,1);saveClues();renderClues()};
+$("#clueAdd").addEventListener("click",()=>{const t=$("#clueTitle").value.trim();if(!t){$("#clueTitle").focus();return}clues.push({title:t,note:$("#clueNote").value.trim(),status:"open"});saveClues();$("#clueTitle").value="";$("#clueNote").value="";renderClues();$("#clueTitle").focus()});
+$("#clueTitle").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("#clueAdd").click()}});
+
+/* ---- session log + "previously…" recap ---- */
+let sessions=[];
+function saveSessions(){storeSet(ck("sessions"),sessions)}
+function renderRecap(){
+  const host=$("#recapHost");if(!host)return;
+  if(!sessions.length){host.innerHTML="";return}
+  const last=sessions[sessions.length-1];
+  host.innerHTML=`<div class="recap"><h3>Previously…</h3><div class="rdate">${esc(last.date)} · ${esc(last.title)}</div>${last.body?`<div style="margin-top:6px">${esc(last.body).replace(/\n/g,"<br>")}</div>`:""}</div>`;
+}
+function renderSessions(){
+  const host=$("#sessHost");if(!host)return;
+  host.innerHTML=sessions.length?sessions.slice().reverse().map(s=>`<div class="sessentry"><span class="sdate">${esc(s.date)}</span> — <b>${esc(s.title)}</b>${s.body?`<div>${esc(s.body).replace(/\n/g,"<br>")}</div>`:""}</div>`).join(""):`<p style="color:var(--parch-dim);font-style:italic;padding:4px 2px">No sessions logged yet.</p>`;
+  renderRecap();
+}
+$("#sessEnd").addEventListener("click",()=>{
+  const title=$("#sessTitle").value.trim()||("Session "+(sessions.length+1));
+  const body=($("#campNotes")?.value||"").trim();
+  sessions.push({date:new Date().toISOString().slice(0,10),title,body});saveSessions();
+  $("#sessTitle").value="";renderSessions();
+  alert(`Logged "${title}". Your Session Notes were captured into the recap — clear the scratchpad when you're ready for next time.`);
+});
+renderCanon();renderClues();renderSessions();   // paint empty/default state immediately
+async function loadCampaignTab(){
+  clues=await storeGet(ck("clues"),[]);renderClues();
+  sessions=await storeGet(ck("sessions"),[]);renderSessions();
+  CANON=await storeGet(ck("canon"),CANON);
+  const ss=await storeGet(ck("sites"),null);if(Array.isArray(ss))siteStatus=ss;
+  renderCanon();
+}
 
 /* ============ NPC JOURNAL TAB (player-authored) ============ */
 let NPCS=[];
 const DISPOS=["Neutral","Ally","Friendly","Suspicious","Hostile","Unknown"];
+/* faction/site dropdown options come from the DM's canon (device-local) — refreshed by renderCanon() */
+function refreshJournalOptions(){
+  const fs=$("#np_faction"),ss=$("#np_site");
+  if(fs){const cur=fs.value;fs.innerHTML=`<option value="">—</option>`+CANON.factions.map(f=>`<option>${esc(f.n)}</option>`).join("");fs.value=cur;}
+  if(ss){const cur=ss.value;ss.innerHTML=`<option value="">—</option>`+CANON.sites.map(s=>`<option>${esc(s.n)}</option>`).join("");ss.value=cur;}
+}
 $("#npcsHost").innerHTML=`
 <div class="camp">
   <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your party's field journal — record the folk you meet, what they do, and what you learn about them. Everything is saved automatically in this browser.</p>
@@ -1354,6 +1716,8 @@ $("#npcsHost").innerHTML=`
       <span><label>Role / title</label><input id="np_role" placeholder="Tavern keeper"></span>
       <span><label>Where you met</label><input id="np_loc" placeholder="Neil's Tavern"></span>
       <span><label>Disposition</label><select id="np_disp">${DISPOS.map(x=>`<option>${x}</option>`).join("")}</select></span>
+      <span><label>Faction</label><select id="np_faction"><option value="">—</option></select></span>
+      <span><label>Tied to site</label><select id="np_site"><option value="">—</option></select></span>
     </div>
     <label>Notes — what they want, what you owe them, what seems off…</label>
     <textarea id="np_notes" placeholder="Friendly so far. Mentioned trouble down by the docks. Keeps glancing at the door."></textarea>
@@ -1376,15 +1740,18 @@ function renderNPCCards(){
       <button class="btn ghost" onclick="delNPC(${i})">remove</button>
     </div>
     ${n.loc?`<div class="npcloc">Met at ${esc(n.loc)}</div>`:""}
+    ${(n.faction||n.site)?`<div class="npcloc">${n.faction?`<span class="npctag">⚑ ${esc(n.faction)}</span>`:""}${n.site?`<span class="npctag">⚰ ${esc(n.site)}</span>`:""}</div>`:""}
     ${n.notes?`<div class="npcnotes">${esc(n.notes).replace(/\n/g,"<br>")}</div>`:""}
   </div>`).join("");
 }
-function saveNPCs(){storeSet("dmscreen:npcs",NPCS)}
+function saveNPCs(){storeSet(ck("npcs"),NPCS)}
+function addNPCRecord(rec){NPCS.push(rec);saveNPCs();renderNPCCards();}   // used by the NPC generator's "Save to Journal"
 renderNPCCards();   // paint the empty-state placeholder immediately; the async load below repaints with saved data
 let npcEditIndex=-1;   // -1 = adding; >=0 = editing in place (record stays put until saved, so abandoning loses nothing)
 window.editNPC=i=>{const n=NPCS[i];
   $("#np_name").value=n.name||"";$("#np_role").value=n.role||"";$("#np_loc").value=n.loc||"";
   $("#np_disp").value=n.disp||"Neutral";$("#np_notes").value=n.notes||"";
+  $("#np_faction").value=n.faction||"";$("#np_site").value=n.site||"";
   npcEditIndex=i;$("#np_add").textContent="Save Changes";
   $("#np_name").focus();try{$("#np_name").scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}
 };
@@ -1393,20 +1760,29 @@ window.delNPC=i=>{if(!confirm("Remove "+(NPCS[i].name||"this NPC")+" from the jo
   saveNPCs();renderNPCCards()};
 $("#np_add").addEventListener("click",()=>{
   const name=$("#np_name").value.trim();if(!name){$("#np_name").focus();return}
-  const rec={name,role:$("#np_role").value.trim(),loc:$("#np_loc").value.trim(),disp:$("#np_disp").value,notes:$("#np_notes").value.trim()};
+  const rec={name,role:$("#np_role").value.trim(),loc:$("#np_loc").value.trim(),disp:$("#np_disp").value,faction:$("#np_faction").value,site:$("#np_site").value,notes:$("#np_notes").value.trim()};
   if(npcEditIndex>=0){NPCS[npcEditIndex]=rec;npcEditIndex=-1;$("#np_add").textContent="Add to Journal"}else{NPCS.push(rec)}
   saveNPCs();
-  ["np_name","np_role","np_loc","np_notes"].forEach(id=>$("#"+id).value="");$("#np_disp").value="Neutral";
+  ["np_name","np_role","np_loc","np_notes"].forEach(id=>$("#"+id).value="");$("#np_disp").value="Neutral";$("#np_faction").value="";$("#np_site").value="";
   renderNPCCards();$("#np_name").focus();
 });
 $("#np_name").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("#np_add").click()}});
+refreshJournalOptions();   // populate faction/site dropdowns (canon may still be loading; renderCanon refreshes again)
+async function loadJournal(){
+  NPCS=await storeGet(ck("npcs"),[]);renderNPCCards();
+  const pn=$("#partyNotes");if(pn){pn.value=await storeGet(ck("partyNotes"),"");
+    pn.addEventListener("input",()=>storeSet(ck("partyNotes"),pn.value))}
+}
+
+/* ============ BOOT — resolve the active campaign first, then everything that reads its keys ============ */
 (async()=>{
-  NPCS=await storeGet("dmscreen:npcs",[]);renderNPCCards();
-  const pn=$("#partyNotes");if(pn){pn.value=await storeGet("dmscreen:partyNotes","");
-    pn.addEventListener("input",()=>storeSet("dmscreen:partyNotes",pn.value))}
+  await bootCampaigns();   // registry + one-time migration of pre-campaign data
+  loadRoster();loadTrk();loadCampNotes();loadCampaignTab();loadJournal();   // independent — run in parallel
 })();
 
 /* ============ STORAGE HEALTH PROBE — warn if the browser is blocking persistence ============ */
+/* Ask the browser to protect our storage from eviction (Safari/iOS can otherwise purge it under pressure). */
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
 (async()=>{
   try{
     await window.storage.set("dmscreen:_probe","1");
