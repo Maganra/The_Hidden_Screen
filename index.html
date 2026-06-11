@@ -274,7 +274,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
 .libpanel .lrow{display:flex;gap:8px;align-items:center;margin-bottom:5px;flex-wrap:wrap}
 .libpanel .lrow .ln{flex:1;min-width:120px;color:var(--parch)}
 
-/* ---------- clues, sessions, burial-site doom ---------- */
+/* ---------- clues, sessions, site doom ---------- */
 .clueform,.sessform{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-start}
 .clueform input,.sessform input{flex:1;min-width:140px}
 .cluecard{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px}
@@ -360,7 +360,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
     </div>
     <div class="hbform hidden" id="hbForm">
       <div class="frow">
-        <span><label>Name *</label><input id="hb_n" placeholder="Bayou Lurker"></span>
+        <span><label>Name *</label><input id="hb_n" placeholder="Barrow Hound"></span>
         <span><label>CR</label><input id="hb_cr" class="num" placeholder="3"></span>
         <span><label>AC</label><input id="hb_ac" class="num" placeholder="14 (natural armor)"></span>
         <span><label>HP *</label><input id="hb_hp" class="num" type="number" placeholder="52"></span>
@@ -381,7 +381,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
         <span><label>Languages</label><input id="hb_lg" placeholder="Common"></span>
       </div>
       <label>Traits — one per line, written as <b>Name | description</b></label>
-      <textarea id="hb_tr" placeholder="Bayou Camouflage | Advantage on Stealth checks in swamp terrain."></textarea>
+      <textarea id="hb_tr" placeholder="Keen Smell | Advantage on Wisdom (Perception) checks that rely on smell."></textarea>
       <label style="margin-top:8px">Actions — one per line, written as <b>Name | description</b></label>
       <textarea id="hb_axn" placeholder="Claw | Melee: +5 to hit. Hit: 8 (1d8+4) slashing."></textarea>
       <div class="frow" style="margin-top:10px">
@@ -1583,11 +1583,11 @@ $("#campaignHost").innerHTML=`
   <div class="cat"><h2>Key NPCs <button class="btn ghost" id="canonEditBtn" style="margin-left:10px">✎ edit canon</button></h2>
     <div class="hbform hidden" id="canonEditor">
       <label>Key NPCs — one per line, written as <b>Name | role / where | public note | secret</b></label>
-      <textarea id="cn_npcs" style="min-height:110px" placeholder="Lady Vex | Noble Council | Charming patron of the arts. | Actually the cult's paymaster."></textarea>
+      <textarea id="cn_npcs" style="min-height:110px" placeholder="Lady Vex | Silver Circle salon | Charming patron of the arts. | Actually the cult's paymaster."></textarea>
       <label style="margin-top:8px">Factions — one per line, written as <b>Name | note</b></label>
-      <textarea id="cn_factions" placeholder="City Watch | Captain is compromised."></textarea>
+      <textarea id="cn_factions" placeholder="Harbor Guild | Eyes on every dock; the clerk owes the party a favor."></textarea>
       <label style="margin-top:8px">Sites — one per line, written as <b>Name | domain</b> (each site gets a seal in the doom tracker)</label>
-      <textarea id="cn_sites" placeholder="The Old Well | Renewal"></textarea>
+      <textarea id="cn_sites" placeholder="The Old Well | Stillness"></textarea>
       <div class="frow" style="margin-top:10px"><button class="btn" id="canonSave">Save Canon</button>
         <span style="color:var(--parch-dim);font-size:13px;font-style:italic;align-self:center">Saved in this browser only — and included in Export, so back up after big changes.</span></div>
     </div>
@@ -1712,9 +1712,9 @@ $("#npcsHost").innerHTML=`
   <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your party's field journal — record the folk you meet, what they do, and what you learn about them. Everything is saved automatically in this browser.</p>
   <div class="npcform">
     <div class="frow">
-      <span><label>Name *</label><input id="np_name" placeholder="Marshall"></span>
+      <span><label>Name *</label><input id="np_name" placeholder="Wencel"></span>
       <span><label>Role / title</label><input id="np_role" placeholder="Tavern keeper"></span>
-      <span><label>Where you met</label><input id="np_loc" placeholder="Neil's Tavern"></span>
+      <span><label>Where you met</label><input id="np_loc" placeholder="The Crooked Lantern"></span>
       <span><label>Disposition</label><select id="np_disp">${DISPOS.map(x=>`<option>${x}</option>`).join("")}</select></span>
       <span><label>Faction</label><select id="np_faction"><option value="">—</option></select></span>
       <span><label>Tied to site</label><select id="np_site"><option value="">—</option></select></span>
