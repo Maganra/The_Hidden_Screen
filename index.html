@@ -193,6 +193,62 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
   .abil{grid-template-columns:repeat(3,1fr);row-gap:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- tracker upgrades: type badges, death saves, party, homebrew ---------- */
+.tbadge{font-family:'Alegreya Sans SC',sans-serif;font-size:11px;letter-spacing:.08em;border-radius:3px;padding:1px 6px;margin-left:7px;vertical-align:2px}
+.tbadge.pc{background:#1f3326;color:#9fce9b;border:1px solid #3c5c41}
+.tbadge.npc{background:#33291a;color:#d9b96a;border:1px solid #6a5526}
+.tbadge.monster{background:#3a201c;color:#dd9387;border:1px solid #6e3128}
+.combatant.dying{border-left-color:var(--oxblood);background:#291a16}
+.combatant.ghosted{opacity:.55;border-style:dashed}
+.eye{font-size:13px}.eye.off{opacity:.5}
+.dsrow{display:flex;align-items:center;gap:10px;width:100%;font-size:13px;color:var(--parch-dim);font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.05em;flex-wrap:wrap}
+.dsg{display:flex;gap:5px}
+.pip{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--sage);background:transparent;padding:0;cursor:pointer}
+.pip.f{border-color:var(--oxblood)}
+.pip.s.on{background:var(--sage)}
+.pip.f.on{background:var(--oxblood)}
+.stab{color:var(--sage);letter-spacing:.12em}.ded{color:var(--oxblood);letter-spacing:.12em}
+.ptybar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.ptyedit{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:14px}
+.ptyedit .prow{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.ptyedit input{width:170px}.ptyedit input.num{width:80px}
+#saveInd{color:var(--parch-dim);font-size:12.5px;font-style:italic;margin-left:auto}
+.hbform{background:var(--panel);border:1px dashed var(--brass-dim);border-radius:6px;padding:14px;margin-bottom:14px}
+.hbform .frow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.hbform .frow span{display:flex;flex-direction:column;gap:2px}
+.hbform input{width:150px}.hbform input.num{width:70px}
+.hbform textarea{width:100%;min-height:54px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:4px;padding:8px;font-family:inherit;font-size:14px}
+.hbform label{font-size:13px;color:var(--parch-dim);display:block;margin-bottom:2px}
+.hbmark{color:var(--brass);font-size:12px}
+
+/* ---------- campaign (DM canon) ---------- */
+.camp .secretline{color:#d98a7f;font-family:'Alegreya Sans SC',sans-serif;font-size:13.5px;letter-spacing:.04em}
+.camp table{border-collapse:collapse;width:100%;font-size:14.5px}
+.camp th{text-align:left;color:var(--brass);font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.05em;padding:3px 10px 3px 0;border-bottom:1px solid var(--line)}
+.camp td{padding:5px 10px 5px 0;border-bottom:1px solid #2e2820;vertical-align:top}
+
+/* ---------- NPC journal (player-authored) ---------- */
+.npcform{background:var(--panel);border:1px dashed var(--brass-dim);border-radius:6px;padding:14px;margin-bottom:18px}
+.npcform .frow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.npcform .frow span{display:flex;flex-direction:column;gap:2px}
+.npcform input{width:180px}.npcform select{width:150px}
+.npcform textarea{width:100%;min-height:54px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:4px;padding:8px;font-family:inherit;font-size:14px}
+.npcform label{font-size:13px;color:var(--parch-dim)}
+.npccard{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.npccard .npchead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.npccard b{font-size:17px;font-family:'Alegreya',serif}
+.npcrole{color:var(--parch-dim);font-style:italic;font-size:14px}
+.npcdisp{font-family:'Alegreya Sans SC',sans-serif;font-size:12px;letter-spacing:.06em;padding:1px 9px;border-radius:10px;border:1px solid var(--line);margin-left:auto}
+.npcloc{color:var(--parch-dim);font-size:13.5px;margin-top:4px}
+.npcnotes{margin-top:6px;font-size:14.5px;line-height:1.5;color:#d9cdb2}
+.npccard .btn{padding:4px 10px}
+.disp-ally{border-left-color:var(--sage)} .disp-ally .npcdisp{color:var(--sage);border-color:#3c5c41}
+.disp-friendly{border-left-color:#7d9a6a} .disp-friendly .npcdisp{color:#9ec089;border-color:#5c7a4a}
+.disp-neutral{border-left-color:var(--brass-dim)} .disp-neutral .npcdisp{color:var(--brass);border-color:var(--brass-dim)}
+.disp-suspicious{border-left-color:#b58a3a} .disp-suspicious .npcdisp{color:#d8a93f;border-color:#8a6d36}
+.disp-hostile{border-left-color:var(--oxblood)} .disp-hostile .npcdisp{color:#d98a7f;border-color:var(--oxblood)}
+.disp-unknown{border-left-color:var(--line)} .disp-unknown .npcdisp{color:var(--parch-dim)}
 </style>
 </head>
 <body>
@@ -204,6 +260,8 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
     <button data-tab="items">Items</button>
     <button data-tab="tracker">Combat Tracker</button>
     <button data-tab="gens">Generators</button>
+    <button data-tab="campaign">Campaign</button>
+    <button data-tab="npcs">NPCs</button>
   </nav>
 </header>
 <main>
@@ -216,6 +274,38 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
     <div class="searchrow">
       <input id="monSearch" type="search" placeholder="Search monsters…">
       <select id="crFilter"><option value="">All CRs</option></select>
+      <button class="btn" id="hbToggle">⚒ Custom Creature</button>
+    </div>
+    <div class="hbform hidden" id="hbForm">
+      <div class="frow">
+        <span><label>Name *</label><input id="hb_n" placeholder="Bayou Lurker"></span>
+        <span><label>CR</label><input id="hb_cr" class="num" placeholder="3"></span>
+        <span><label>AC</label><input id="hb_ac" class="num" placeholder="14 (natural armor)"></span>
+        <span><label>HP *</label><input id="hb_hp" class="num" type="number" placeholder="52"></span>
+        <span><label>Hit Dice</label><input id="hb_hd" class="num" placeholder="8d8+16"></span>
+        <span><label>Speed</label><input id="hb_sp" placeholder="30 ft., swim 30 ft."></span>
+      </div>
+      <div class="frow">
+        <span><label>STR</label><input id="hb_s" class="num" type="number" value="10"></span>
+        <span><label>DEX</label><input id="hb_d" class="num" type="number" value="10"></span>
+        <span><label>CON</label><input id="hb_c" class="num" type="number" value="10"></span>
+        <span><label>INT</label><input id="hb_i" class="num" type="number" value="10"></span>
+        <span><label>WIS</label><input id="hb_w" class="num" type="number" value="10"></span>
+        <span><label>CHA</label><input id="hb_ch" class="num" type="number" value="10"></span>
+      </div>
+      <div class="frow">
+        <span><label>Type line</label><input id="hb_st" placeholder="Medium undead, neutral evil"></span>
+        <span><label>Senses</label><input id="hb_sen" placeholder="darkvision 60 ft."></span>
+        <span><label>Languages</label><input id="hb_lg" placeholder="Common"></span>
+      </div>
+      <label>Traits — one per line, written as <b>Name | description</b></label>
+      <textarea id="hb_tr" placeholder="Bayou Camouflage | Advantage on Stealth checks in swamp terrain."></textarea>
+      <label style="margin-top:8px">Actions — one per line, written as <b>Name | description</b></label>
+      <textarea id="hb_axn" placeholder="Claw | Melee: +5 to hit. Hit: 8 (1d8+4) slashing."></textarea>
+      <div class="frow" style="margin-top:10px">
+        <button class="btn" id="hbSave">Save Creature</button>
+        <span style="color:var(--parch-dim);font-size:13px;font-style:italic;align-self:center">Saved creatures persist in this browser and join the Bestiary, tracker, and Encounter Builder.</span>
+      </div>
     </div>
     <div class="bestgrid">
       <div class="monlist" id="monList"></div>
@@ -243,13 +333,28 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
       <span class="round" id="roundLbl">Round 1</span>
       <button class="btn" id="nextTurn">Next Turn ▸</button>
       <button class="btn ghost" id="sortInit">Sort by Initiative</button>
+      <button class="btn" id="playerViewBtn">⧉ Player View</button>
+      <button class="btn ghost" id="exportBtn">Export</button>
+      <button class="btn ghost" id="importBtn">Import</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none">
       <button class="btn red" id="clearTrk">Clear Encounter</button>
+      <span id="saveInd"></span>
+    </div>
+    <div class="ptybar">
+      <button class="btn" id="ptyToCombat">⚑ Summon the Party</button>
+      <button class="btn ghost" id="ptyToggle">Manage Party</button>
+      <span style="color:var(--parch-dim);font-size:13px;font-style:italic">Set each hero's max HP &amp; AC once — remembered forever. Click any initiative number to set rolls.</span>
+    </div>
+    <div class="ptyedit hidden" id="ptyEdit">
+      <div id="ptyRows"></div>
+      <button class="btn ghost" id="ptyAddRow">+ add member</button>
     </div>
     <div class="trk-add">
       <input id="cName" placeholder="Name">
       <input id="cInit" class="num" type="number" placeholder="Init">
       <input id="cHP" class="num" type="number" placeholder="HP">
       <input id="cAC" class="num" type="number" placeholder="AC">
+      <select id="cType"><option value="pc">PC</option><option value="npc">NPC</option><option value="monster" selected>Monster</option></select>
       <button class="btn" id="addC">Add</button>
       <span style="color:var(--parch-dim);font-size:13.5px;font-style:italic">…or add monsters straight from the Bestiary.</span>
     </div>
@@ -288,6 +393,14 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
         <div class="out" id="spiceOut">A rumor, a storm, a crooked sign…</div>
       </div>
     </div>
+  </section>
+
+  <section id="tab-campaign" class="tab">
+    <div id="campaignHost"></div>
+  </section>
+
+  <section id="tab-npcs" class="tab">
+    <div id="npcsHost"></div>
   </section>
 </main>
 
@@ -509,6 +622,21 @@ $("#ruleSearch").addEventListener("input",e=>{
   $$("#rulesHost .cat").forEach(c=>c.classList.toggle("hidden",![...c.querySelectorAll(".rule")].some(r=>!r.classList.contains("hidden"))));
 });
 
+/* ============ SHARED STATE & PERSISTENCE (async window.storage, JSON-encoded) ============ */
+async function storeGet(k,d){try{const r=await window.storage.get(k);return r&&r.value!=null?JSON.parse(r.value):d}catch(e){return d}}
+async function storeSet(k,v){try{await window.storage.set(k,JSON.stringify(v))}catch(e){}}
+let HOMEBREW=[];                       // custom creatures (async-loaded below)
+let PARTY=[                            // saved heroes — prefilled from Blood in the Bayou
+  {name:"Cersei (Gooby)",ac:14,max:38,type:"pc"},
+  {name:"Braith",ac:15,max:36,type:"pc"},
+  {name:"Magos",ac:18,max:44,type:"pc"},
+  {name:"Jeremy's Monk",ac:16,max:40,type:"pc"},
+  {name:"Xerox",ac:15,max:38,type:"pc"}
+];
+function flashSaved(){const el=$("#saveInd");if(!el)return;const t=new Date();
+  el.textContent="saved "+t.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+function bcast(){try{localStorage.setItem("dmscreen:bcast",String(Date.now()))}catch(e){}} // nudge any open Player View
+
 /* ============ BESTIARY ============ */
 MONS.sort((a,b)=>crval(a.cr)-crval(b.cr)||a.n.localeCompare(b.n));
 const crSet=[...new Set(MONS.map(m=>m.cr))];
@@ -516,17 +644,19 @@ crSet.forEach(c=>{const o=document.createElement("option");o.value=c;o.textConte
 let selMon=null;
 function renderMonList(){
   const q=$("#monSearch").value.trim().toLowerCase(), f=$("#crFilter").value;
-  $("#monList").innerHTML=MONS.filter(m=>(!q||m.n.toLowerCase().includes(q)||m.st.toLowerCase().includes(q))&&(!f||m.cr===f))
-    .map(m=>`<button data-n="${esc(m.n)}" class="${selMon===m.n?'sel':''}">${m.n}<span class="cr">CR ${m.cr}</span></button>`).join("")
+  const all=[...MONS,...HOMEBREW];
+  all.sort((a,b)=>crval(a.cr)-crval(b.cr)||a.n.localeCompare(b.n));
+  $("#monList").innerHTML=all.filter(m=>(!q||m.n.toLowerCase().includes(q)||(m.st||"").toLowerCase().includes(q))&&(!f||m.cr===f))
+    .map(m=>`<button data-n="${esc(m.n)}" class="${selMon===m.n?'sel':''}">${m.n}${m.hb?'<span class="hbmark"> ⚒</span>':''}<span class="cr">CR ${m.cr}</span></button>`).join("")
     ||`<p style="padding:12px;color:var(--parch-dim);font-style:italic">Nothing stirs…</p>`;
-  $$("#monList button").forEach(b=>b.addEventListener("click",()=>{selMon=b.dataset.n;renderMonList();renderStat(MONS.find(m=>m.n===selMon));toDetail("#monView")}));
+  $$("#monList button").forEach(b=>b.addEventListener("click",()=>{selMon=b.dataset.n;renderMonList();renderStat(all.find(m=>m.n===selMon));toDetail("#monView")}));
 }
 function line(lbl,v){return v?`<p class="ln"><b>${lbl}</b> ${v}</p>`:""}
 function renderStat(m){
   const AB=["STR","DEX","CON","INT","WIS","CHA"];
   $("#monView").innerHTML=`<div class="statblock">
     <h3>${m.n}</h3><div class="meta">${m.st}</div><div class="taper"></div>
-    ${line("Armor Class",m.acx)}${line("Hit Points",m.hp+" ("+m.hd+")")}${line("Speed",m.sp)}
+    ${line("Armor Class",m.acx)}${line("Hit Points",m.hp+(m.hd?" ("+m.hd+")":""))}${line("Speed",m.sp)}
     <div class="taper"></div>
     <div class="abil">${m.ab.map((v,i)=>`<div><b>${AB[i]}</b>${v} (${mod(v)})</div>`).join("")}</div>
     <div class="taper"></div>
@@ -538,7 +668,8 @@ function renderStat(m){
     ${m.axn&&m.axn.length?'<h4>Actions</h4>'+m.axn.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
     ${m.lax&&m.lax.length?'<h4>Legendary Actions</h4><p>Three legendary actions per round, one at a time at the end of other turns; regained at the start of its turn.</p>'+m.lax.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
   </div>
-  <div class="sb-actions"><button class="btn" onclick="addMonToTracker('${esc(m.n)}')">⚔ Add to Combat Tracker</button></div>`;
+  <div class="sb-actions"><button class="btn" id="sbAddTrk">⚔ Add to Combat Tracker</button></div>`;
+  $("#sbAddTrk").onclick=()=>addMonToTracker(m.n);   // bind in JS so names with apostrophes/quotes can't break the handler
 }
 $("#monSearch").addEventListener("input",renderMonList);
 $("#crFilter").addEventListener("change",renderMonList);
@@ -546,52 +677,224 @@ renderMonList();
 
 /* ============ COMBAT TRACKER ============ */
 let TRK={round:1,turn:0,list:[]};
+let trkHydrated=false;   // true once the saved encounter has loaded — guards the async-storage load race
 const CONDS=["Blinded","Charmed","Deafened","Frightened","Grappled","Incapacitated","Invisible","Paralyzed","Petrified","Poisoned","Prone","Restrained","Stunned","Unconscious","Concentrating","Exhaustion"];
-async function saveTrk(){try{await window.storage.set("dmscreen:tracker",JSON.stringify(TRK))}catch(e){}}
-async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value)TRK=JSON.parse(r.value)}catch(e){}renderTrk()}
+/* save is fire-and-forget so the UI stays snappy; it re-renders, flashes the indicator, nudges the Player View,
+   and only persists once hydration is done so an over-eager early click can't overwrite the saved encounter */
+function saveTrk(){renderTrk();flashSaved();bcast();if(trkHydrated)Promise.resolve(window.storage.set("dmscreen:tracker",JSON.stringify(TRK))).catch(()=>{})}
+async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value&&!trkHydrated)TRK=JSON.parse(r.value)}catch(e){}trkHydrated=true;renderTrk()}
 function renderTrk(){
   $("#roundLbl").textContent="Round "+TRK.round;
-  if(!TRK.list.length){$("#trkHost").innerHTML=`<p style="color:var(--parch-dim);font-style:italic">The battlefield is empty. Add combatants above, or send in monsters from the Bestiary.</p>`;return}
+  if(!TRK.list.length){$("#trkHost").innerHTML=`<p style="color:var(--parch-dim);font-style:italic">The battlefield is empty. Summon the party, add combatants above, or send in monsters from the Bestiary.</p>`;return}
   $("#trkHost").innerHTML=TRK.list.map((c,i)=>{
     const pct=c.max>0?Math.max(0,Math.min(100,100*c.hp/c.max)):0;
     const cls=pct>50?"":pct>25?"hurt":"bad";
-    return `<div class="combatant ${i===TRK.turn?'turn':''} ${c.hp<=0?'dead':''}">
-      <div class="init">${c.init}</div>
-      <div class="nm">${esc(c.name)}<small>AC ${c.ac??"—"}</small></div>
+    const type=c.type||"monster";
+    const down=c.hp<=0;
+    const dying=down&&type==="pc"&&!c.stableDead;
+    const ds=c.ds||{s:0,f:0};
+    return `<div class="combatant ${i===TRK.turn?'turn':''} ${down&&!dying?'dead':''} ${dying?'dying':''} ${c.hidden?'ghosted':''}">
+      <div class="init" onclick="setInit(${i})" style="cursor:pointer" title="click to set initiative">${c.init}</div>
+      <div class="nm">${esc(c.name)}<span class="tbadge ${type}">${type==="pc"?"PC":type==="npc"?"NPC":"Foe"}</span>${c.conc?'<span class="hbmark" title="Concentrating"> ◈</span>':''}<small>AC ${c.ac??"—"}</small></div>
       <div class="hpbar"><div class="lbl"><span>HP</span><span>${c.hp} / ${c.max}</span></div>
         <div class="bar"><div class="fill ${cls}" style="width:${pct}%"></div></div></div>
       <div class="hpctl">
         <button class="btn red" onclick="hpDelta(${i},-1)">−</button>
         <input type="number" id="amt${i}" value="${c.amt||5}" min="1" aria-label="amount">
         <button class="btn" onclick="hpDelta(${i},1)">+</button>
+        <button class="btn ghost eye ${c.hidden?'off':''}" onclick="toggleHide(${i})" title="${c.hidden?'hidden from players':'visible to players'}">${c.hidden?'🚫':'👁'}</button>
         <button class="btn ghost" onclick="delC(${i})" title="remove">✕</button>
       </div>
+      ${dying?`<div class="dsrow"><span>Death Saves</span>
+        <span class="dsg">${[0,1,2].map(k=>`<button class="pip s ${ds.s>k?'on':''}" onclick="deathSave(${i},'s',${k})" title="success"></button>`).join("")}</span>
+        <span class="dsg">${[0,1,2].map(k=>`<button class="pip f ${ds.f>k?'on':''}" onclick="deathSave(${i},'f',${k})" title="failure"></button>`).join("")}</span>
+        <button class="btn ghost" onclick="reviveOne(${i})">stabilize / heal</button></div>`:""}
+      ${down&&type!=="pc"?`<div class="dsrow"><span class="ded">DEFEATED</span></div>`:""}
+      ${dying&&ds.s>=3?`<div class="dsrow"><span class="stab">STABLE</span></div>`:""}
+      ${dying&&ds.f>=3?`<div class="dsrow"><span class="ded">DEAD</span></div>`:""}
       <div class="condrow">${(c.conds||[]).map((cd,j)=>`<button class="condtag" title="remove" onclick="rmCond(${i},${j})">${cd} ✕</button>`).join("")}
         <select class="condtag add" onchange="addCond(${i},this.value);this.value=''"><option value="">+ condition</option>${CONDS.map(x=>`<option>${x}</option>`).join("")}</select></div>
     </div>`}).join("");
 }
-window.hpDelta=(i,sign)=>{const a=+($("#amt"+i)?.value||1);const c=TRK.list[i];c.amt=a;c.hp=Math.min(c.max,c.hp+sign*a);if(c.hp<0)c.hp=0;saveTrk();renderTrk()};
-window.delC=i=>{TRK.list.splice(i,1);if(TRK.turn>=TRK.list.length)TRK.turn=0;saveTrk();renderTrk()};
-window.addCond=(i,v)=>{if(!v)return;TRK.list[i].conds=TRK.list[i].conds||[];if(!TRK.list[i].conds.includes(v))TRK.list[i].conds.push(v);saveTrk();renderTrk()};
-window.rmCond=(i,j)=>{TRK.list[i].conds.splice(j,1);saveTrk();renderTrk()};
+window.toggleHide=i=>{TRK.list[i].hidden=!TRK.list[i].hidden;saveTrk()};
+window.deathSave=(i,kind,k)=>{const c=TRK.list[i];c.ds=c.ds||{s:0,f:0};
+  // clicking a pip sets the count to that index+1, or clears back to it if already exactly that
+  c.ds[kind]=(c.ds[kind]===k+1)?k:k+1;saveTrk()};
+window.reviveOne=i=>{const c=TRK.list[i];c.hp=Math.max(1,c.hp);c.ds={s:0,f:0};saveTrk()};
+window.hpDelta=(i,sign)=>{const a=+($("#amt"+i)?.value||1);const c=TRK.list[i];c.amt=a;
+  const wasUp=c.hp>0;
+  c.hp=Math.min(c.max,c.hp+sign*a);if(c.hp<0)c.hp=0;
+  if(sign<0){
+    // concentration check prompt
+    if(c.conc){const dc=Math.max(10,Math.floor(a/2));setTimeout(()=>{
+      if(!confirm(`${c.name} is concentrating. Con save DC ${dc} (½ of ${a}). Did the save SUCCEED?\n\nOK = kept concentration · Cancel = broken`)){c.conc=false;saveTrk();}
+    },30);}
+    // taking damage while already at 0 HP = a death save failure (PCs); ≥ max HP of damage = instant death
+    if(!wasUp&&(c.type==="pc")){c.ds=c.ds||{s:0,f:0};c.ds.f=Math.min(3,c.ds.f+(a>=c.max?3:1));}
+  }
+  saveTrk()};
+window.delC=i=>{TRK.list.splice(i,1);if(TRK.turn>=TRK.list.length)TRK.turn=0;saveTrk()};
+window.addCond=(i,v)=>{if(!v)return;const c=TRK.list[i];c.conds=c.conds||[];
+  if(v==="Concentrating"){c.conc=true;saveTrk();return;}
+  if(!c.conds.includes(v))c.conds.push(v);saveTrk()};
+window.rmCond=(i,j)=>{TRK.list[i].conds.splice(j,1);saveTrk()};
+window.setInit=i=>{const v=prompt("Initiative for "+TRK.list[i].name+":",TRK.list[i].init);if(v!==null){TRK.list[i].init=+v||0;saveTrk()}};
 $("#addC").addEventListener("click",()=>{
   const n=$("#cName").value.trim();if(!n)return $("#cName").focus();
   const hp=+($("#cHP").value)||10;
-  TRK.list.push({name:n,init:+($("#cInit").value)||ri(1,20),hp,max:hp,ac:+($("#cAC").value)||null,conds:[]});
+  TRK.list.push({name:n,init:+($("#cInit").value)||ri(1,20),hp,max:hp,ac:+($("#cAC").value)||null,type:$("#cType").value,conds:[]});
   ["cName","cInit","cHP","cAC"].forEach(id=>$("#"+id).value="");
-  saveTrk();renderTrk();
+  saveTrk();
 });
-$("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;saveTrk();renderTrk()});
-$("#nextTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk();renderTrk()});
-$("#clearTrk").addEventListener("click",()=>{TRK={round:1,turn:0,list:[]};saveTrk();renderTrk()});
+$("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;saveTrk()});
+$("#nextTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk()});
+$("#clearTrk").addEventListener("click",()=>{if(!confirm("Clear the whole encounter? (Your saved party and custom creatures are kept.)"))return;TRK={round:1,turn:0,list:[]};saveTrk()});
 window.addMonToTracker=name=>{
-  const m=MONS.find(x=>x.n===name);if(!m)return;
-  const count=TRK.list.filter(c=>c.name.startsWith(m.n)).length;
+  const m=[...MONS,...HOMEBREW].find(x=>x.n===name);if(!m)return;
+  const count=TRK.list.filter(c=>c.name===m.n||c.name.startsWith(m.n+" ")).length;
   const init=ri(1,20)+Math.floor((m.ab[1]-10)/2);
-  TRK.list.push({name:count?`${m.n} ${count+1}`:m.n,init,hp:m.hp,max:m.hp,ac:parseInt(m.acx)||10,conds:[]});
-  saveTrk();renderTrk();
+  TRK.list.push({name:count?`${m.n} ${count+1}`:m.n,init,hp:m.hp,max:m.hp,ac:parseInt(m.acx)||10,type:"monster",conds:[]});
+  saveTrk();
   $$("nav button").find(b=>b.dataset.tab==="tracker").click();
 };
+
+/* ============ PARTY ROSTER ============ */
+function renderParty(){
+  if(!$("#ptyRows"))return;
+  $("#ptyRows").innerHTML=PARTY.map((p,i)=>`<div class="prow">
+    <input value="${esc(p.name)}" onchange="ptyEdit(${i},'name',this.value)" placeholder="Hero name">
+    <input class="num" type="number" value="${p.max||''}" onchange="ptyEdit(${i},'max',+this.value)" placeholder="Max HP">
+    <input class="num" type="number" value="${p.ac||''}" onchange="ptyEdit(${i},'ac',+this.value)" placeholder="AC">
+    <button class="btn ghost" onclick="ptyDel(${i})">remove</button></div>`).join("");
+}
+window.ptyEdit=(i,k,v)=>{PARTY[i][k]=v;storeSet("dmscreen:party",PARTY)};
+window.ptyDel=i=>{PARTY.splice(i,1);storeSet("dmscreen:party",PARTY);renderParty()};
+$("#ptyAddRow").addEventListener("click",()=>{PARTY.push({name:"",ac:10,max:10,type:"pc"});storeSet("dmscreen:party",PARTY);renderParty()});
+$("#ptyToggle").addEventListener("click",()=>{$("#ptyEdit").classList.toggle("hidden");renderParty()});
+$("#ptyToCombat").addEventListener("click",()=>{
+  PARTY.filter(p=>p.name.trim()).forEach(p=>{
+    if(TRK.list.some(c=>c.name===p.name))return; // don't double-add
+    const init=prompt(`Initiative for ${p.name}:`,"");
+    TRK.list.push({name:p.name,init:init===null||init===""?ri(1,20):+init,hp:p.max||10,max:p.max||10,ac:p.ac||null,type:"pc",conds:[],ds:{s:0,f:0}});
+  });
+  saveTrk();
+});
+
+/* ============ EXPORT / IMPORT ============ */
+$("#exportBtn").addEventListener("click",()=>{
+  const data={v:1,exported:new Date().toISOString(),tracker:TRK,party:PARTY,homebrew:HOMEBREW};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="hidden-screen-"+new Date().toISOString().slice(0,10)+".json";a.click();
+  URL.revokeObjectURL(a.href);
+});
+$("#importBtn").addEventListener("click",()=>$("#importFile").click());
+$("#importFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
+    if(d.tracker){TRK=d.tracker;storeSet("dmscreen:tracker",TRK)}
+    if(d.party){PARTY=d.party;storeSet("dmscreen:party",PARTY)}
+    if(d.homebrew){HOMEBREW=d.homebrew;storeSet("dmscreen:homebrew",HOMEBREW)}
+    refreshCRFilter();renderMonList();renderParty();renderTrk();bcast();
+    alert("Encounter, party, and custom creatures loaded.");
+  }catch(err){alert("That file couldn't be read.")}};r.readAsText(f);e.target.value="";});
+
+/* ============ PLAYER VIEW (pop-out window, live-synced) ============ */
+/* The popup reads the DM's in-memory tracker through window.opener, so it works regardless of
+   the storage backend; bcast() writes a localStorage key purely to fire the cross-window event. */
+window.pvRound=()=>TRK.round;
+window.pvRowsFor=()=>{
+  const vis=TRK.list.filter(c=>!c.hidden);
+  if(!vis.length)return '<div class="pv-wait">Awaiting the next encounter…</div>';
+  return vis.map(c=>{
+    const real=TRK.list.indexOf(c);
+    let word,cls;
+    if(c.hp<=0){word="Down";cls="pv-down"}
+    else{const pct=c.max>0?100*c.hp/c.max:100;
+      if(pct<=50){word="Bloodied";cls="pv-blood"}else{word="Healthy";cls="pv-ok"}}
+    const conds=(c.conds||[]).map(cd=>'<i>'+esc(cd)+'</i>').join("")+(c.conc?'<i>Concentrating</i>':'');
+    return '<div class="pv-row '+(real===TRK.turn?'pv-turn':'')+'">'+
+      '<div class="pv-init">'+c.init+'</div>'+
+      '<div class="pv-name">'+esc(c.name)+'</div>'+
+      '<div class="pv-conds">'+conds+'</div>'+
+      '<span class="pv-stat '+cls+'">'+word+'</span></div>';
+  }).join("");
+};
+function playerHTML(){
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Initiative — The Hidden Screen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Alegreya:wght@500;700&family=Alegreya+Sans+SC:wght@700&display=swap" rel="stylesheet">
+  <style>
+   :root{--ink:#171310;--panel:#221c15;--line:#3d3426;--parch:#e8dcc4;--parch-dim:#b8a988;--brass:#c9a227;--brass-dim:#8a7020;--oxblood:#9c3c30;--sage:#7d9a6a}
+   body{margin:0;background:var(--ink);color:var(--parch);font-family:'Alegreya',Georgia,serif}
+   #playerRoot{min-height:100vh;padding:30px 4vw}.pv-wrap{max-width:920px;margin:0 auto}
+   .pv-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--brass-dim);padding-bottom:10px;margin-bottom:18px}
+   .pv-head h1{font-family:'Cinzel',serif;color:var(--brass);letter-spacing:.16em;font-size:30px;text-transform:uppercase;margin:0}
+   .pv-round{font-family:'Cinzel',serif;color:var(--parch);font-size:22px}
+   .pv-row{display:flex;align-items:center;gap:18px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:8px;padding:16px 20px;margin-bottom:10px;font-size:22px;flex-wrap:wrap}
+   .pv-turn{border-left-color:var(--brass);background:#2a2317;box-shadow:0 0 18px rgba(201,162,39,.15)}
+   .pv-init{font-family:'Cinzel',serif;color:var(--brass);font-size:26px;width:48px;text-align:center}
+   .pv-name{font-weight:700;flex:1;min-width:140px}
+   .pv-conds i{font-style:normal;font-size:13px;background:#3a2420;border:1px solid var(--oxblood);color:#e0a89e;border-radius:10px;padding:1px 9px;margin-right:4px}
+   .pv-stat{font-family:'Alegreya Sans SC',sans-serif;font-size:16px;letter-spacing:.08em}
+   .pv-ok{color:var(--sage)}.pv-blood{color:var(--brass)}.pv-down{color:var(--oxblood)}
+   .pv-wait{color:var(--parch-dim);font-style:italic;font-size:20px;text-align:center;padding:60px 0}
+  </style></head><body><div id="playerRoot"><div class="pv-wrap">
+   <div class="pv-head"><h1>Initiative</h1><div class="pv-round" id="pvRound">Round ${TRK.round}</div></div>
+   <div id="pvRows">${window.pvRowsFor()}</div>
+   <p style="color:var(--parch-dim);font-style:italic;font-size:13px;margin-top:20px">The Hidden Screen · live from the DM's table</p>
+  </div></div>
+  <script>
+   /* read the DM's live in-memory tracker through window.opener — correct under both the async
+      window.storage backend and the standalone localStorage shim */
+   function pvSync(){try{ if(window.opener&&!window.opener.closed){
+     document.getElementById("pvRound").textContent="Round "+window.opener.pvRound();
+     document.getElementById("pvRows").innerHTML=window.opener.pvRowsFor();
+   } }catch(err){}}
+   window.addEventListener("storage",function(e){if(e.key==="dmscreen:bcast"||e.key==="dmscreen:tracker")pvSync();});
+   setInterval(pvSync,1000);   // polling backstop: storage events can be unreliable for popups under storage partitioning
+  <\/script></body></html>`;
+}
+$("#playerViewBtn").addEventListener("click",()=>{
+  const w=window.open("","dmscreen_player","width=900,height=700");
+  if(!w){alert("Allow pop-ups for this page to open the Player View.");return}
+  w.document.write(playerHTML());w.document.close();
+});
+
+/* ============ HOMEBREW CREATURE FORGE ============ */
+function refreshCRFilter(){
+  const sel=$("#crFilter");if(!sel)return;
+  HOMEBREW.forEach(m=>{
+    if(m.cr&&m.cr!=="—"&&![...sel.options].some(o=>o.value===m.cr)){
+      const o=document.createElement("option");o.value=m.cr;o.textContent="CR "+m.cr;sel.appendChild(o)}
+  });
+}
+$("#hbToggle").addEventListener("click",()=>$("#hbForm").classList.toggle("hidden"));
+function parseLines(txt){return txt.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+  const p=l.split("|");return [(p[0]||"").trim(),(p[1]||"").trim()]})}
+$("#hbSave").addEventListener("click",()=>{
+  const n=$("#hb_n").value.trim();const hp=+$("#hb_hp").value;
+  if(!n||!hp){alert("A custom creature needs at least a name and HP.");return}
+  const m={hb:true,n,cr:$("#hb_cr").value.trim()||"—",xp:0,
+    st:$("#hb_st").value.trim()||"Custom creature",
+    acx:$("#hb_ac").value.trim()||"10",hp,hd:$("#hb_hd").value.trim()||"",
+    sp:$("#hb_sp").value.trim()||"30 ft.",
+    ab:[+$("#hb_s").value||10,+$("#hb_d").value||10,+$("#hb_c").value||10,+$("#hb_i").value||10,+$("#hb_w").value||10,+$("#hb_ch").value||10],
+    sen:$("#hb_sen").value.trim()||"",lg:$("#hb_lg").value.trim()||"",
+    tr:parseLines($("#hb_tr").value),axn:parseLines($("#hb_axn").value)};
+  HOMEBREW=HOMEBREW.filter(x=>x.n!==n);HOMEBREW.push(m);storeSet("dmscreen:homebrew",HOMEBREW);
+  ["hb_n","hb_cr","hb_ac","hb_hp","hb_hd","hb_sp","hb_st","hb_sen","hb_lg","hb_tr","hb_axn"].forEach(id=>$("#"+id).value="");
+  ["hb_s","hb_d","hb_c","hb_i","hb_w","hb_ch"].forEach(id=>$("#"+id).value=10);
+  $("#hbForm").classList.add("hidden");
+  refreshCRFilter();
+  selMon=m.n;renderMonList();renderStat(m);
+  alert(`"${n}" forged and saved. Find it in the bestiary (marked ⚒) — you can add it to the tracker like any other creature.`);
+});
+
+/* ============ ASYNC INIT: load homebrew, party, and the saved encounter ============ */
+(async()=>{
+  const hb=await storeGet("dmscreen:homebrew",null);if(hb)HOMEBREW=hb;
+  const pty=await storeGet("dmscreen:party",null);if(pty)PARTY=pty;
+  refreshCRFilter();renderMonList();renderParty();
+})();
 loadTrk();
 
 /* ============ ENCOUNTER BUILDER ============ */
@@ -823,6 +1126,112 @@ function rollExpr(){
 }
 $("#rollExpr").addEventListener("click",rollExpr);
 $("#diceExpr").addEventListener("keydown",e=>{if(e.key==="Enter")rollExpr()});
+
+/* ============ CAMPAIGN TAB (Blood in the Bayou — DM canon) ============ */
+$("#campaignHost").innerHTML=`
+<div class="camp">
+  <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your canon, behind the screen — NPC secrets, factions, and the seven burial sites.</p>
+  <div class="cat"><h2>Key NPCs</h2><div class="cards">
+    ${[
+      ["Marshall","Quest-giver · Neil's Tavern","Ageless gnome who has watched the burial sites for millennia.","SECRET: an Avatar of Pelor."],
+      ["Lord Cassius Morne","Noble Council","Orchestrates the ritual murders along the bayou ley lines.","SECRET: the true villain the party will uncover."],
+      ["Mayor Unu Apxick","City leadership","Doesn't smuggle — he guides existing killers like a 'Jiminy Cricket.' The murders ARE the ritual.","SECRET: the ultimate hand; an agent of Orcus."],
+      ["Aldric Vane","City Watch officer","Believes he is doing good; manipulated into killing.","SECRET: red herring — one of two active killers."],
+      ["Aldara Voss","Merchant Guild leader (half-elf)","Controls the shipping routes.","SECRET: her routes smuggle the ritual components."],
+      ["The Harbormaster","Thieves Guild leader","Running a parallel investigation.","SECRET: several victims were Guild members."],
+      ["Tim / Timothy","Head of the magic school","The party's current destination.","SECRET: descendant of 'the Mother'; his death breaks the Site 7 seal."]
+    ].map(p=>`<div class="rule open"><button>${esc(p[0])}<span class="chev">▸</span></button>
+      <div class="body"><i>${esc(p[1])}</i><br>${esc(p[2])}<br><span class="secretline">${esc(p[3])}</span></div></div>`).join("")}
+  </div></div>
+  <div class="cat"><h2>Factions</h2><div class="cards">
+    ${[
+      ["City Watch","Captain loyal to Cassius; obstructionist."],
+      ["Noble Council","Cassius is the villain; two members blackmailed."],
+      ["Thieves Guild","Victims among them; running their own investigation."],
+      ["Merchant Guild","Shipping routes exploited to smuggle ritual components."]
+    ].map(f=>`<div class="rule open"><button>${esc(f[0])}<span class="chev">▸</span></button><div class="body">${esc(f[1])}</div></div>`).join("")}
+  </div></div>
+  <div class="cat"><h2>The Seven Burial Sites</h2>
+    <table><tr><th>#</th><th>Site</th><th>Domain</th><th>Note</th></tr>
+    <tr><td>1</td><td>The Bayou</td><td>Harmony</td><td></td></tr>
+    <tr><td>2</td><td>Well / Tim's Property</td><td>Renewal</td><td></td></tr>
+    <tr><td>3</td><td>Mayor's Mansion</td><td>Hope</td><td></td></tr>
+    <tr><td>4</td><td>Merchant Compound</td><td>Luck</td><td></td></tr>
+    <tr><td>5</td><td>Coppervein's Location</td><td>Memory</td><td></td></tr>
+    <tr><td>6</td><td>Austhenon Park / Eausthar</td><td>Order</td><td>★ Keystone (intact)</td></tr>
+    <tr><td>7</td><td>Magic School / the Mother</td><td>Life</td><td>death cannot occur here</td></tr>
+    </table>
+  </div>
+  <div class="cat"><h2>Session Notes</h2>
+    <textarea id="campNotes" style="width:100%;min-height:140px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:6px;padding:12px;font-family:inherit;font-size:15px" placeholder="Scratchpad — saved automatically in this browser…"></textarea>
+  </div>
+</div>`;
+(async()=>{const cn=$("#campNotes");if(cn){cn.value=await storeGet("dmscreen:campNotes","");
+  cn.addEventListener("input",()=>storeSet("dmscreen:campNotes",cn.value))}})();
+
+/* ============ NPC JOURNAL TAB (player-authored) ============ */
+let NPCS=[];
+const DISPOS=["Neutral","Ally","Friendly","Suspicious","Hostile","Unknown"];
+$("#npcsHost").innerHTML=`
+<div class="camp">
+  <p style="color:var(--parch-dim);font-style:italic;margin-bottom:16px">Your party's field journal — record the folk you meet, what they do, and what you learn about them. Everything is saved automatically in this browser.</p>
+  <div class="npcform">
+    <div class="frow">
+      <span><label>Name *</label><input id="np_name" placeholder="Marshall"></span>
+      <span><label>Role / title</label><input id="np_role" placeholder="Tavern keeper"></span>
+      <span><label>Where you met</label><input id="np_loc" placeholder="Neil's Tavern"></span>
+      <span><label>Disposition</label><select id="np_disp">${DISPOS.map(x=>`<option>${x}</option>`).join("")}</select></span>
+    </div>
+    <label>Notes — what they want, what you owe them, what seems off…</label>
+    <textarea id="np_notes" placeholder="Friendly so far. Mentioned trouble down by the docks. Keeps glancing at the door."></textarea>
+    <button class="btn" id="np_add" style="margin-top:8px">Add to Journal</button>
+  </div>
+  <div id="npcCards"></div>
+  <div class="cat" style="margin-top:24px"><h2>Party Notes</h2>
+    <textarea id="partyNotes" style="width:100%;min-height:140px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:6px;padding:12px;font-family:inherit;font-size:15px" placeholder="Quests, clues, loose ends, treasure split — saved automatically…"></textarea>
+  </div>
+</div>`;
+function dispClass(d){return "disp-"+String(d||"unknown").toLowerCase()}
+function renderNPCCards(){
+  const host=$("#npcCards");
+  if(!NPCS.length){host.innerHTML=`<p style="color:var(--parch-dim);font-style:italic;padding:6px 2px">No one recorded yet. Add the first face your party remembers.</p>`;return}
+  host.innerHTML=NPCS.map((n,i)=>`<div class="npccard ${dispClass(n.disp)}">
+    <div class="npchead">
+      <b>${esc(n.name)}</b>${n.role?`<span class="npcrole">${esc(n.role)}</span>`:""}
+      <span class="npcdisp">${esc(n.disp||"Unknown")}</span>
+      <button class="btn ghost" onclick="editNPC(${i})">edit</button>
+      <button class="btn ghost" onclick="delNPC(${i})">remove</button>
+    </div>
+    ${n.loc?`<div class="npcloc">Met at ${esc(n.loc)}</div>`:""}
+    ${n.notes?`<div class="npcnotes">${esc(n.notes).replace(/\n/g,"<br>")}</div>`:""}
+  </div>`).join("");
+}
+function saveNPCs(){storeSet("dmscreen:npcs",NPCS)}
+renderNPCCards();   // paint the empty-state placeholder immediately; the async load below repaints with saved data
+let npcEditIndex=-1;   // -1 = adding; >=0 = editing in place (record stays put until saved, so abandoning loses nothing)
+window.editNPC=i=>{const n=NPCS[i];
+  $("#np_name").value=n.name||"";$("#np_role").value=n.role||"";$("#np_loc").value=n.loc||"";
+  $("#np_disp").value=n.disp||"Neutral";$("#np_notes").value=n.notes||"";
+  npcEditIndex=i;$("#np_add").textContent="Save Changes";
+  $("#np_name").focus();try{$("#np_name").scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}
+};
+window.delNPC=i=>{if(!confirm("Remove "+(NPCS[i].name||"this NPC")+" from the journal?"))return;NPCS.splice(i,1);
+  if(npcEditIndex===i){npcEditIndex=-1;$("#np_add").textContent="Add to Journal"}else if(npcEditIndex>i){npcEditIndex--}
+  saveNPCs();renderNPCCards()};
+$("#np_add").addEventListener("click",()=>{
+  const name=$("#np_name").value.trim();if(!name){$("#np_name").focus();return}
+  const rec={name,role:$("#np_role").value.trim(),loc:$("#np_loc").value.trim(),disp:$("#np_disp").value,notes:$("#np_notes").value.trim()};
+  if(npcEditIndex>=0){NPCS[npcEditIndex]=rec;npcEditIndex=-1;$("#np_add").textContent="Add to Journal"}else{NPCS.push(rec)}
+  saveNPCs();
+  ["np_name","np_role","np_loc","np_notes"].forEach(id=>$("#"+id).value="");$("#np_disp").value="Neutral";
+  renderNPCCards();$("#np_name").focus();
+});
+$("#np_name").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("#np_add").click()}});
+(async()=>{
+  NPCS=await storeGet("dmscreen:npcs",[]);renderNPCCards();
+  const pn=$("#partyNotes");if(pn){pn.value=await storeGet("dmscreen:partyNotes","");
+    pn.addEventListener("input",()=>storeSet("dmscreen:partyNotes",pn.value))}
+})();
 </script>
 </body>
 </html>
