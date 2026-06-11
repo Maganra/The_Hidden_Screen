@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171310">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hidden Screen">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171310'/%3E%3Cpolygon points='32,6 54,19 54,45 32,58 10,45 10,19' fill='none' stroke='%23c9a227' stroke-width='3'/%3E%3Cpolygon points='32,16 46,40 18,40' fill='none' stroke='%23c9a227' stroke-width='2'/%3E%3Ctext x='32' y='37' font-family='Georgia,serif' font-size='13' fill='%23c9a227' text-anchor='middle' font-weight='bold'%3E20%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>The Hidden Screen — DM Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Alegreya:ital,wght@0,500;0,700;1,500&family=Alegreya+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#171310; --panel:#221c15; --panel2:#2b241b; --line:#3d3426;
+  --parch:#e8dcc4; --parch-dim:#b8a988; --brass:#c9a227; --brass-dim:#8a7020;
+  --oxblood:#9c3c30; --oxblood-deep:#7a200d; --sage:#7d9a6a;
+  --stat-bg:#ece2cd; --stat-ink:#2a2118;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink);color:var(--parch);font-family:'Alegreya',Georgia,serif;font-size:16px}
+body{padding-bottom:110px}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:16px;background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:4px;padding:7px 10px;outline:none}
+input:focus,select:focus{border-color:var(--brass-dim)}
+input::placeholder{color:var(--parch-dim);opacity:.7}
+
+/* ---------- masthead ---------- */
+header{border-bottom:1px solid var(--line);padding:18px 20px 0;background:linear-gradient(180deg,#1d1812,var(--ink))}
+.mast{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;max-width:1100px;margin:0 auto}
+.mast h1{font-family:'Cinzel',serif;font-weight:700;font-size:24px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
+.mast .sub{font-style:italic;color:var(--parch-dim);font-size:14px}
+nav{max-width:1100px;margin:10px auto 0;display:flex;gap:2px;flex-wrap:wrap}
+nav button{background:none;border:none;border-bottom:3px solid transparent;color:var(--parch-dim);
+  font-family:'Alegreya Sans SC',sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;padding:10px 16px}
+nav button:hover{color:var(--parch)}
+nav button.on{color:var(--brass);border-bottom-color:var(--brass)}
+nav button:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
+
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tab{display:none}.tab.on{display:block}
+
+/* ---------- rules ---------- */
+.searchrow{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.searchrow input{flex:1;min-width:220px}
+.cat{margin-bottom:26px}
+.cat h2{font-family:'Alegreya Sans SC',sans-serif;font-size:15px;letter-spacing:.18em;color:var(--brass);
+  border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.rule{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.rule>button{width:100%;text-align:left;background:none;border:none;color:var(--parch);
+  font-family:'Alegreya',serif;font-weight:700;font-size:17px;padding:11px 14px;display:flex;justify-content:space-between;gap:8px}
+.rule>button .chev{color:var(--brass-dim);transition:transform .15s}
+.rule.open>button .chev{transform:rotate(90deg)}
+.rule .body{display:none;padding:0 14px 13px;color:#d9cdb2;font-size:15.5px;line-height:1.55}
+.rule.open .body{display:block}
+.rule .body ul{padding-left:18px;margin-top:4px}
+.rule .body li{margin-bottom:3px}
+.rule .body table{border-collapse:collapse;margin-top:6px;width:100%;font-size:14.5px}
+.rule .body th{text-align:left;color:var(--brass);font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.05em;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.rule .body td{padding:3px 8px 3px 0;border-bottom:1px solid #2e2820;vertical-align:top}
+.hidden{display:none!important}
+
+/* ---------- statblock (the signature) ---------- */
+.bestgrid{display:grid;grid-template-columns:280px 1fr;gap:18px}
+@media(max-width:820px){.bestgrid{grid-template-columns:1fr}}
+.monlist{background:var(--panel);border:1px solid var(--line);border-radius:6px;max-height:72vh;overflow:auto}
+.monlist button{display:flex;justify-content:space-between;width:100%;background:none;border:none;border-bottom:1px solid #2a2419;
+  color:var(--parch);padding:8px 12px;font-size:15px;text-align:left}
+.monlist button:hover{background:var(--panel2)}
+.monlist button.sel{background:var(--panel2);color:var(--brass)}
+.monlist .cr{color:var(--parch-dim);font-size:13px}
+.statblock{background:var(--stat-bg);color:var(--stat-ink);border-radius:4px;padding:18px 20px;
+  border-top:5px solid var(--oxblood-deep);border-bottom:5px solid var(--oxblood-deep);
+  box-shadow:0 4px 18px rgba(0,0,0,.5);font-size:15px;line-height:1.45;max-width:680px}
+.statblock h3{font-family:'Alegreya',serif;font-variant:small-caps;font-size:26px;color:var(--oxblood-deep);font-weight:700}
+.statblock .meta{font-style:italic;font-size:14px;margin-bottom:6px}
+.statblock .taper{height:6px;margin:7px 0;background:var(--oxblood-deep);clip-path:polygon(0 50%,2% 0,98% 0,100% 50%,98% 100%,2% 100%)}
+.statblock .ln{color:var(--oxblood-deep);margin:2px 0}
+.statblock .ln b{color:var(--oxblood-deep)}
+.abil{display:grid;grid-template-columns:repeat(6,1fr);text-align:center;margin:8px 0;gap:4px}
+.abil div b{display:block;color:var(--oxblood-deep)}
+.statblock h4{font-family:'Alegreya',serif;font-variant:small-caps;font-size:19px;color:var(--oxblood-deep);
+  border-bottom:1px solid var(--oxblood-deep);margin:12px 0 6px;font-weight:500}
+.statblock p{margin:6px 0}
+.statblock p b i{margin-right:2px}
+.sb-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- buttons ---------- */
+.btn{background:var(--panel2);border:1px solid var(--brass-dim);color:var(--brass);border-radius:4px;
+  padding:7px 14px;font-family:'Alegreya Sans SC',sans-serif;font-weight:700;letter-spacing:.05em;font-size:14px}
+.btn:hover{background:#352c1f}
+.btn.red{border-color:var(--oxblood);color:#d98a7f}
+.btn.ghost{border-color:var(--line);color:var(--parch-dim)}
+.btn:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+
+/* ---------- tracker ---------- */
+.trk-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.round{font-family:'Cinzel',serif;color:var(--brass);font-size:18px;letter-spacing:.08em}
+.trk-add{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.trk-add input{width:120px}
+.trk-add input.num{width:70px}
+.combatant{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
+  border-left:4px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px;flex-wrap:wrap}
+.combatant.turn{border-left-color:var(--brass);background:#2a2317}
+.combatant .init{font-family:'Cinzel',serif;font-size:20px;color:var(--brass);width:36px;text-align:center}
+.combatant .nm{font-weight:700;font-size:17px;min-width:130px}
+.combatant .nm small{display:block;color:var(--parch-dim);font-weight:400;font-size:12.5px}
+.hpbar{flex:1;min-width:150px}
+.hpbar .bar{height:8px;background:#16110d;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.hpbar .fill{height:100%;background:var(--sage);transition:width .2s}
+.hpbar .fill.hurt{background:var(--brass)}
+.hpbar .fill.bad{background:var(--oxblood)}
+.hpbar .lbl{font-size:13px;color:var(--parch-dim);margin-bottom:2px;display:flex;justify-content:space-between}
+.hpctl{display:flex;gap:4px;align-items:center}
+.hpctl input{width:54px;padding:4px 6px;text-align:center}
+.hpctl .btn{padding:4px 9px}
+.condrow{display:flex;gap:4px;flex-wrap:wrap;width:100%}
+.condtag{background:#3a2420;border:1px solid var(--oxblood);color:#e0a89e;font-size:12px;border-radius:10px;padding:1px 9px;cursor:pointer}
+.condtag.add{background:none;border-style:dashed;border-color:var(--line);color:var(--parch-dim)}
+.dead{opacity:.45;text-decoration:line-through}
+
+/* ---------- generators ---------- */
+.genwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.genbox{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+.genbox h2{font-family:'Alegreya Sans SC',sans-serif;font-size:15px;letter-spacing:.18em;color:var(--brass);margin-bottom:10px}
+.genbox .out{background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:12px;margin-top:10px;
+  font-size:15px;line-height:1.6;min-height:60px;color:#ddd2b8}
+.genbox .out b{color:var(--brass)}
+.genbox .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.genbox label{font-size:14px;color:var(--parch-dim)}
+
+/* ---------- items ---------- */
+.rar{font-size:12px}
+.rar.Common{color:#9a8f78}.rar.Uncommon{color:#7d9a6a}.rar.Rare{color:#6a8db5}
+.rar.VeryRare{color:#a075c9}.rar.Legendary{color:#d08a3e}
+.itemlink{color:var(--brass);text-decoration:underline dotted;cursor:pointer}
+.itemlink:hover{color:#e3c25a}
+
+/* ---------- dice dock ---------- */
+.dicedock{position:fixed;bottom:0;left:0;right:0;background:#1d1710;border-top:2px solid var(--brass-dim);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;flex-wrap:wrap;z-index:50;box-shadow:0 -6px 20px rgba(0,0,0,.5)}
+.dice-strip,.dice-row{display:contents}
+.dicedock .d{background:var(--panel2);border:1px solid var(--line);color:var(--parch);border-radius:6px;
+  padding:6px 11px;font-family:'Alegreya Sans SC',sans-serif;font-weight:700;font-size:14px}
+.dicedock .d:hover{border-color:var(--brass-dim);color:var(--brass)}
+.dicedock input{width:110px}
+.diceout{font-size:16px;flex:1;min-width:180px;color:var(--parch)}
+.diceout b{font-family:'Cinzel',serif;color:var(--brass);font-size:21px;margin-right:6px}
+.diceout small{color:var(--parch-dim)}
+.crit{color:var(--sage)!important}.fumb{color:var(--oxblood)!important}
+
+footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-size:12.5px;font-style:italic}
+/* ---------- mobile ---------- */
+@media(max-width:820px){
+  .monlist{max-height:35vh}
+}
+@media(max-width:640px){
+  header{padding:14px 12px 0}
+  main{padding:12px}
+  /* nav: horizontal scroll instead of wrapping */
+  nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{white-space:nowrap;flex-shrink:0;padding:12px 14px}
+  /* bigger touch targets */
+  .btn{padding:10px 16px}
+  .monlist button{padding:12px}
+  .hpctl .btn{padding:9px 13px}
+  .hpctl input{width:62px;padding:9px 6px}
+  .condtag{padding:5px 12px;font-size:13px}
+  .condrow{margin-top:4px}
+  /* tracker add row: name takes full width */
+  .trk-add input#cName{flex:1 1 100%;width:auto}
+  /* rule tables can scroll sideways instead of breaking layout */
+  .rule .body{overflow-x:auto}
+  /* statblock breathing room */
+  .statblock{padding:14px}
+  /* dice dock: two rows — scrollable die strip + roll row */
+  body{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+  .dicedock{flex-direction:column;align-items:stretch;gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
+  .dice-strip{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+  .dice-strip::-webkit-scrollbar{display:none}
+  .dice-strip .d{flex-shrink:0;padding:10px 14px}
+  .dice-row{display:flex;gap:8px;align-items:center}
+  .dice-row input{flex:1;min-width:0;width:auto}
+  .diceout{flex:1 1 100%;min-width:0;margin-top:2px}
+}
+@media(max-width:480px){
+  .abil{grid-template-columns:repeat(3,1fr);row-gap:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="mast"><h1>The Hidden Screen</h1><span class="sub">a dungeon master's companion</span></div>
+  <nav>
+    <button class="on" data-tab="rules">Rules</button>
+    <button data-tab="bestiary">Bestiary</button>
+    <button data-tab="items">Items</button>
+    <button data-tab="tracker">Combat Tracker</button>
+    <button data-tab="gens">Generators</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-rules" class="tab on">
+    <div class="searchrow"><input id="ruleSearch" type="search" placeholder="Search rules… (try: grapple, prone, cover, falling)"></div>
+    <div id="rulesHost"></div>
+  </section>
+
+  <section id="tab-bestiary" class="tab">
+    <div class="searchrow">
+      <input id="monSearch" type="search" placeholder="Search monsters…">
+      <select id="crFilter"><option value="">All CRs</option></select>
+    </div>
+    <div class="bestgrid">
+      <div class="monlist" id="monList"></div>
+      <div id="monView"><p style="color:var(--parch-dim);font-style:italic">Select a creature from the list.</p></div>
+    </div>
+  </section>
+
+  <section id="tab-items" class="tab">
+    <div class="searchrow">
+      <input id="itemSearch" type="search" placeholder="Search magic items…">
+      <select id="rarFilter"><option value="">All rarities</option>
+        <option>Common</option><option>Uncommon</option><option>Rare</option>
+        <option>Very Rare</option><option>Legendary</option></select>
+      <label style="display:flex;align-items:center;gap:6px;color:var(--parch-dim);font-size:14px">
+        <input type="checkbox" id="attFilter" style="width:auto"> attunement only</label>
+    </div>
+    <div class="bestgrid">
+      <div class="monlist" id="itemList"></div>
+      <div id="itemView"><p style="color:var(--parch-dim);font-style:italic">Select an item from the list.</p></div>
+    </div>
+  </section>
+
+  <section id="tab-tracker" class="tab">
+    <div class="trk-top">
+      <span class="round" id="roundLbl">Round 1</span>
+      <button class="btn" id="nextTurn">Next Turn ▸</button>
+      <button class="btn ghost" id="sortInit">Sort by Initiative</button>
+      <button class="btn red" id="clearTrk">Clear Encounter</button>
+    </div>
+    <div class="trk-add">
+      <input id="cName" placeholder="Name">
+      <input id="cInit" class="num" type="number" placeholder="Init">
+      <input id="cHP" class="num" type="number" placeholder="HP">
+      <input id="cAC" class="num" type="number" placeholder="AC">
+      <button class="btn" id="addC">Add</button>
+      <span style="color:var(--parch-dim);font-size:13.5px;font-style:italic">…or add monsters straight from the Bestiary.</span>
+    </div>
+    <div id="trkHost"></div>
+  </section>
+
+  <section id="tab-gens" class="tab">
+    <div class="genwrap">
+      <div class="genbox"><h2>NPC</h2>
+        <button class="btn" id="genNPC">Conjure an NPC</button>
+        <div class="out" id="npcOut">A stranger waits to be imagined…</div>
+      </div>
+      <div class="genbox"><h2>Encounter</h2>
+        <div class="row">
+          <label>Party</label><input id="encN" class="num" type="number" value="4" min="1" max="10" style="width:60px">
+          <label>Level</label><input id="encL" class="num" type="number" value="3" min="1" max="20" style="width:60px">
+          <select id="encD"><option>Easy</option><option selected>Medium</option><option>Hard</option><option>Deadly</option></select>
+        </div>
+        <button class="btn" id="genEnc">Build Encounter</button>
+        <div class="out" id="encOut">Steel sharpens. Choose your difficulty.</div>
+      </div>
+      <div class="genbox"><h2>Loot</h2>
+        <div class="row">
+          <select id="lootTier"><option value="0">CR 0–4</option><option value="1">CR 5–10</option><option value="2">CR 11–16</option><option value="3">CR 17+</option></select>
+          <select id="lootKind"><option value="ind">Pocket loot</option><option value="hoard">Treasure hoard</option></select>
+        </div>
+        <button class="btn" id="genLoot">Roll Treasure</button>
+        <div class="out" id="lootOut">Gold gleams in the dark…</div>
+      </div>
+      <div class="genbox"><h2>Table Spice</h2>
+        <div class="row">
+          <button class="btn ghost" id="genTavern">Tavern</button>
+          <button class="btn ghost" id="genHook">Plot Hook</button>
+          <button class="btn ghost" id="genWeather">Weather</button>
+        </div>
+        <div class="out" id="spiceOut">A rumor, a storm, a crooked sign…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="dicedock">
+  <div class="dice-strip">
+    <button class="d" data-die="4">d4</button><button class="d" data-die="6">d6</button>
+    <button class="d" data-die="8">d8</button><button class="d" data-die="10">d10</button>
+    <button class="d" data-die="12">d12</button><button class="d" data-die="20">d20</button>
+    <button class="d" data-die="100">d100</button>
+    <button class="d" id="advBtn">ADV</button><button class="d" id="disBtn">DIS</button>
+  </div>
+  <div class="dice-row">
+    <input id="diceExpr" placeholder="e.g. 2d6+3" aria-label="Dice expression">
+    <button class="d" id="rollExpr">Roll</button>
+    <div class="diceout" id="diceOut"><small>The dice are listening.</small></div>
+  </div>
+</div>
+
+<footer>This work includes material from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode).</footer>
+<script>
+/* ============ RULES DATA (SRD 5.1, CC-BY-4.0) ============ */
+const RULES=[
+{cat:"Conditions",items:[
+["Blinded","<ul><li>Can't see; automatically fails any check requiring sight.</li><li>Attack rolls against the creature have <b>advantage</b>; the creature's attack rolls have <b>disadvantage</b>.</li></ul>"],
+["Charmed","<ul><li>Can't attack the charmer or target them with harmful abilities or magic.</li><li>The charmer has <b>advantage</b> on ability checks to interact socially with the creature.</li></ul>"],
+["Deafened","<ul><li>Can't hear; automatically fails any check requiring hearing.</li></ul>"],
+["Exhaustion","<table><tr><th>Lvl</th><th>Effect (cumulative)</th></tr><tr><td>1</td><td>Disadvantage on ability checks</td></tr><tr><td>2</td><td>Speed halved</td></tr><tr><td>3</td><td>Disadvantage on attacks & saves</td></tr><tr><td>4</td><td>HP maximum halved</td></tr><tr><td>5</td><td>Speed reduced to 0</td></tr><tr><td>6</td><td>Death</td></tr></table><ul><li>Finishing a long rest (with food & drink) reduces exhaustion by 1.</li></ul>"],
+["Frightened","<ul><li>Disadvantage on ability checks and attack rolls while the source of fear is in line of sight.</li><li>Can't willingly move closer to the source of its fear.</li></ul>"],
+["Grappled","<ul><li>Speed becomes 0; can't benefit from bonuses to speed.</li><li>Ends if the grappler is incapacitated, or if the target is moved out of the grappler's reach by an effect.</li><li><b>Escape:</b> action — Athletics or Acrobatics vs. grappler's Athletics.</li></ul>"],
+["Incapacitated","<ul><li>Can't take actions or reactions.</li></ul>"],
+["Invisible","<ul><li>Impossible to see without special senses; counts as heavily obscured for hiding.</li><li>Location can be detected by noise or tracks.</li><li>Attack rolls against it have <b>disadvantage</b>; its attack rolls have <b>advantage</b>.</li></ul>"],
+["Paralyzed","<ul><li>Incapacitated; can't move or speak.</li><li>Auto-fails Strength and Dexterity saves.</li><li>Attacks against it have <b>advantage</b>.</li><li>Any hit from within 5 ft. is a <b>critical hit</b>.</li></ul>"],
+["Petrified","<ul><li>Transformed (with worn/carried nonmagical items) into solid inanimate substance; weight ×10; doesn't age.</li><li>Incapacitated, can't move or speak, unaware of surroundings.</li><li>Attacks against it have advantage; auto-fails Str & Dex saves.</li><li>Resistance to all damage; immune to poison and disease (existing poison/disease suspended).</li></ul>"],
+["Poisoned","<ul><li>Disadvantage on attack rolls and ability checks.</li></ul>"],
+["Prone","<ul><li>Only movement option is crawl (each ft. costs 1 extra ft.) unless it stands (costs half its speed).</li><li>Disadvantage on its attack rolls.</li><li>Attacks against it have <b>advantage if attacker is within 5 ft.</b>, otherwise <b>disadvantage</b>.</li></ul>"],
+["Restrained","<ul><li>Speed 0; can't benefit from speed bonuses.</li><li>Attacks against it have <b>advantage</b>; its attacks have <b>disadvantage</b>.</li><li><b>Disadvantage on Dexterity saving throws.</b></li></ul>"],
+["Stunned","<ul><li>Incapacitated, can't move, can speak only falteringly.</li><li>Auto-fails Str & Dex saves.</li><li>Attacks against it have <b>advantage</b>.</li></ul>"],
+["Unconscious","<ul><li>Incapacitated, can't move or speak, unaware of surroundings.</li><li>Drops everything held; falls prone.</li><li>Auto-fails Str & Dex saves; attacks against it have advantage.</li><li>Any hit from within 5 ft. is a <b>critical hit</b>.</li></ul>"]
+]},
+{cat:"Actions in Combat",items:[
+["Attack","Make one melee or ranged attack. Features like Extra Attack let you make more than one with this action."],
+["Cast a Spell","Cast a spell with a casting time of 1 action. You can't cast a leveled spell with your action <i>and</i> a different leveled spell with a bonus action in the same turn (a cantrip with 1-action casting time is fine)."],
+["Dash","Gain extra movement equal to your speed (after modifiers) for the turn."],
+["Disengage","Your movement doesn't provoke opportunity attacks for the rest of the turn."],
+["Dodge","Until your next turn starts: attacks against you have <b>disadvantage</b> if you can see the attacker, and you make Dex saves with <b>advantage</b>. Lost if you're incapacitated or speed drops to 0."],
+["Help","Give an ally advantage on an ability check, or on their first attack roll against a creature within 5 ft. of you (before your next turn)."],
+["Hide","Make a Dexterity (Stealth) check vs. passive Perception (or active Perception of searchers). You must be heavily obscured or otherwise unseen."],
+["Ready","Choose a trigger and a response (action or movement). The reaction occurs right after the trigger. Readying a spell requires concentration; spell slot is spent even if not released."],
+["Search","Devote your attention to finding something — usually Wisdom (Perception) or Intelligence (Investigation)."],
+["Use an Object","Interact with a second object on your turn (you get one free object interaction with your move/action)."],
+["Grapple (special attack)","Replace one attack: contested check — your Strength (Athletics) vs. target's Athletics <i>or</i> Acrobatics. Target must be no more than one size larger and within reach. Success: target is <b>grappled</b>. Moving a grappled creature halves your speed (unless it's two+ sizes smaller)."],
+["Shove (special attack)","Replace one attack: same contest as grapple. Success: knock the target <b>prone</b> or push it <b>5 ft. away</b>."],
+["Two-Weapon Fighting","If you Attack with a light melee weapon in one hand, bonus action: attack with a different light melee weapon in the other hand. No ability modifier to the bonus damage (unless negative)."],
+["Opportunity Attack","Reaction: one melee attack against a hostile creature you can see that moves out of your reach. Triggered by movement using the creature's own move/action/reaction — not teleports or forced movement."]
+]},
+{cat:"Combat Mechanics",items:[
+["Cover","<table><tr><th>Cover</th><th>Effect</th></tr><tr><td>Half</td><td>+2 AC and Dex saves</td></tr><tr><td>Three-quarters</td><td>+5 AC and Dex saves</td></tr><tr><td>Total</td><td>Can't be targeted directly</td></tr></table>"],
+["Critical Hits","On a natural 20, roll all of the attack's damage dice <b>twice</b> and add them together, then add modifiers once. Extra dice (e.g., sneak attack) are also doubled."],
+["Unseen Attackers & Targets","Attacking a target you can't see: <b>disadvantage</b>. Attacking while unseen by the target: <b>advantage</b>. When you make an attack while hidden, you give away your location, hit or miss."],
+["Ranged Attacks in Melee","Disadvantage on a ranged attack roll if a hostile creature who can see you (and isn't incapacitated) is within 5 ft."],
+["Mounted Combat","Mounting/dismounting costs half your speed. If the mount provokes an opportunity attack, the attacker can target you or the mount. A controlled mount acts on your initiative and can only Dash, Disengage, or Dodge. If you're knocked prone or the mount is, DC 10 Dex save to land on your feet."],
+["Underwater Combat","Melee weapon attacks: <b>disadvantage</b> unless using a dagger, javelin, shortsword, spear, or trident. Ranged attacks: auto-miss beyond normal range; disadvantage within it (crossbows, nets, and thrown javelin-likes excepted). Everything fully immersed has <b>resistance to fire damage</b>."],
+["Squeezing","A creature can squeeze through a space one size smaller than itself. While squeezing: each foot costs 1 extra foot, disadvantage on attacks and Dex saves, attacks against it have advantage."],
+["Flanking? (no such rule)","Core 5e has no flanking bonus — it's an optional rule. If you use the common variant: melee attackers on directly opposite sides of a creature each gain advantage."]
+]},
+{cat:"Death, Damage & Healing",items:[
+["Dropping to 0 HP","If damage reduces you to 0 HP and remaining damage <b>equals or exceeds your HP maximum</b>, you die outright. Otherwise you fall <b>unconscious</b> and begin making death saving throws."],
+["Death Saving Throws","On your turn at 0 HP: roll a d20. <b>10+</b> = success, <b>9 or less</b> = failure. Three successes: stable. Three failures: death. <b>Nat 1 = two failures. Nat 20 = regain 1 HP.</b> Taking damage at 0 HP = one failure (a crit = two); damage equal to HP max = death."],
+["Stabilizing","Action: DC 10 Wisdom (Medicine) check, or use a healer's kit (no check). A stable creature at 0 HP regains 1 HP after <b>1d4 hours</b>."],
+["Concentration","Broken by: casting another concentration spell, being incapacitated, or dying. <b>On taking damage:</b> Con save, DC = 10 or half the damage taken, whichever is higher. Environmental chaos (a wave, the DM's call) can also force a DC 10 save."],
+["Temporary Hit Points","Not real HP — a buffer. They can't be healed, don't stack (keep the higher pool), and being at full HP doesn't prevent gaining them. Damage hits temp HP first."],
+["Resistance & Vulnerability","Resistance: damage of that type halved. Vulnerability: doubled. Apply after all other modifiers. Multiple resistances to the same type count once."],
+["Instant Death (massive damage)","When damage reduces you to 0 HP with leftover damage ≥ your HP maximum, you die."],
+["Knocking Out","When you reduce a creature to 0 HP with a <b>melee</b> attack, you may declare it knocked out: it falls unconscious and is stable."]
+]},
+{cat:"Resting",items:[
+["Short Rest","At least 1 hour of light activity. Spend Hit Dice to heal: roll the die + Con modifier per die spent."],
+["Long Rest","At least 8 hours (sleep ≥6, light activity ≤2). Regain all HP and half your total Hit Dice (min 1). Interrupted by 1+ hour of strenuous activity. Only one long rest per 24 hours; need at least 1 HP at the start to benefit."]
+]},
+{cat:"Environment & Exploration",items:[
+["Vision & Light","<b>Lightly obscured</b> (dim light, patchy fog): disadvantage on Perception checks relying on sight. <b>Heavily obscured</b> (darkness, opaque fog): effectively blinded looking into it. <b>Darkvision:</b> see dim light as bright, darkness as dim (no color)."],
+["Falling","1d6 bludgeoning per 10 ft. fallen, max 20d6. Land prone unless damage is avoided."],
+["Suffocating","Hold breath: 1 + Con modifier minutes (min 30 sec). Out of breath: survive Con-modifier rounds (min 1), then drop to 0 HP and start dying — no healing or stabilizing until you can breathe."],
+["Jumping","<b>Long jump:</b> feet = Strength score with a 10-ft. run-up (half from standing). <b>High jump:</b> 3 + Str modifier feet with run-up (half standing). DC 10 Athletics to clear a low obstacle mid-jump."],
+["Travel Pace","<table><tr><th>Pace</th><th>Hour</th><th>Day</th><th>Effect</th></tr><tr><td>Fast</td><td>4 mi</td><td>30 mi</td><td>−5 passive Perception</td></tr><tr><td>Normal</td><td>3 mi</td><td>24 mi</td><td>—</td></tr><tr><td>Slow</td><td>2 mi</td><td>18 mi</td><td>Can move stealthily</td></tr></table><b>Forced march:</b> beyond 8 hrs/day, Con save each extra hour (DC 10 + 1/hour) or gain one exhaustion level."],
+["Food & Water","Food: need 1 lb/day; can go 3 + Con mod days without, then 1 exhaustion/day. Water: 1 gallon/day (2 in heat); half ration = DC 15 Con save or 1 exhaustion; none = automatic exhaustion."],
+["Improvising Damage","<table><tr><th>Dice</th><th>Example</th></tr><tr><td>1d10</td><td>Burned by coals, hit by falling bookcase</td></tr><tr><td>2d10</td><td>Lightning strike, bonfire stumble</td></tr><tr><td>4d10</td><td>Hit by falling rubble in a collapsing tunnel</td></tr><tr><td>10d10</td><td>Crushed by compacting walls, vat of acid</td></tr><tr><td>18d10</td><td>Submerged in lava, crashing flying fortress</td></tr><tr><td>24d10</td><td>Tumbling into a vortex of fire on the Elemental Plane</td></tr></table>"],
+["Objects (AC & HP)","<table><tr><th>Substance</th><th>AC</th></tr><tr><td>Cloth, paper, rope</td><td>11</td></tr><tr><td>Crystal, glass, ice</td><td>13</td></tr><tr><td>Wood, bone</td><td>15</td></tr><tr><td>Stone</td><td>17</td></tr><tr><td>Iron, steel</td><td>19</td></tr><tr><td>Mithral</td><td>21</td></tr><tr><td>Adamantine</td><td>23</td></tr></table>HP guideline: fragile small 1d4 · resilient small 2d4 · fragile medium 1d10 · resilient medium 2d10 · resilient large (cart) 5d10."]
+]},
+{cat:"Checks & DCs",items:[
+["Typical DCs","<table><tr><th>Task</th><th>DC</th></tr><tr><td>Very easy</td><td>5</td></tr><tr><td>Easy</td><td>10</td></tr><tr><td>Medium</td><td>15</td></tr><tr><td>Hard</td><td>20</td></tr><tr><td>Very hard</td><td>25</td></tr><tr><td>Nearly impossible</td><td>30</td></tr></table>"],
+["Skills by Ability","<b>Str:</b> Athletics · <b>Dex:</b> Acrobatics, Sleight of Hand, Stealth · <b>Int:</b> Arcana, History, Investigation, Nature, Religion · <b>Wis:</b> Animal Handling, Insight, Medicine, Perception, Survival · <b>Cha:</b> Deception, Intimidation, Performance, Persuasion"],
+["Advantage & Disadvantage","Roll 2d20, take the higher (advantage) or lower (disadvantage). They <b>never stack</b>, and one instance of each cancels to a straight roll regardless of how many sources apply."],
+["Passive Checks","10 + all modifiers that normally apply (advantage +5, disadvantage −5). Most used: passive Perception."],
+["Contests","Both sides roll ability checks; higher total wins. Ties preserve the status quo."],
+["Group Checks","Everyone rolls; if at least <b>half</b> succeed, the group succeeds."],
+["Inspiration","DM-awarded. Spend it to gain advantage on one attack roll, saving throw, or ability check. You either have it or you don't — no stockpiling."]
+]}
+];
+/* ============ BESTIARY (SRD 5.1) — fields: n name, cr, xp, st subtitle, acx AC, hp, hd dice, sp speed, ab [STR..CHA], sv saves, sk skills, vul, res, imm, cim cond-immune, sen senses, lg langs, tr traits, axn actions, lax legendary ============ */
+const CRV={"0":0,"1/8":.125,"1/4":.25,"1/2":.5};const crval=c=>CRV[c]!==undefined?CRV[c]:+c;
+const MONS=[
+{n:"Commoner",cr:"0",xp:10,st:"Medium humanoid (any race), any alignment",acx:"10",hp:4,hd:"1d8",sp:"30 ft.",ab:[10,10,10,10,10,10],sen:"passive Perception 10",lg:"any one language (usually Common)",tr:[],axn:[["Club","Melee: +2 to hit, reach 5 ft. Hit: 2 (1d4) bludgeoning."]]},
+{n:"Bandit",cr:"1/8",xp:25,st:"Medium humanoid (any race), any non-lawful alignment",acx:"12 (leather armor)",hp:11,hd:"2d8+2",sp:"30 ft.",ab:[11,12,12,10,10,10],sen:"passive Perception 10",lg:"any one language (usually Common)",tr:[],axn:[["Scimitar","Melee: +3 to hit, reach 5 ft. Hit: 4 (1d6+1) slashing."],["Light Crossbow","Ranged: +3 to hit, range 80/320 ft. Hit: 5 (1d8+1) piercing."]]},
+{n:"Cultist",cr:"1/8",xp:25,st:"Medium humanoid (any race), any non-good alignment",acx:"12 (leather armor)",hp:9,hd:"2d8",sp:"30 ft.",ab:[11,12,10,10,11,10],sk:"Deception +2, Religion +2",sen:"passive Perception 10",lg:"any one language (usually Common)",tr:[["Dark Devotion","Advantage on saves against being charmed or frightened."]],axn:[["Scimitar","Melee: +3 to hit, reach 5 ft. Hit: 4 (1d6+1) slashing."]]},
+{n:"Guard",cr:"1/8",xp:25,st:"Medium humanoid (any race), any alignment",acx:"16 (chain shirt, shield)",hp:11,hd:"2d8+2",sp:"30 ft.",ab:[13,12,12,10,11,10],sk:"Perception +2",sen:"passive Perception 12",lg:"any one language (usually Common)",tr:[],axn:[["Spear","Melee or Ranged: +3 to hit, reach 5 ft. or range 20/60 ft. Hit: 4 (1d6+1) piercing, or 5 (1d8+1) two-handed."]]},
+{n:"Kobold",cr:"1/8",xp:25,st:"Small humanoid (kobold), lawful evil",acx:"12",hp:5,hd:"2d6-2",sp:"30 ft.",ab:[7,15,9,8,7,8],sen:"darkvision 60 ft., passive Perception 8",lg:"Common, Draconic",tr:[["Sunlight Sensitivity","Disadvantage on attacks and sight-based Perception in sunlight."],["Pack Tactics","Advantage on attacks if a non-incapacitated ally is within 5 ft. of the target."]],axn:[["Dagger","Melee: +4 to hit, reach 5 ft. Hit: 4 (1d4+2) piercing."],["Sling","Ranged: +4 to hit, range 30/120 ft. Hit: 4 (1d4+2) bludgeoning."]]},
+{n:"Giant Rat",cr:"1/8",xp:25,st:"Small beast, unaligned",acx:"12",hp:7,hd:"2d6",sp:"30 ft.",ab:[7,15,11,2,10,4],sen:"darkvision 60 ft., passive Perception 10",lg:"—",tr:[["Keen Smell","Advantage on smell-based Perception checks."],["Pack Tactics","Advantage on attacks if a non-incapacitated ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +4 to hit, reach 5 ft. Hit: 4 (1d4+2) piercing."]]},
+{n:"Acolyte",cr:"1/4",xp:50,st:"Medium humanoid (any race), any alignment",acx:"10",hp:9,hd:"2d8",sp:"30 ft.",ab:[10,10,10,10,14,11],sk:"Medicine +4, Religion +2",sen:"passive Perception 12",lg:"any one language (usually Common)",tr:[["Spellcasting","1st-level cleric (DC 12, +4). Cantrips: light, sacred flame, thaumaturgy. 1st (3 slots): bless, cure wounds, sanctuary."]],axn:[["Club","Melee: +2 to hit, reach 5 ft. Hit: 2 (1d4) bludgeoning."]]},
+{n:"Goblin",cr:"1/4",xp:50,st:"Small humanoid (goblinoid), neutral evil",acx:"15 (leather armor, shield)",hp:7,hd:"2d6",sp:"30 ft.",ab:[8,14,10,10,8,8],sk:"Stealth +6",sen:"darkvision 60 ft., passive Perception 9",lg:"Common, Goblin",tr:[["Nimble Escape","Can Disengage or Hide as a bonus action each turn."]],axn:[["Scimitar","Melee: +4 to hit, reach 5 ft. Hit: 5 (1d6+2) slashing."],["Shortbow","Ranged: +4 to hit, range 80/320 ft. Hit: 5 (1d6+2) piercing."]]},
+{n:"Skeleton",cr:"1/4",xp:50,st:"Medium undead, lawful evil",acx:"13 (armor scraps)",hp:13,hd:"2d8+4",sp:"30 ft.",ab:[10,14,15,6,8,5],vul:"bludgeoning",imm:"poison",cim:"exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 9",lg:"understands languages it knew in life but can't speak",tr:[],axn:[["Shortsword","Melee: +4 to hit, reach 5 ft. Hit: 5 (1d6+2) piercing."],["Shortbow","Ranged: +4 to hit, range 80/320 ft. Hit: 5 (1d6+2) piercing."]]},
+{n:"Zombie",cr:"1/4",xp:50,st:"Medium undead, neutral evil",acx:"8",hp:22,hd:"3d8+9",sp:"20 ft.",ab:[13,6,16,3,6,5],sv:"Wis +0",imm:"poison",cim:"poisoned",sen:"darkvision 60 ft., passive Perception 8",lg:"understands languages it knew in life but can't speak",tr:[["Undead Fortitude","If reduced to 0 HP by non-radiant, non-crit damage: Con save DC 5 + damage taken; on success, drops to 1 HP instead."]],axn:[["Slam","Melee: +3 to hit, reach 5 ft. Hit: 4 (1d6+1) bludgeoning."]]},
+{n:"Wolf",cr:"1/4",xp:50,st:"Medium beast, unaligned",acx:"13 (natural armor)",hp:11,hd:"2d8+2",sp:"40 ft.",ab:[12,15,12,3,12,6],sk:"Perception +3, Stealth +4",sen:"passive Perception 13",lg:"—",tr:[["Keen Hearing and Smell","Advantage on Perception checks using hearing or smell."],["Pack Tactics","Advantage on attacks if a non-incapacitated ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +4 to hit, reach 5 ft. Hit: 7 (2d4+2) piercing; target must succeed DC 11 Str save or be knocked prone."]]},
+{n:"Gnoll",cr:"1/2",xp:100,st:"Medium humanoid (gnoll), chaotic evil",acx:"15 (hide armor, shield)",hp:22,hd:"5d8",sp:"30 ft.",ab:[14,12,11,6,10,7],sen:"darkvision 60 ft., passive Perception 10",lg:"Gnoll",tr:[["Rampage","When it reduces a creature to 0 HP with melee on its turn, bonus action: move up to half speed and make a bite attack."]],axn:[["Bite","Melee: +4 to hit, reach 5 ft. Hit: 4 (1d4+2) piercing."],["Spear","Melee or Ranged: +4, reach 5 ft. or 20/60. Hit: 5 (1d6+2), or 6 (1d8+2) two-handed."],["Longbow","Ranged: +3 to hit, range 150/600 ft. Hit: 5 (1d8+1) piercing."]]},
+{n:"Hobgoblin",cr:"1/2",xp:100,st:"Medium humanoid (goblinoid), lawful evil",acx:"18 (chain mail, shield)",hp:11,hd:"2d8+2",sp:"30 ft.",ab:[13,12,12,10,10,9],sen:"darkvision 60 ft., passive Perception 10",lg:"Common, Goblin",tr:[["Martial Advantage","Once per turn, +2d6 damage to a creature within 5 ft. of a non-incapacitated ally."]],axn:[["Longsword","Melee: +3 to hit, reach 5 ft. Hit: 5 (1d8+1) slashing, or 6 (1d10+1) two-handed."],["Longbow","Ranged: +3 to hit, range 150/600 ft. Hit: 5 (1d8+1) piercing."]]},
+{n:"Lizardfolk",cr:"1/2",xp:100,st:"Medium humanoid (lizardfolk), neutral",acx:"15 (natural armor, shield)",hp:22,hd:"4d8+4",sp:"30 ft., swim 30 ft.",ab:[15,10,13,7,12,7],sk:"Perception +3, Stealth +4, Survival +5",sen:"passive Perception 13",lg:"Draconic",tr:[["Hold Breath","Can hold its breath for 15 minutes."]],axn:[["Multiattack","Two melee attacks, each a different weapon."],["Bite","Melee: +4 to hit. Hit: 5 (1d6+2) piercing."],["Heavy Club","Melee: +4 to hit. Hit: 5 (1d6+2) bludgeoning."],["Javelin","Melee or Ranged: +4, reach 5 ft. or 30/120. Hit: 5 (1d6+2) piercing."]]},
+{n:"Orc",cr:"1/2",xp:100,st:"Medium humanoid (orc), chaotic evil",acx:"13 (hide armor)",hp:15,hd:"2d8+6",sp:"30 ft.",ab:[16,12,16,7,11,10],sk:"Intimidation +2",sen:"darkvision 60 ft., passive Perception 10",lg:"Common, Orc",tr:[["Aggressive","Bonus action: move up to its speed toward a hostile creature it can see."]],axn:[["Greataxe","Melee: +5 to hit, reach 5 ft. Hit: 9 (1d12+3) slashing."],["Javelin","Melee or Ranged: +5, reach 5 ft. or 30/120. Hit: 6 (1d6+3) piercing."]]},
+{n:"Scout",cr:"1/2",xp:100,st:"Medium humanoid (any race), any alignment",acx:"13 (leather armor)",hp:16,hd:"3d8+3",sp:"30 ft.",ab:[11,14,12,11,13,11],sk:"Nature +4, Perception +5, Stealth +6, Survival +5",sen:"passive Perception 15",lg:"any one language (usually Common)",tr:[["Keen Hearing and Sight","Advantage on Perception using hearing or sight."]],axn:[["Multiattack","Two melee or two ranged attacks."],["Shortsword","Melee: +4 to hit. Hit: 5 (1d6+2) piercing."],["Longbow","Ranged: +4, range 150/600 ft. Hit: 6 (1d8+2) piercing."]]},
+{n:"Shadow",cr:"1/2",xp:100,st:"Medium undead, chaotic evil",acx:"12",hp:16,hd:"3d8+3",sp:"40 ft.",ab:[6,14,13,6,10,8],sk:"Stealth +4 (+6 in dim light/darkness)",vul:"radiant",res:"acid, cold, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical attacks",imm:"necrotic, poison",cim:"exhaustion, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained",sen:"darkvision 60 ft., passive Perception 10",lg:"—",tr:[["Amorphous","Can move through a space as narrow as 1 inch."],["Shadow Stealth","In dim light or darkness, can Hide as a bonus action."],["Sunlight Weakness","Disadvantage on attacks, checks, and saves in sunlight."]],axn:[["Strength Drain","Melee: +4 to hit, reach 5 ft. Hit: 9 (2d6+2) necrotic, and target's Str score is reduced by 1d4. Target dies at Str 0; humanoids killed rise as a shadow in 1d4 hours."]]},
+{n:"Thug",cr:"1/2",xp:100,st:"Medium humanoid (any race), any non-good alignment",acx:"11 (leather armor)",hp:32,hd:"5d8+10",sp:"30 ft.",ab:[15,11,14,10,10,11],sk:"Intimidation +2",sen:"passive Perception 10",lg:"any one language (usually Common)",tr:[["Pack Tactics","Advantage on attacks if a non-incapacitated ally is within 5 ft. of the target."]],axn:[["Multiattack","Two melee attacks."],["Mace","Melee: +4 to hit. Hit: 5 (1d6+2) bludgeoning."],["Heavy Crossbow","Ranged: +2, range 100/400. Hit: 5 (1d10) piercing."]]},
+{n:"Worg",cr:"1/2",xp:100,st:"Large monstrosity, neutral evil",acx:"13 (natural armor)",hp:26,hd:"4d10+4",sp:"50 ft.",ab:[16,13,13,7,11,8],sk:"Perception +4",sen:"darkvision 60 ft., passive Perception 14",lg:"Goblin, Worg",tr:[["Keen Hearing and Smell","Advantage on Perception using hearing or smell."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing; DC 13 Str save or knocked prone."]]},
+{n:"Brown Bear",cr:"1",xp:200,st:"Large beast, unaligned",acx:"11 (natural armor)",hp:34,hd:"4d10+12",sp:"40 ft., climb 30 ft.",ab:[19,10,16,2,13,7],sk:"Perception +3",sen:"passive Perception 13",lg:"—",tr:[["Keen Smell","Advantage on smell-based Perception checks."]],axn:[["Multiattack","One bite and one claws attack."],["Bite","Melee: +6 to hit. Hit: 8 (1d8+4) piercing."],["Claws","Melee: +6 to hit. Hit: 11 (2d6+4) slashing."]]},
+{n:"Bugbear",cr:"1",xp:200,st:"Medium humanoid (goblinoid), chaotic evil",acx:"16 (hide armor, shield)",hp:27,hd:"5d8+5",sp:"30 ft.",ab:[15,14,13,8,11,9],sk:"Stealth +6, Survival +2",sen:"darkvision 60 ft., passive Perception 10",lg:"Common, Goblin",tr:[["Brute","A melee weapon deals one extra die of damage (included)."],["Surprise Attack","If it surprises a creature and hits in the first round, +7 (2d6) damage."]],axn:[["Morningstar","Melee: +4 to hit, reach 5 ft. Hit: 11 (2d8+2) piercing."],["Javelin","Melee or Ranged: +4, reach 5 ft. or 30/120. Hit: 9 (2d6+2) melee or 5 (1d6+2) ranged piercing."]]},
+{n:"Dire Wolf",cr:"1",xp:200,st:"Large beast, unaligned",acx:"14 (natural armor)",hp:37,hd:"5d10+10",sp:"50 ft.",ab:[17,15,15,3,12,7],sk:"Perception +3, Stealth +4",sen:"passive Perception 13",lg:"—",tr:[["Keen Hearing and Smell","Advantage on Perception using hearing or smell."],["Pack Tactics","Advantage on attacks if an ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing; DC 13 Str save or knocked prone."]]},
+{n:"Ghoul",cr:"1",xp:200,st:"Medium undead, chaotic evil",acx:"12",hp:22,hd:"5d8",sp:"30 ft.",ab:[13,15,10,7,10,6],imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[],axn:[["Bite","Melee: +2 to hit, reach 5 ft. Hit: 9 (2d6+2) piercing."],["Claws","Melee: +4 to hit, reach 5 ft. Hit: 7 (2d4+2) slashing. Non-elf, non-undead targets: DC 10 Con save or be <b>paralyzed</b> 1 minute (repeat save at end of each turn)."]]},
+{n:"Giant Spider",cr:"1",xp:200,st:"Large beast, unaligned",acx:"14 (natural armor)",hp:26,hd:"4d10+4",sp:"30 ft., climb 30 ft.",ab:[14,16,12,2,11,4],sk:"Stealth +7",sen:"blindsight 10 ft., darkvision 60 ft., passive Perception 10",lg:"—",tr:[["Spider Climb","Climbs difficult surfaces, including ceilings, without a check."],["Web Sense","Knows the location of any creature touching its web."],["Web Walker","Ignores movement restrictions from webbing."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 7 (1d8+3) piercing + DC 11 Con save, taking 9 (2d8) poison on a fail (half on success). If poison drops target to 0 HP: stable but poisoned and paralyzed 1 hour."],["Web (Recharge 5–6)","Ranged: +5 to hit, range 30/60 ft. Target restrained by webbing (escape DC 12 Str; web AC 10, 5 HP, vulnerable to fire, immune to bludgeoning/poison/psychic)."]]},
+{n:"Imp",cr:"1",xp:200,st:"Tiny fiend (devil, shapechanger), lawful evil",acx:"13",hp:10,hd:"3d4+3",sp:"20 ft., fly 40 ft.",ab:[6,17,13,11,12,14],sk:"Deception +4, Insight +3, Persuasion +4, Stealth +5",res:"cold; bludgeoning/piercing/slashing from nonmagical non-silvered attacks",imm:"fire, poison",cim:"poisoned",sen:"darkvision 120 ft., passive Perception 11",lg:"Infernal, Common",tr:[["Shapechanger","Polymorph into a rat, raven, or spider, or back."],["Devil's Sight","Magical darkness doesn't impede its darkvision."],["Magic Resistance","Advantage on saves vs. spells and magical effects."]],axn:[["Sting (Bite in beast form)","Melee: +5 to hit, reach 5 ft. Hit: 5 (1d4+3) piercing + DC 11 Con save, 10 (3d6) poison on fail, half on success."],["Invisibility","Turns invisible until it attacks or drops concentration."]]},
+{n:"Specter",cr:"1",xp:200,st:"Medium undead, chaotic evil",acx:"12",hp:22,hd:"5d8",sp:"0 ft., fly 50 ft. (hover)",ab:[1,14,11,10,10,11],res:"acid, cold, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical attacks",imm:"necrotic, poison",cim:"charmed, exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",sen:"darkvision 60 ft., passive Perception 10",lg:"understands languages it knew in life but can't speak",tr:[["Incorporeal Movement","Moves through creatures and objects as difficult terrain; 1d10 force damage if it ends its turn inside an object."],["Sunlight Sensitivity","Disadvantage on attacks and sight-based Perception in sunlight."]],axn:[["Life Drain","Melee: +4 to hit, reach 5 ft. Hit: 10 (3d6) necrotic; DC 10 Con save or HP maximum reduced by the same amount until a long rest. Dies if HP max hits 0."]]},
+{n:"Spy",cr:"1",xp:200,st:"Medium humanoid (any race), any alignment",acx:"12",hp:27,hd:"6d8",sp:"30 ft.",ab:[10,15,10,12,14,16],sk:"Deception +5, Insight +4, Investigation +5, Perception +6, Persuasion +5, Sleight of Hand +4, Stealth +4",sen:"passive Perception 16",lg:"any two languages",tr:[["Cunning Action","Bonus action each turn: Dash, Disengage, or Hide."],["Sneak Attack (1/turn)","+7 (2d6) damage with advantage, or when a non-incapacitated enemy of the target is within 5 ft. and the spy lacks disadvantage."]],axn:[["Multiattack","Two melee attacks."],["Shortsword","Melee: +4 to hit. Hit: 5 (1d6+2) piercing."],["Hand Crossbow","Ranged: +4, range 30/120. Hit: 5 (1d6+2) piercing."]]},
+{n:"Ankheg",cr:"2",xp:450,st:"Large monstrosity, unaligned",acx:"14 (natural armor), 11 while prone",hp:39,hd:"6d10+6",sp:"30 ft., burrow 10 ft.",ab:[17,11,13,1,13,6],sen:"darkvision 60 ft., tremorsense 60 ft., passive Perception 11",lg:"—",tr:[],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) slashing + 3 (1d6) acid. Large or smaller target is grappled (escape DC 13); bite restricted to grappled target with advantage while held."],["Acid Spray (Recharge 6)","30-ft. line, 5 ft. wide: DC 13 Dex save, 10 (3d6) acid, half on success."]]},
+{n:"Bandit Captain",cr:"2",xp:450,st:"Medium humanoid (any race), any non-lawful alignment",acx:"15 (studded leather)",hp:65,hd:"10d8+20",sp:"30 ft.",ab:[15,16,14,14,11,14],sv:"Str +4, Dex +5, Wis +2",sk:"Athletics +4, Deception +4",sen:"passive Perception 10",lg:"any two languages",tr:[],axn:[["Multiattack","Three melee attacks (two scimitar, one dagger) or two ranged dagger attacks."],["Scimitar","Melee: +5 to hit. Hit: 6 (1d6+3) slashing."],["Dagger","Melee or Ranged: +5, reach 5 ft. or 20/60. Hit: 5 (1d4+3) piercing."],["Parry (Reaction)","+2 AC against one melee attack it can see (must be wielding a weapon)."]]},
+{n:"Cult Fanatic",cr:"2",xp:450,st:"Medium humanoid (any race), any non-good alignment",acx:"13 (leather armor)",hp:33,hd:"6d8+6",sp:"30 ft.",ab:[11,14,12,10,13,14],sk:"Deception +4, Persuasion +4, Religion +2",sen:"passive Perception 11",lg:"any one language (usually Common)",tr:[["Dark Devotion","Advantage on saves vs. charmed/frightened."],["Spellcasting","4th-level cleric (DC 11, +3). Cantrips: light, sacred flame, thaumaturgy. 1st (4): command, inflict wounds, shield of faith. 2nd (3): hold person, spiritual weapon."]],axn:[["Multiattack","Two melee attacks."],["Dagger","Melee or Ranged: +4, reach 5 ft. or 20/60. Hit: 4 (1d4+2) piercing."]]},
+{n:"Gelatinous Cube",cr:"2",xp:450,st:"Large ooze, unaligned",acx:"6",hp:84,hd:"8d10+40",sp:"15 ft.",ab:[14,3,20,1,6,1],cim:"blinded, charmed, deafened, exhaustion, frightened, prone",sen:"blindsight 60 ft. (blind beyond), passive Perception 8",lg:"—",tr:[["Ooze Cube","Fills its space; creatures inside can be seen but have total cover. Entering its space: DC 12 Dex save or be engulfed."],["Transparent","DC 15 Perception to spot it without movement; creatures unaware of it are surprised when engulfed."]],axn:[["Pseudopod","Melee: +4 to hit, reach 5 ft. Hit: 10 (3d6) acid."],["Engulf","Moves up to speed; creatures in path: DC 12 Dex save. Fail = engulfed: restrained, can't breathe, 21 (6d6) acid at the start of each of the cube's turns. Escape: DC 12 Str check (costs the escaper or ally an action)."]]},
+{n:"Ghast",cr:"2",xp:450,st:"Medium undead, chaotic evil",acx:"13",hp:36,hd:"8d8",sp:"30 ft.",ab:[16,17,10,11,10,8],res:"necrotic",imm:"poison",cim:"charmed, exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 10",lg:"Common",tr:[["Stench","Start of turn within 5 ft.: DC 10 Con save or be poisoned until the start of your next turn; success = immune to this ghast's stench 24 hrs."],["Turning Defiance","Ghouls within 30 ft. have advantage on saves vs. turn undead."]],axn:[["Bite","Melee: +3 to hit, reach 5 ft. Hit: 12 (2d8+3) piercing."],["Claws","Melee: +5 to hit. Hit: 10 (2d6+3) slashing; non-undead DC 10 Con save or <b>paralyzed</b> 1 minute (repeat save each turn)."]]},
+{n:"Mimic",cr:"2",xp:450,st:"Medium monstrosity (shapechanger), neutral",acx:"12 (natural armor)",hp:58,hd:"9d8+18",sp:"15 ft.",ab:[17,12,15,5,13,8],sk:"Stealth +5",imm:"acid",cim:"prone",sen:"darkvision 60 ft., passive Perception 11",lg:"—",tr:[["Shapechanger","Polymorphs into an object or back; statistics unchanged."],["Adhesive (Object Form)","Adheres to anything touching it; Huge or smaller creatures are grappled (escape DC 13; checks vs. it at disadvantage)."],["False Appearance","Indistinguishable from an ordinary object while motionless."],["Grappler","Advantage on attacks vs. creatures it's grappling."]],axn:[["Pseudopod","Melee: +5 to hit. Hit: 7 (1d8+3) bludgeoning; in object form, target is adhered."],["Bite","Melee: +5 to hit. Hit: 7 (1d8+3) piercing + 4 (1d8) acid."]]},
+{n:"Ogre",cr:"2",xp:450,st:"Large giant, chaotic evil",acx:"11 (hide armor)",hp:59,hd:"7d10+21",sp:"40 ft.",ab:[19,8,16,5,7,7],sen:"darkvision 60 ft., passive Perception 8",lg:"Common, Giant",tr:[],axn:[["Greatclub","Melee: +6 to hit, reach 5 ft. Hit: 13 (2d8+4) bludgeoning."],["Javelin","Melee or Ranged: +6, reach 5 ft. or 30/120. Hit: 11 (2d6+4) piercing."]]},
+{n:"Priest",cr:"2",xp:450,st:"Medium humanoid (any race), any alignment",acx:"13 (chain shirt)",hp:27,hd:"5d8+5",sp:"25 ft.",ab:[10,10,12,13,16,13],sk:"Medicine +7, Persuasion +3, Religion +4",sen:"passive Perception 13",lg:"any two languages",tr:[["Divine Eminence","Bonus action: imbue a melee weapon hit with +10 (3d6) radiant (spend higher slot for +1d6/level)."],["Spellcasting","5th-level cleric (DC 13, +5). Cantrips: light, sacred flame, thaumaturgy. 1st (4): cure wounds, guiding bolt, sanctuary. 2nd (3): lesser restoration, spiritual weapon. 3rd (2): dispel magic, spirit guardians."]],axn:[["Mace","Melee: +2 to hit, reach 5 ft. Hit: 3 (1d6) bludgeoning."]]},
+{n:"Rust Monster",cr:"1/2",xp:100,st:"Medium monstrosity, unaligned",acx:"14 (natural armor)",hp:27,hd:"5d8+5",sp:"40 ft.",ab:[13,12,13,2,13,6],sen:"darkvision 60 ft., passive Perception 11",lg:"—",tr:[["Iron Scent","Pinpoints ferrous metal within 30 ft."],["Rust Metal","Nonmagical ferrous weapons hitting it take a permanent −1 penalty; at −5 the weapon is destroyed. Nonmagical ferrous ammo is destroyed on hit."]],axn:[["Bite","Melee: +3 to hit. Hit: 5 (1d8+1) piercing."],["Antennae","Corrodes a nonmagical ferrous object within 5 ft. Unworn objects: 1-ft. cube destroyed. Worn/carried: DC 11 Dex save or armor takes permanent −1 AC (destroyed at AC 10 + Dex); shields likewise."]]},
+{n:"Basilisk",cr:"3",xp:700,st:"Medium monstrosity, unaligned",acx:"15 (natural armor)",hp:52,hd:"8d8+16",sp:"20 ft.",ab:[16,8,15,2,8,7],sen:"darkvision 60 ft., passive Perception 9",lg:"—",tr:[["Petrifying Gaze","Start of a creature's turn within 30 ft. seeing the basilisk's eyes: DC 12 Con save or begin turning to stone (restrained; repeat at end of next turn — fail = <b>petrified</b> until freed by greater restoration etc.). Creatures can avert eyes (basilisk gets advantage on attacks against them). Its own reflected gaze can petrify it."]],axn:[["Bite","Melee: +5 to hit, reach 5 ft. Hit: 10 (2d6+3) piercing + 7 (2d6) poison."]]},
+{n:"Doppelganger",cr:"3",xp:700,st:"Medium monstrosity (shapechanger), neutral",acx:"14",hp:52,hd:"8d8+16",sp:"30 ft.",ab:[11,18,14,11,12,14],sk:"Deception +6, Insight +3",cim:"charmed",sen:"darkvision 60 ft., passive Perception 11",lg:"Common",tr:[["Shapechanger","Polymorph into any Small/Medium humanoid it has seen, or back."],["Ambusher","Advantage on attack rolls vs. creatures it has surprised."],["Surprise Attack","If it surprises a creature and hits in round one: +10 (3d6) damage."]],axn:[["Multiattack","Two melee attacks."],["Slam","Melee: +6 to hit. Hit: 7 (1d6+4) bludgeoning."],["Read Thoughts","Magically read surface thoughts of one creature within 60 ft.; gains advantage on Deception/Insight/Intimidation/Persuasion vs. it."]]},
+{n:"Green Hag",cr:"3",xp:700,st:"Medium fey, neutral evil",acx:"17 (natural armor)",hp:82,hd:"11d8+33",sp:"30 ft.",ab:[18,12,16,13,14,14],sk:"Arcana +3, Deception +4, Perception +4, Stealth +3",sen:"darkvision 60 ft., passive Perception 14",lg:"Common, Draconic, Sylvan",tr:[["Amphibious","Breathes air and water."],["Innate Spellcasting","At will: dancing lights, minor illusion, vicious mockery (DC 12)."],["Mimicry","Imitates animal sounds and humanoid voices (DC 14 Insight to discern)."]],axn:[["Claws","Melee: +6 to hit, reach 5 ft. Hit: 13 (2d8+4) slashing."],["Illusory Appearance","Covers herself and gear in an illusion appearing as another creature of her general shape (DC 20 Investigation to discern; physical contact reveals)."],["Invisible Passage","Turns invisible until she attacks/casts or drops concentration, leaving no trace."]]},
+{n:"Hell Hound",cr:"3",xp:700,st:"Medium fiend, lawful evil",acx:"15 (natural armor)",hp:45,hd:"7d8+14",sp:"50 ft.",ab:[17,12,14,6,13,6],sk:"Perception +5",imm:"fire",sen:"darkvision 60 ft., passive Perception 15",lg:"understands Infernal but can't speak",tr:[["Keen Hearing and Smell","Advantage on Perception using hearing or smell."],["Pack Tactics","Advantage on attacks if an ally is within 5 ft. of the target."]],axn:[["Bite","Melee: +5 to hit. Hit: 7 (1d8+3) piercing + 7 (2d6) fire."],["Fire Breath (Recharge 5–6)","15-ft. cone: DC 12 Dex save, 21 (6d6) fire, half on success."]]},
+{n:"Knight",cr:"3",xp:700,st:"Medium humanoid (any race), any alignment",acx:"18 (plate)",hp:52,hd:"8d8+16",sp:"30 ft.",ab:[16,11,14,11,11,15],sv:"Con +4, Wis +2",sen:"passive Perception 10",lg:"any one language (usually Common)",tr:[["Brave","Advantage on saves vs. frightened."]],axn:[["Multiattack","Two melee attacks."],["Greatsword","Melee: +5 to hit. Hit: 10 (2d6+3) slashing."],["Heavy Crossbow","Ranged: +2, range 100/400. Hit: 5 (1d10) piercing."],["Leadership (Recharges after rest)","For 1 minute, allies within 30 ft. add +1d4 to attack rolls and saves while the knight is conscious."],["Parry (Reaction)","+2 AC vs. one melee attack it can see (needs a melee weapon)."]]},
+{n:"Manticore",cr:"3",xp:700,st:"Large monstrosity, lawful evil",acx:"14 (natural armor)",hp:68,hd:"8d10+24",sp:"30 ft., fly 50 ft.",ab:[17,16,17,7,12,8],sen:"darkvision 60 ft., passive Perception 11",lg:"Common",tr:[["Tail Spike Regrowth","24 tail spikes; regrow after a long rest."]],axn:[["Multiattack","Three attacks: one bite + two claws, or three tail spikes."],["Bite","Melee: +5 to hit. Hit: 7 (1d8+3) piercing."],["Claw","Melee: +5 to hit. Hit: 6 (1d6+3) slashing."],["Tail Spike","Ranged: +5, range 100/200. Hit: 7 (1d8+3) piercing."]]},
+{n:"Owlbear",cr:"3",xp:700,st:"Large monstrosity, unaligned",acx:"13 (natural armor)",hp:59,hd:"7d10+21",sp:"40 ft.",ab:[20,12,17,3,12,7],sk:"Perception +3",sen:"darkvision 60 ft., passive Perception 13",lg:"—",tr:[["Keen Sight and Smell","Advantage on Perception using sight or smell."]],axn:[["Multiattack","One beak and one claws attack."],["Beak","Melee: +7 to hit, reach 5 ft. Hit: 10 (1d10+5) piercing."],["Claws","Melee: +7 to hit. Hit: 14 (2d8+5) slashing."]]},
+{n:"Veteran",cr:"3",xp:700,st:"Medium humanoid (any race), any alignment",acx:"17 (splint)",hp:58,hd:"9d8+18",sp:"30 ft.",ab:[16,13,14,10,11,10],sk:"Athletics +5, Perception +2",sen:"passive Perception 12",lg:"any one language (usually Common)",tr:[],axn:[["Multiattack","Two longsword attacks; if shortsword drawn, one shortsword too."],["Longsword","Melee: +5 to hit. Hit: 7 (1d8+3) slashing, or 8 (1d10+3) two-handed."],["Shortsword","Melee: +5 to hit. Hit: 6 (1d6+3) piercing."],["Heavy Crossbow","Ranged: +3, range 100/400. Hit: 6 (1d10+1) piercing."]]},
+{n:"Wight",cr:"3",xp:700,st:"Medium undead, neutral evil",acx:"14 (studded leather)",hp:45,hd:"6d8+18",sp:"30 ft.",ab:[15,14,16,10,13,15],sk:"Perception +3, Stealth +4",res:"necrotic; bludgeoning/piercing/slashing from nonmagical non-silvered attacks",imm:"poison",cim:"exhaustion, poisoned",sen:"darkvision 60 ft., passive Perception 13",lg:"the languages it knew in life",tr:[["Sunlight Sensitivity","Disadvantage on attacks and sight-based Perception in sunlight."]],axn:[["Multiattack","Two longsword or two longbow attacks; can use Life Drain in place of one longsword."],["Life Drain","Melee: +4 to hit. Hit: 6 (1d6+2) necrotic; DC 13 Con save or HP max reduced by the same until a long rest (death at 0). Humanoids killed rise 24 hrs later as zombies under its control."],["Longsword","Melee: +4 to hit. Hit: 6 (1d8+2) slashing."],["Longbow","Ranged: +4, range 150/600. Hit: 6 (1d8+2) piercing."]]},
+{n:"Banshee",cr:"4",xp:1100,st:"Medium undead, chaotic evil",acx:"12",hp:58,hd:"13d8",sp:"0 ft., fly 40 ft. (hover)",ab:[1,14,10,12,11,17],sv:"Wis +2, Cha +5",res:"acid, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical attacks",imm:"cold, necrotic, poison",cim:"charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained",sen:"darkvision 60 ft., passive Perception 10",lg:"Common, Elvish",tr:[["Detect Life","Senses living creatures up to 5 miles away (knows direction, not location)."],["Incorporeal Movement","Moves through creatures/objects as difficult terrain; 1d10 force if it ends turn inside an object."]],axn:[["Corrupting Touch","Melee: +4 to hit, reach 5 ft. Hit: 12 (3d6+2) necrotic."],["Horrifying Visage","Non-undead within 60 ft. that can see her: DC 13 Wis save or frightened 1 minute (aging on big fail at DM's whim); repeat save each turn; success = immune 24 hrs."],["Wail (1/day)","All living within 30 ft. that can hear: DC 13 Con save; fail = drop to 0 HP, success = 10 (3d6) psychic."]]},
+{n:"Ghost",cr:"4",xp:1100,st:"Medium undead, any alignment",acx:"11",hp:45,hd:"10d8",sp:"0 ft., fly 40 ft. (hover)",ab:[7,13,10,10,12,17],res:"acid, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical attacks",imm:"cold, necrotic, poison",cim:"charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained",sen:"darkvision 60 ft., passive Perception 11",lg:"any it knew in life",tr:[["Ethereal Sight","Sees 60 ft. into the Ethereal Plane."],["Incorporeal Movement","Through creatures/objects as difficult terrain; 1d10 force ending turn inside an object."]],axn:[["Withering Touch","Melee: +5 to hit, reach 5 ft. Hit: 17 (4d6+3) necrotic."],["Etherealness","Shifts between the Material and Ethereal planes."],["Horrifying Visage","Non-undead within 60 ft.: DC 13 Wis save or frightened 1 min; fail by 5+ = age 1d4×10 years. Repeat save each turn; success = immune 24 hrs."],["Possession (Recharge 6)","One humanoid within 5 ft.: DC 13 Cha save or be possessed (ghost controls the body; target's mind is suppressed). Ends on 0 HP body, ghost's choice, or turn undead. Success = immune 24 hrs."]]},
+{n:"Fire Elemental",cr:"5",xp:1800,st:"Large elemental, neutral",acx:"13",hp:102,hd:"12d10+36",sp:"50 ft.",ab:[10,17,16,6,10,7],res:"bludgeoning/piercing/slashing from nonmagical attacks",imm:"fire, poison",cim:"exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",sen:"darkvision 60 ft., passive Perception 10",lg:"Ignan",tr:[["Fire Form","Moves through 1-inch gaps; creatures it moves through take 5 (1d10) fire and ignite (1d10 fire/turn until doused, DC 10 Dex action). First contact each turn (or touching it within 5 ft. with melee): 5 (1d10) fire. Ignites flammable objects it touches."],["Illumination","Bright light 30 ft., dim 30 more."],["Water Susceptibility","5 cold damage per 5 ft. of water moved through (or gallon splashed)."]],axn:[["Multiattack","Two touch attacks."],["Touch","Melee: +6 to hit. Hit: 10 (2d6+3) fire; target ignites (1d10 fire at start of its turns until doused)."]]},
+{n:"Hill Giant",cr:"5",xp:1800,st:"Huge giant, chaotic evil",acx:"13 (natural armor)",hp:105,hd:"10d12+40",sp:"40 ft.",ab:[21,8,19,5,9,6],sk:"Perception +2",sen:"passive Perception 12",lg:"Giant",tr:[],axn:[["Multiattack","Two greatclub attacks."],["Greatclub","Melee: +8 to hit, reach 10 ft. Hit: 18 (3d8+5) bludgeoning."],["Rock","Ranged: +8 to hit, range 60/240 ft. Hit: 21 (3d10+5) bludgeoning."]]},
+{n:"Troll",cr:"5",xp:1800,st:"Large giant, chaotic evil",acx:"15 (natural armor)",hp:84,hd:"8d10+40",sp:"30 ft.",ab:[18,13,20,7,9,7],sk:"Perception +2",sen:"darkvision 60 ft., passive Perception 12",lg:"Giant",tr:[["Keen Smell","Advantage on smell-based Perception."],["Regeneration","Regains 10 HP at the start of its turn (not if it took acid or fire damage since its last turn). Dies only if it starts a turn at 0 HP and can't regenerate."]],axn:[["Multiattack","One bite and two claw attacks."],["Bite","Melee: +7 to hit. Hit: 7 (1d6+4) piercing."],["Claw","Melee: +7 to hit. Hit: 11 (2d6+4) slashing."]]},
+{n:"Vampire Spawn",cr:"5",xp:1800,st:"Medium undead, neutral evil",acx:"15 (natural armor)",hp:82,hd:"11d8+33",sp:"30 ft.",ab:[16,16,16,11,10,12],sv:"Dex +6, Wis +3",sk:"Perception +3, Stealth +6",res:"necrotic; bludgeoning/piercing/slashing from nonmagical attacks",sen:"darkvision 60 ft., passive Perception 13",lg:"the languages it knew in life",tr:[["Regeneration","Regains 10 HP at the start of its turn if it has 1+ HP and isn't in sunlight or running water (off next turn after radiant damage or holy water)."],["Spider Climb","Climbs any surface, including ceilings, no check."],["Vampire Weaknesses","Forbiddance (can't enter homes uninvited); harmed by running water (20 acid ending turn in it); stake through heart while incapacitated = paralyzed until removed; sunlight = 20 radiant/turn + disadvantage on attacks and checks."]],axn:[["Multiattack","Two attacks; only one can be a bite."],["Bite","Melee: +6 to hit, one willing/grappled/incapacitated/restrained creature. Hit: 6 (1d6+3) piercing + 7 (2d6) necrotic; target's HP max reduced by the necrotic amount; spawn heals the same."],["Claws","Melee: +6 to hit. Hit: 8 (2d4+3) slashing; instead of damage, can grapple (escape DC 13)."]]},
+{n:"Wraith",cr:"5",xp:1800,st:"Medium undead, neutral evil",acx:"13",hp:67,hd:"9d8+27",sp:"0 ft., fly 60 ft. (hover)",ab:[6,16,16,12,14,15],res:"acid, cold, fire, lightning, thunder; bludgeoning/piercing/slashing from nonmagical non-silvered attacks",imm:"necrotic, poison",cim:"charmed, exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained",sen:"darkvision 60 ft., passive Perception 12",lg:"the languages it knew in life",tr:[["Incorporeal Movement","Through creatures/objects as difficult terrain; 1d10 force ending turn inside an object."],["Sunlight Sensitivity","Disadvantage on attacks and sight-based Perception in sunlight."]],axn:[["Life Drain","Melee: +6 to hit, reach 5 ft. Hit: 21 (4d8+3) necrotic; DC 14 Con save or HP max reduced by the same until a long rest (death at 0)."],["Create Specter","Targets a humanoid dead ≤1 minute (violent death): its spirit rises as a specter under the wraith's command (max 7)."]]},
+{n:"Chimera",cr:"6",xp:2300,st:"Large monstrosity, chaotic evil",acx:"14 (natural armor)",hp:114,hd:"12d10+48",sp:"30 ft., fly 60 ft.",ab:[19,11,19,3,14,10],sk:"Perception +8",sen:"darkvision 60 ft., passive Perception 18",lg:"understands Draconic but can't speak",tr:[],axn:[["Multiattack","Three attacks: bite, horns, claws. When fire breath is available, can use it in place of bite or horns."],["Bite","Melee: +7 to hit. Hit: 11 (2d6+4) piercing."],["Horns","Melee: +7 to hit. Hit: 10 (1d12+4) bludgeoning."],["Claws","Melee: +7 to hit. Hit: 11 (2d6+4) slashing."],["Fire Breath (Recharge 5–6)","15-ft. cone: DC 15 Dex save, 31 (7d8) fire, half on success."]]},
+{n:"Mage",cr:"6",xp:2300,st:"Medium humanoid (any race), any alignment",acx:"12 (15 with mage armor)",hp:40,hd:"9d8",sp:"30 ft.",ab:[9,14,11,17,12,11],sv:"Int +6, Wis +4",sk:"Arcana +6, History +6",sen:"passive Perception 11",lg:"any four languages",tr:[["Spellcasting","9th-level wizard (DC 14, +6). Cantrips: fire bolt, light, mage hand, prestidigitation. 1st (4): detect magic, mage armor, magic missile, shield. 2nd (3): misty step, suggestion. 3rd (3): counterspell, fireball, fly. 4th (3): greater invisibility, ice storm. 5th (1): cone of cold."]],axn:[["Dagger","Melee or Ranged: +5, reach 5 ft. or 20/60. Hit: 4 (1d4+2) piercing."]]},
+{n:"Wyvern",cr:"6",xp:2300,st:"Large dragon, unaligned",acx:"13 (natural armor)",hp:110,hd:"13d10+39",sp:"20 ft., fly 80 ft.",ab:[19,10,16,5,12,6],sk:"Perception +4",sen:"darkvision 60 ft., passive Perception 14",lg:"—",tr:[],axn:[["Multiattack","One bite and one stinger attack; while flying, can use claws instead of one."],["Bite","Melee: +7 to hit, reach 10 ft. Hit: 11 (2d6+4) piercing."],["Claws","Melee: +7 to hit. Hit: 13 (2d8+4) slashing."],["Stinger","Melee: +7 to hit, reach 10 ft. Hit: 11 (2d6+4) piercing + DC 15 Con save, 24 (7d6) poison on fail, half on success."]]},
+{n:"Stone Giant",cr:"7",xp:2900,st:"Huge giant, neutral",acx:"17 (natural armor)",hp:126,hd:"11d12+55",sp:"40 ft.",ab:[23,15,20,10,12,9],sv:"Dex +5, Con +8, Wis +4",sk:"Athletics +12, Perception +4",sen:"darkvision 60 ft., passive Perception 14",lg:"Giant",tr:[["Stone Camouflage","Advantage on Stealth checks in rocky terrain."]],axn:[["Multiattack","Two greatclub attacks."],["Greatclub","Melee: +9 to hit, reach 15 ft. Hit: 19 (3d8+6) bludgeoning."],["Rock","Ranged: +9, range 60/240. Hit: 28 (4d10+6) bludgeoning; DC 17 Str save or knocked prone."],["Rock Catching (Reaction)","DC 10 Dex save to catch a hurled rock or similar; no damage on success."]]},
+{n:"Assassin",cr:"8",xp:3900,st:"Medium humanoid (any race), any non-good alignment",acx:"15 (studded leather)",hp:78,hd:"12d8+24",sp:"30 ft.",ab:[11,16,14,13,11,10],sv:"Dex +6, Int +4",sk:"Acrobatics +6, Deception +3, Perception +3, Stealth +9",res:"poison",sen:"passive Perception 13",lg:"Thieves' cant plus any two",tr:[["Assassinate","First turn: advantage vs. creatures that haven't acted; any hit vs. a surprised creature is a critical."],["Evasion","Dex save for half: take none on success, half on fail."],["Sneak Attack (1/turn)","+14 (4d6) with advantage, or when an enemy of the target is within 5 ft."]],axn:[["Multiattack","Two shortsword attacks."],["Shortsword","Melee: +6 to hit. Hit: 6 (1d6+3) piercing + DC 15 Con save, 24 (7d6) poison on fail, half on success."],["Light Crossbow","Ranged: +6, range 80/320. Hit: 7 (1d8+3) piercing + same poison rider."]]},
+{n:"Frost Giant",cr:"8",xp:3900,st:"Huge giant, neutral evil",acx:"15 (patchwork armor)",hp:138,hd:"12d12+60",sp:"40 ft.",ab:[23,9,21,9,10,12],sv:"Con +8, Wis +3, Cha +4",sk:"Athletics +9, Perception +3",imm:"cold",sen:"passive Perception 13",lg:"Giant",tr:[],axn:[["Multiattack","Two greataxe attacks."],["Greataxe","Melee: +9 to hit, reach 10 ft. Hit: 25 (3d12+6) slashing."],["Rock","Ranged: +9, range 60/240. Hit: 28 (4d10+6) bludgeoning."]]},
+{n:"Young Green Dragon",cr:"8",xp:3900,st:"Large dragon, lawful evil",acx:"18 (natural armor)",hp:136,hd:"16d10+48",sp:"40 ft., fly 80 ft., swim 40 ft.",ab:[19,12,17,16,13,15],sv:"Dex +4, Con +6, Wis +4, Cha +5",sk:"Deception +5, Perception +7, Stealth +4",imm:"poison",cim:"poisoned",sen:"blindsight 30 ft., darkvision 120 ft., passive Perception 17",lg:"Common, Draconic",tr:[["Amphibious","Breathes air and water."]],axn:[["Multiattack","One bite and two claw attacks."],["Bite","Melee: +7 to hit, reach 10 ft. Hit: 15 (2d10+4) piercing + 7 (2d6) poison."],["Claw","Melee: +7 to hit. Hit: 11 (2d6+4) slashing."],["Poison Breath (Recharge 5–6)","30-ft. cone: DC 14 Con save, 42 (12d6) poison, half on success."]]},
+{n:"Fire Giant",cr:"9",xp:5000,st:"Huge giant, lawful evil",acx:"18 (plate)",hp:162,hd:"13d12+78",sp:"30 ft.",ab:[25,9,23,10,14,13],sv:"Dex +3, Con +10, Cha +5",sk:"Athletics +11, Perception +6",imm:"fire",sen:"passive Perception 16",lg:"Giant",tr:[],axn:[["Multiattack","Two greatsword attacks."],["Greatsword","Melee: +11 to hit, reach 10 ft. Hit: 28 (6d6+7) slashing."],["Rock","Ranged: +11, range 60/240. Hit: 29 (4d10+7) bludgeoning."]]},
+{n:"Young Red Dragon",cr:"10",xp:5900,st:"Large dragon, chaotic evil",acx:"18 (natural armor)",hp:178,hd:"17d10+85",sp:"40 ft., climb 40 ft., fly 80 ft.",ab:[23,10,21,14,11,19],sv:"Dex +4, Con +9, Wis +4, Cha +8",sk:"Perception +8, Stealth +4",imm:"fire",sen:"blindsight 30 ft., darkvision 120 ft., passive Perception 18",lg:"Common, Draconic",tr:[],axn:[["Multiattack","One bite and two claw attacks."],["Bite","Melee: +10 to hit, reach 10 ft. Hit: 17 (2d10+6) piercing + 3 (1d6) fire."],["Claw","Melee: +10 to hit. Hit: 13 (2d6+6) slashing."],["Fire Breath (Recharge 5–6)","30-ft. cone: DC 17 Dex save, 56 (16d6) fire, half on success."]]},
+{n:"Archmage",cr:"12",xp:8400,st:"Medium humanoid (any race), any alignment",acx:"12 (15 with mage armor)",hp:99,hd:"18d8+18",sp:"30 ft.",ab:[10,14,12,20,15,16],sv:"Int +9, Wis +6",sk:"Arcana +13, History +13",res:"damage from spells; nonmagical bludgeoning/piercing/slashing (from stoneskin)",sen:"passive Perception 12",lg:"any six languages",tr:[["Magic Resistance","Advantage on saves vs. spells and magical effects."],["Spellcasting","18th-level wizard (DC 17, +9). Cantrips: fire bolt, light, mage hand, prestidigitation, shocking grasp. 1st (4): detect magic, identify, mage armor*, magic missile. 2nd (3): detect thoughts, mirror image, misty step. 3rd (3): counterspell, fly, lightning bolt. 4th (3): banishment, fire shield, stoneskin*. 5th (3): cone of cold, scrying, wall of force. 6th (1): globe of invulnerability. 7th (1): teleport. 8th (1): mind blank*. 9th (1): time stop. (*cast pre-combat)"]],axn:[["Dagger","Melee or Ranged: +6, reach 5 ft. or 20/60. Hit: 4 (1d4+2) piercing."]]},
+{n:"Vampire",cr:"13",xp:10000,st:"Medium undead (shapechanger), lawful evil",acx:"16 (natural armor)",hp:144,hd:"17d8+68",sp:"30 ft.",ab:[18,18,18,17,15,18],sv:"Dex +9, Wis +7, Cha +9",sk:"Perception +7, Stealth +9",res:"necrotic; bludgeoning/piercing/slashing from nonmagical attacks",sen:"darkvision 120 ft., passive Perception 17",lg:"the languages it knew in life",tr:[["Shapechanger","Polymorph into a Tiny bat or Medium cloud of mist, or back (if not in sunlight/running water)."],["Legendary Resistance (3/day)","Choose to succeed on a failed save."],["Misty Escape","At 0 HP outside its resting place: turns to mist (instead of falling unconscious) and must reach its coffin within 2 hours; paralyzed at 0 HP in its coffin, regains 1 HP after 1 hour there."],["Regeneration","20 HP at start of turn (1+ HP, no sunlight/running water; off after radiant or holy water)."],["Spider Climb","Any surface, including ceilings."],["Vampire Weaknesses","Can't enter residences uninvited; running water deals 20 acid; stake while incapacitated in resting place = paralyzed; sunlight: 20 radiant/turn, disadvantage on attacks and checks."]],axn:[["Multiattack (Vampire Form)","Two attacks, only one a bite."],["Unarmed Strike","Melee: +9 to hit. Hit: 8 (1d8+4) bludgeoning; instead of damage can grapple (escape DC 18)."],["Bite","Melee: +9 to hit vs. willing/grappled/incapacitated/restrained. Hit: 7 (1d6+4) piercing + 10 (3d6) necrotic; HP max reduced by the necrotic amount; vampire heals the same. Humanoid drained to 0 this way rises the next night as a vampire spawn."],["Charm","One humanoid within 30 ft.: DC 17 Wis save or be charmed 24 hrs (regards vampire as trusted; willing bite target). Repeats on damage."],["Children of the Night (1/day)","Summons 2d4 swarms of bats/rats (or 3d6 wolves outdoors), arriving in 1d4 rounds."]],lax:[["Move","Up to its speed without provoking opportunity attacks."],["Unarmed Strike","Makes one unarmed strike."],["Bite (2 actions)","Makes one bite attack."]]},
+{n:"Adult Red Dragon",cr:"17",xp:18000,st:"Huge dragon, chaotic evil",acx:"19 (natural armor)",hp:256,hd:"19d12+133",sp:"40 ft., climb 40 ft., fly 80 ft.",ab:[27,10,25,16,13,21],sv:"Dex +6, Con +13, Wis +7, Cha +11",sk:"Perception +13, Stealth +6",imm:"fire",sen:"blindsight 60 ft., darkvision 120 ft., passive Perception 23",lg:"Common, Draconic",tr:[["Legendary Resistance (3/day)","Choose to succeed on a failed save."]],axn:[["Multiattack","Frightful Presence, then one bite and two claws."],["Bite","Melee: +14 to hit, reach 10 ft. Hit: 19 (2d10+8) piercing + 7 (2d6) fire."],["Claw","Melee: +14 to hit. Hit: 15 (2d6+8) slashing."],["Tail","Melee: +14 to hit, reach 15 ft. Hit: 17 (2d8+8) bludgeoning."],["Frightful Presence","Creatures of its choice within 120 ft.: DC 19 Wis save or frightened 1 min (repeat each turn; success = immune 24 hrs)."],["Fire Breath (Recharge 5–6)","60-ft. cone: DC 21 Dex save, 63 (18d6) fire, half on success."]],lax:[["Detect","Wisdom (Perception) check."],["Tail Attack","One tail attack."],["Wing Attack (2 actions)","Creatures within 10 ft.: DC 22 Dex save, 15 (2d6+8) bludgeoning + prone; dragon can then fly half its speed."]]},
+{n:"Lich",cr:"21",xp:33000,st:"Medium undead, any evil alignment",acx:"17 (natural armor)",hp:135,hd:"18d8+54",sp:"30 ft.",ab:[11,16,16,20,14,16],sv:"Con +10, Int +12, Wis +9",sk:"Arcana +19, History +12, Insight +9, Perception +9",res:"cold, lightning, necrotic",imm:"poison; bludgeoning/piercing/slashing from nonmagical attacks",cim:"charmed, exhaustion, frightened, paralyzed, poisoned",sen:"truesight 120 ft., passive Perception 19",lg:"Common plus up to five others",tr:[["Legendary Resistance (3/day)","Choose to succeed on a failed save."],["Rejuvenation","With a phylactery, a destroyed lich gains a new body in 1d10 days."],["Turn Resistance","Advantage on saves vs. turn undead."],["Spellcasting","18th-level wizard (DC 20, +12). Cantrips: mage hand, prestidigitation, ray of frost. 1st (4): detect magic, magic missile, shield, thunderwave. 2nd (3): detect thoughts, invisibility, mirror image. 3rd (3): animate dead, counterspell, dispel magic, fireball. 4th (3): blight, dimension door. 5th (3): cloudkill, scrying. 6th (1): disintegrate, globe of invulnerability. 7th (1): finger of death, plane shift. 8th (1): dominate monster, power word stun. 9th (1): power word kill."]],axn:[["Paralyzing Touch","Melee spell: +12 to hit, reach 5 ft. Hit: 10 (3d6) cold; DC 18 Con save or paralyzed 1 minute (repeat each turn)."]],lax:[["Cantrip","Casts a cantrip."],["Paralyzing Touch (2 actions)","One paralyzing touch."],["Frightening Gaze (2 actions)","One creature within 10 ft.: DC 18 Wis save or frightened 1 min."],["Disrupt Life (3 actions)","Each non-undead within 20 ft.: DC 18 Con save, 21 (6d6) necrotic, half on success."]]}
+];
+
+/* ============ HELPERS ============ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+/* Outside Claude.ai, window.storage doesn't exist — shim it with localStorage so the
+   combat tracker survives app restarts when running as a standalone page / PWA. */
+if(!window.storage){
+  window.storage={
+    async get(k){const v=localStorage.getItem(k);if(v===null)throw new Error("key not found");return{key:k,value:v}},
+    async set(k,v){localStorage.setItem(k,v);return{key:k,value:v}},
+    async delete(k){localStorage.removeItem(k);return{key:k,deleted:true}},
+    async list(p=""){return{keys:Object.keys(localStorage).filter(k=>k.startsWith(p))}}
+  };
+}
+/* Register the service worker when hosted (https / localhost); harmless no-op otherwise. */
+if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","127.0.0.1"].includes(location.hostname))){
+  navigator.serviceWorker.register("./sw.js").catch(()=>{});
+}
+/* On narrow screens the list stacks above the detail pane — bring the detail into view after a selection. */
+const toDetail=sel=>{if(matchMedia("(max-width:820px)").matches)
+  $(sel)?.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})};
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[ri(0,a.length-1)];
+const mod=v=>{const m=Math.floor((v-10)/2);return (m>=0?"+":"")+m};
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+/* ============ TABS ============ */
+$$("nav button").forEach(b=>b.addEventListener("click",()=>{
+  $$("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  $$(".tab").forEach(t=>t.classList.toggle("on",t.id==="tab-"+b.dataset.tab));
+}));
+
+/* ============ RULES ============ */
+function renderRules(){
+  $("#rulesHost").innerHTML=RULES.map((c,ci)=>`<div class="cat" data-ci="${ci}"><h2>${c.cat}</h2><div class="cards">`+
+    c.items.map((it,ii)=>`<div class="rule" data-k="${esc((it[0]+" "+it[1]).toLowerCase())}">
+      <button aria-expanded="false">${it[0]}<span class="chev">▸</span></button>
+      <div class="body">${it[1]}</div></div>`).join("")+`</div></div>`).join("");
+  $$("#rulesHost .rule>button").forEach(b=>b.addEventListener("click",()=>{
+    const r=b.parentElement;r.classList.toggle("open");
+    b.setAttribute("aria-expanded",r.classList.contains("open"));
+  }));
+}
+renderRules();
+$("#ruleSearch").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  $$("#rulesHost .rule").forEach(r=>{
+    const hit=!q||r.dataset.k.includes(q);
+    r.classList.toggle("hidden",!hit);
+    if(q&&hit)r.classList.add("open");if(!q)r.classList.remove("open");
+  });
+  $$("#rulesHost .cat").forEach(c=>c.classList.toggle("hidden",![...c.querySelectorAll(".rule")].some(r=>!r.classList.contains("hidden"))));
+});
+
+/* ============ BESTIARY ============ */
+MONS.sort((a,b)=>crval(a.cr)-crval(b.cr)||a.n.localeCompare(b.n));
+const crSet=[...new Set(MONS.map(m=>m.cr))];
+crSet.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent="CR "+c;$("#crFilter").appendChild(o)});
+let selMon=null;
+function renderMonList(){
+  const q=$("#monSearch").value.trim().toLowerCase(), f=$("#crFilter").value;
+  $("#monList").innerHTML=MONS.filter(m=>(!q||m.n.toLowerCase().includes(q)||m.st.toLowerCase().includes(q))&&(!f||m.cr===f))
+    .map(m=>`<button data-n="${esc(m.n)}" class="${selMon===m.n?'sel':''}">${m.n}<span class="cr">CR ${m.cr}</span></button>`).join("")
+    ||`<p style="padding:12px;color:var(--parch-dim);font-style:italic">Nothing stirs…</p>`;
+  $$("#monList button").forEach(b=>b.addEventListener("click",()=>{selMon=b.dataset.n;renderMonList();renderStat(MONS.find(m=>m.n===selMon));toDetail("#monView")}));
+}
+function line(lbl,v){return v?`<p class="ln"><b>${lbl}</b> ${v}</p>`:""}
+function renderStat(m){
+  const AB=["STR","DEX","CON","INT","WIS","CHA"];
+  $("#monView").innerHTML=`<div class="statblock">
+    <h3>${m.n}</h3><div class="meta">${m.st}</div><div class="taper"></div>
+    ${line("Armor Class",m.acx)}${line("Hit Points",m.hp+" ("+m.hd+")")}${line("Speed",m.sp)}
+    <div class="taper"></div>
+    <div class="abil">${m.ab.map((v,i)=>`<div><b>${AB[i]}</b>${v} (${mod(v)})</div>`).join("")}</div>
+    <div class="taper"></div>
+    ${line("Saving Throws",m.sv)}${line("Skills",m.sk)}${line("Damage Vulnerabilities",m.vul)}
+    ${line("Damage Resistances",m.res)}${line("Damage Immunities",m.imm)}${line("Condition Immunities",m.cim)}
+    ${line("Senses",m.sen)}${line("Languages",m.lg)}
+    <p class="ln"><b>Challenge</b> ${m.cr} (${m.xp.toLocaleString()} XP)</p>
+    ${m.tr&&m.tr.length?'<div class="taper"></div>'+m.tr.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
+    ${m.axn&&m.axn.length?'<h4>Actions</h4>'+m.axn.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
+    ${m.lax&&m.lax.length?'<h4>Legendary Actions</h4><p>Three legendary actions per round, one at a time at the end of other turns; regained at the start of its turn.</p>'+m.lax.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
+  </div>
+  <div class="sb-actions"><button class="btn" onclick="addMonToTracker('${esc(m.n)}')">⚔ Add to Combat Tracker</button></div>`;
+}
+$("#monSearch").addEventListener("input",renderMonList);
+$("#crFilter").addEventListener("change",renderMonList);
+renderMonList();
+
+/* ============ COMBAT TRACKER ============ */
+let TRK={round:1,turn:0,list:[]};
+const CONDS=["Blinded","Charmed","Deafened","Frightened","Grappled","Incapacitated","Invisible","Paralyzed","Petrified","Poisoned","Prone","Restrained","Stunned","Unconscious","Concentrating","Exhaustion"];
+async function saveTrk(){try{await window.storage.set("dmscreen:tracker",JSON.stringify(TRK))}catch(e){}}
+async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value)TRK=JSON.parse(r.value)}catch(e){}renderTrk()}
+function renderTrk(){
+  $("#roundLbl").textContent="Round "+TRK.round;
+  if(!TRK.list.length){$("#trkHost").innerHTML=`<p style="color:var(--parch-dim);font-style:italic">The battlefield is empty. Add combatants above, or send in monsters from the Bestiary.</p>`;return}
+  $("#trkHost").innerHTML=TRK.list.map((c,i)=>{
+    const pct=c.max>0?Math.max(0,Math.min(100,100*c.hp/c.max)):0;
+    const cls=pct>50?"":pct>25?"hurt":"bad";
+    return `<div class="combatant ${i===TRK.turn?'turn':''} ${c.hp<=0?'dead':''}">
+      <div class="init">${c.init}</div>
+      <div class="nm">${esc(c.name)}<small>AC ${c.ac??"—"}</small></div>
+      <div class="hpbar"><div class="lbl"><span>HP</span><span>${c.hp} / ${c.max}</span></div>
+        <div class="bar"><div class="fill ${cls}" style="width:${pct}%"></div></div></div>
+      <div class="hpctl">
+        <button class="btn red" onclick="hpDelta(${i},-1)">−</button>
+        <input type="number" id="amt${i}" value="${c.amt||5}" min="1" aria-label="amount">
+        <button class="btn" onclick="hpDelta(${i},1)">+</button>
+        <button class="btn ghost" onclick="delC(${i})" title="remove">✕</button>
+      </div>
+      <div class="condrow">${(c.conds||[]).map((cd,j)=>`<button class="condtag" title="remove" onclick="rmCond(${i},${j})">${cd} ✕</button>`).join("")}
+        <select class="condtag add" onchange="addCond(${i},this.value);this.value=''"><option value="">+ condition</option>${CONDS.map(x=>`<option>${x}</option>`).join("")}</select></div>
+    </div>`}).join("");
+}
+window.hpDelta=(i,sign)=>{const a=+($("#amt"+i)?.value||1);const c=TRK.list[i];c.amt=a;c.hp=Math.min(c.max,c.hp+sign*a);if(c.hp<0)c.hp=0;saveTrk();renderTrk()};
+window.delC=i=>{TRK.list.splice(i,1);if(TRK.turn>=TRK.list.length)TRK.turn=0;saveTrk();renderTrk()};
+window.addCond=(i,v)=>{if(!v)return;TRK.list[i].conds=TRK.list[i].conds||[];if(!TRK.list[i].conds.includes(v))TRK.list[i].conds.push(v);saveTrk();renderTrk()};
+window.rmCond=(i,j)=>{TRK.list[i].conds.splice(j,1);saveTrk();renderTrk()};
+$("#addC").addEventListener("click",()=>{
+  const n=$("#cName").value.trim();if(!n)return $("#cName").focus();
+  const hp=+($("#cHP").value)||10;
+  TRK.list.push({name:n,init:+($("#cInit").value)||ri(1,20),hp,max:hp,ac:+($("#cAC").value)||null,conds:[]});
+  ["cName","cInit","cHP","cAC"].forEach(id=>$("#"+id).value="");
+  saveTrk();renderTrk();
+});
+$("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;saveTrk();renderTrk()});
+$("#nextTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk();renderTrk()});
+$("#clearTrk").addEventListener("click",()=>{TRK={round:1,turn:0,list:[]};saveTrk();renderTrk()});
+window.addMonToTracker=name=>{
+  const m=MONS.find(x=>x.n===name);if(!m)return;
+  const count=TRK.list.filter(c=>c.name.startsWith(m.n)).length;
+  const init=ri(1,20)+Math.floor((m.ab[1]-10)/2);
+  TRK.list.push({name:count?`${m.n} ${count+1}`:m.n,init,hp:m.hp,max:m.hp,ac:parseInt(m.acx)||10,conds:[]});
+  saveTrk();renderTrk();
+  $$("nav button").find(b=>b.dataset.tab==="tracker").click();
+};
+loadTrk();
+
+/* ============ ENCOUNTER BUILDER ============ */
+const XPT={ // [easy,medium,hard,deadly] per character level 1-20
+1:[25,50,75,100],2:[50,100,150,200],3:[75,150,225,400],4:[125,250,375,500],5:[250,500,750,1100],
+6:[300,600,900,1400],7:[350,750,1100,1700],8:[450,900,1400,2100],9:[550,1100,1600,2400],10:[600,1200,1900,2800],
+11:[800,1600,2400,3600],12:[1000,2000,3000,4500],13:[1100,2200,3400,5100],14:[1250,2500,3800,5700],15:[1400,2800,4300,6400],
+16:[1600,3200,4800,7200],17:[2000,3900,5900,8800],18:[2100,4200,6300,9500],19:[2400,4900,7300,10900],20:[2800,5700,8500,12700]};
+function encMult(n,party){const t=[1,1,1.5,2,2,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4];let m=t[Math.min(n,15)-1]||4;
+  if(party<3)m=t[Math.min(n+1,15)-1]||4; else if(party>5)m=n===1?1:t[Math.min(n-1,15)]||1; return m}
+$("#genEnc").addEventListener("click",()=>{
+  const n=Math.max(1,+$("#encN").value||4),L=Math.min(20,Math.max(1,+$("#encL").value||3)),di=$("#encD").selectedIndex;
+  const budget=XPT[L][di]*n;
+  const pool=MONS.filter(m=>m.xp<=budget&&m.xp>=budget/30&&m.cr!=="0");
+  let best=null;
+  for(let tries=0;tries<200&&!best;tries++){
+    const m=pick(pool);if(!m)break;
+    const maxC=Math.min(8,Math.floor(budget/m.xp));if(maxC<1)continue;
+    const c=ri(1,maxC);const adj=m.xp*c*encMult(c,n);
+    if(adj>=budget*.75&&adj<=budget*1.2)best={m,c,adj,raw:m.xp*c};
+  }
+  if(!best){const m=pool.sort((a,b)=>b.xp-a.xp)[0];best=m?{m,c:1,adj:m.xp,raw:m.xp}:null}
+  $("#encOut").innerHTML=best?
+    `<b>${best.c}× ${best.m.n}</b> (CR ${best.m.cr} each)<br>
+     Raw XP ${best.raw.toLocaleString()} · Adjusted ${Math.round(best.adj).toLocaleString()} vs. budget ${budget.toLocaleString()}<br>
+     <span style="font-style:italic">Award ${best.raw.toLocaleString()} XP to the party. Reroll for variety.</span>`
+    :"No suitable foe in the bestiary for that budget — adjust level or difficulty.";
+});
+
+/* ============ NPC GENERATOR ============ */
+const NPC={
+anc:["human","hill dwarf","high elf","wood elf","lightfoot halfling","rock gnome","half-orc","tiefling","dragonborn","half-elf"],
+fn:["Bram","Sera","Odo","Maela","Torvin","Ysolde","Garrick","Petra","Finn","Hesta","Roric","Anwen","Caspar","Dru","Edda","Loric","Mira","Norv","Olwen","Pim","Quill","Renna","Soren","Tess","Ulric","Vex","Wren","Zora"],
+ln:["Ashdown","Blackbriar","Coppervein","Duskwhistle","Emberfall","Fenwick","Greymantle","Holloway","Ironboot","Junip","Kettleworth","Longshadow","Mossbank","Nightriver","Oakhart","Pyle","Quickstep","Ravenwood","Stonemead","Thistledown","Underbough","Vance","Westmoor","Yarrow"],
+job:["innkeeper","caravan guard","gravedigger","herbalist","retired soldier","pickpocket","scribe","fishmonger","rat-catcher","minor noble","wandering priest","tinker","midwife","smuggler","stonecutter","falconer","tax collector","street performer","apprentice alchemist","ferryman"],
+look:["a missing front tooth and a wide grin","ink-stained fingers","an elaborate braided beard","one milky eye","a patchwork coat of many fabrics","burn scars up one arm","a pet rat in their hood","jewelry far too fine for their station","a constant nervous cough","boots two sizes too big","a tattoo of an anchor on the neck","hair gone white at thirty"],
+trait:["laughs at the wrong moments","never makes eye contact","quotes proverbs constantly, half of them wrong","is aggressively generous","whispers everything","keeps exact count of favors owed","is terrified of dogs","collects buttons","speaks of themselves in the third person","hums old war marches","trusts no one who refuses a drink","apologizes compulsively"],
+want:["to pay off a debt to someone dangerous","to find a sibling who vanished years ago","to be remembered for something — anything","to leave this town before winter","revenge on a guild that ruined them","to protect a secret child","to buy back the family farm","to impress a noble patron","to atone for a betrayal","a quiet life, violently defended"],
+secret:["is informing on the party to a third party","is not who they claim to be","owes their soul, quite literally","witnessed a murder and stayed silent","is secretly wealthy","carries a forged identity paper","is dying and hiding it","serves a cult — reluctantly","stole their good name from a dead traveler","knows the location of something the party seeks"]};
+$("#genNPC").addEventListener("click",()=>{
+  $("#npcOut").innerHTML=`<b>${pick(NPC.fn)} ${pick(NPC.ln)}</b>, ${pick(NPC.anc)} ${pick(NPC.job)}<br>
+  <b>Look:</b> ${pick(NPC.look)}<br><b>Manner:</b> ${pick(NPC.trait)}<br>
+  <b>Wants:</b> ${pick(NPC.want)}<br><b>Secret:</b> ${pick(NPC.secret)}`;
+});
+
+/* ============ LOOT GENERATOR ============ */
+const MAGIC=[["Potion of Healing","2d4+2 HP"],["Potion of Greater Healing","4d4+4 HP"],["Potion of Climbing",""],["Spell Scroll (1st level)",""],["Spell Scroll (2nd level)",""],["Bag of Holding",""],["Cloak of Elvenkind",""],["Boots of Elvenkind",""],["Goggles of Night",""],["Immovable Rod",""],["Weapon, +1",""],["Shield, +1",""],["Ring of Swimming",""],["Wand of Magic Detection",""],["Driftglobe",""],["Alchemy Jug",""],["Cloak of Protection",""],["Gauntlets of Ogre Power",""],["Ring of Protection",""],["Wand of Fireballs",""],["Flame Tongue",""],["Belt of Giant Strength (Hill)",""],["Staff of Power",""],["Vorpal Sword",""]];
+const TRINK=["a brass key with no lock","a dragon's tooth on a leather cord","a love letter, unsigned","a glass eye that always looks east","a deck missing the Queen of Cups","a child's wooden sword","a map of a city that doesn't exist","a vial of grave dirt","a silver locket, painted portrait scratched out"];
+$("#genLoot").addEventListener("click",()=>{
+  const t=+$("#lootTier").value, hoard=$("#lootKind").value==="hoard";
+  const coins=[
+    ()=>`${ri(3,18)*(hoard?20:1)} cp, ${ri(2,12)*(hoard?15:1)} sp, ${ri(1,8)*(hoard?10:1)} gp`,
+    ()=>`${ri(4,24)*(hoard?12:1)} sp, ${ri(2,12)*(hoard?25:1)} gp`,
+    ()=>`${ri(4,24)*(hoard?60:2)} gp, ${ri(1,6)*(hoard?12:1)} pp`,
+    ()=>`${ri(8,48)*(hoard?80:4)} gp, ${ri(2,12)*(hoard?25:2)} pp`][t]();
+  let out=`<b>Coins:</b> ${coins}`;
+  if(hoard){
+    const gems=["a polished agate","a pair of moonstones","a fist-sized chunk of amber","a flawed ruby","matching sapphires","a black pearl","an emerald the size of a thumbnail","a star ruby"];
+    out+=`<br><b>Valuables:</b> ${pick(gems)} (~${[25,100,500,2500][t]*ri(1,4)} gp)`;
+    const nItems=ri(0,t+1)+(t>1?1:0);
+    const lo=t*6, hi=Math.min(MAGIC.length-1,(t+1)*6+3);
+    const items=[];for(let i=0;i<nItems;i++){const it=MAGIC[ri(Math.min(lo,MAGIC.length-2),hi)];
+      items.push(`<span class="itemlink" onclick="openItem('${it[0].replace(/'/g,"\\'")}')">${it[0]}</span>`+(it[1]?` (${it[1]})`:""))}
+    out+=items.length?`<br><b>Magic items:</b> ${items.join("; ")} <span style="font-style:italic;font-size:13px">— tap an item for its full description</span>`:"<br><i>No magic items this time.</i>";
+  } else if(Math.random()<.35){out+=`<br><b>Also carrying:</b> ${pick(TRINK)}`}
+  $("#lootOut").innerHTML=out;
+});
+
+/* ============ TABLE SPICE ============ */
+const TAV1=["The Drowned","The Gilded","The Prancing","The Sleeping","The Crooked","The Laughing","The Rusty","The Wandering","The Bleeding","The Last"],
+TAV2=["Griffin","Flagon","Goat","Giant","Lantern","Maiden","Anchor","Kettle","Crown","Badger"],
+TAVQ=["the ale is watered but the gossip is pure","a bard plays the same three songs on loop","the cellar connects to the old sewers","the owner pays adventurers in credit","no one sits at the corner table — ever","arm-wrestling settles all tabs"],
+HOOK=["A funeral procession passes — the coffin is rattling from the inside.","A child sells 'maps to the dragon's hoard' for a copper. One of them is real.","Every dog in town began howling at midnight and hasn't stopped.","A wanted poster bears the face of one of the party members.","The well water has started tasting of salt — the sea is forty miles away.","A noble seeks bodyguards for a journey they refuse to describe.","Last night the stars rearranged. Only the party seems to have noticed.","Someone is buying up all the silver in town, paying triple.","An old rival of the party arrives — asking for their help.","The local temple's relic is a fake. The priest knows. Now you know."],
+WTHR=["Cold drizzle; everything smells of wet wool. Visibility poor at range.","Clear and sharp; sound carries unnaturally far today.","Oppressive heat; Con-taxing travel, tempers short.","Fog thick as soup until midday — lightly obscured everywhere.","A storm builds on the horizon; it will break in 1d4 hours.","Snow flurries; tracks are fresh and easy to follow.","Wind from the east, strong enough to foul ranged attacks (DM's call: −2).","Unseasonably warm; insects everywhere, rations at risk."];
+$("#genTavern").addEventListener("click",()=>$("#spiceOut").innerHTML=`<b>${pick(TAV1)} ${pick(TAV2)}</b> — where ${pick(TAVQ)}.`);
+$("#genHook").addEventListener("click",()=>$("#spiceOut").innerHTML=pick(HOOK));
+$("#genWeather").addEventListener("click",()=>$("#spiceOut").innerHTML=pick(WTHR));
+
+/* ============ MAGIC ITEM COMPENDIUM (SRD 5.1) — t type, r rarity, at attunement, d description ============ */
+const ITEMS=[
+{n:"Potion of Healing",t:"Potion",r:"Common",d:"Drink (action) to regain <b>2d4+2</b> hit points. The red liquid glimmers when agitated."},
+{n:"Potion of Greater Healing",t:"Potion",r:"Uncommon",d:"Drink to regain <b>4d4+4</b> hit points."},
+{n:"Potion of Superior Healing",t:"Potion",r:"Rare",d:"Drink to regain <b>8d4+8</b> hit points."},
+{n:"Potion of Supreme Healing",t:"Potion",r:"Very Rare",d:"Drink to regain <b>10d4+20</b> hit points."},
+{n:"Potion of Climbing",t:"Potion",r:"Common",d:"For 1 hour: climbing speed equal to walking speed, advantage on Athletics checks to climb."},
+{n:"Potion of Resistance",t:"Potion",r:"Uncommon",d:"Resistance to one damage type (chosen by the DM or rolled when brewed) for 1 hour."},
+{n:"Potion of Water Breathing",t:"Potion",r:"Uncommon",d:"Breathe underwater for 1 hour. Smells of the sea, with a jellyfish-like blob floating in it."},
+{n:"Spell Scroll (1st level)",t:"Scroll",r:"Common",d:"One 1st-level spell, cast as an action if it's on your class list (save DC 13, attack +5). If the spell is above what you can normally cast, DC 11 Arcana check or the scroll fizzles. Crumbles to dust when used."},
+{n:"Spell Scroll (2nd level)",t:"Scroll",r:"Uncommon",d:"One 2nd-level spell (save DC 13, attack +5); same rules as other scrolls — usable only if the spell is on your class's list."},
+{n:"Spell Scroll (3rd level)",t:"Scroll",r:"Uncommon",d:"One 3rd-level spell (save DC 15, attack +7)."},
+{n:"Spell Scroll (5th level)",t:"Scroll",r:"Rare",d:"One 5th-level spell (save DC 17, attack +9)."},
+{n:"Alchemy Jug",t:"Wondrous item",r:"Uncommon",d:"Command word produces a chosen liquid daily (max/day): acid 8 oz, basic poison 1/2 oz, beer 4 gal, honey 1 gal, mayonnaise 2 gal, oil 1 qt, vinegar 2 gal, fresh water 8 gal, salt water 12 gal, wine 1 gal. Pours 2 gallons per minute."},
+{n:"Ammunition, +1",t:"Weapon (ammo)",r:"Uncommon",d:"+1 bonus to attack and damage rolls. The magic is spent once it hits."},
+{n:"Bag of Holding",t:"Wondrous item",r:"Uncommon",d:"Holds 500 lb / 64 cu ft but always weighs 15 lb. Ruptured if pierced or overloaded (contents scatter into the Astral Plane). Placing it inside a portable hole tears a gate to the Astral Plane. Breathing creatures inside suffocate after 10 minutes ÷ occupants."},
+{n:"Bag of Tricks",t:"Wondrous item",r:"Uncommon",d:"Action: pull out a fuzzy ball, throw it up to 20 ft. — it becomes a random beast (by bag color: gray/rust/tan tables) that acts on your turn and obeys you. Up to 3 pulls per dawn; creatures vanish at dawn or at 0 HP."},
+{n:"Boots of Elvenkind",t:"Wondrous item",r:"Uncommon",d:"Your steps make no sound regardless of surface. Advantage on Dexterity (Stealth) checks that rely on moving silently."},
+{n:"Boots of Striding and Springing",t:"Wondrous item",r:"Uncommon",at:1,d:"Walking speed becomes 30 ft. (unless higher), unaffected by encumbrance or heavy armor. Jump three times the normal distance (still capped by movement)."},
+{n:"Boots of Speed",t:"Wondrous item",r:"Rare",at:1,d:"Bonus action: click heels to double walking speed; opportunity attacks against you have disadvantage. Lasts a total of 10 minutes (resettable on long rest)."},
+{n:"Boots of the Winterlands",t:"Wondrous item",r:"Uncommon",at:1,d:"Resistance to cold damage, ignore difficult terrain from ice/snow, tolerate temperatures to −50 °F."},
+{n:"Bracers of Archery",t:"Wondrous item",r:"Uncommon",at:1,d:"Proficiency with longbow and shortbow; +2 to damage rolls with ranged attacks made with such weapons."},
+{n:"Bracers of Defense",t:"Wondrous item",r:"Rare",at:1,d:"+2 AC while wearing no armor and using no shield."},
+{n:"Brooch of Shielding",t:"Wondrous item",r:"Uncommon",at:1,d:"Resistance to force damage; immunity to the magic missile spell."},
+{n:"Circlet of Blasting",t:"Wondrous item",r:"Uncommon",d:"Once per dawn, cast scorching ray (+5 on each attack roll)."},
+{n:"Cloak of Elvenkind",t:"Wondrous item",r:"Uncommon",at:1,d:"Hood up: Perception checks to see you have disadvantage, and you have advantage on Stealth checks to hide — the cloak shifts color to camouflage you."},
+{n:"Cloak of Protection",t:"Wondrous item",r:"Uncommon",at:1,d:"+1 bonus to AC and saving throws."},
+{n:"Cloak of Displacement",t:"Wondrous item",r:"Rare",at:1,d:"You appear to stand slightly elsewhere: attack rolls against you have disadvantage. Suppressed until the start of your next turn whenever you take damage, or if incapacitated/restrained."},
+{n:"Cloak of the Bat",t:"Wondrous item",r:"Rare",at:1,d:"Advantage on Stealth. In dim light/darkness: grip the edges to fly at 40 ft.; or polymorph into a bat (your mental stats retained). Flight/transform only in dim light or darkness."},
+{n:"Decanter of Endless Water",t:"Wondrous item",r:"Uncommon",d:"Command words: 'stream' (1 gal), 'fountain' (5 gal), 'geyser' (30 gal — a 30-ft. × 1-ft. blast; as an attack, DC 13 Str save or take 1d4 bludgeoning and fall prone; can push objects)."},
+{n:"Driftglobe",t:"Wondrous item",r:"Uncommon",d:"Glass sphere; command word casts light or daylight (daylight 1/dawn). Within 60 ft. you can command it to hover and follow you."},
+{n:"Dust of Disappearance",t:"Wondrous item",r:"Uncommon",d:"Thrown in the air, it coats you and everything within 10 ft.: invisible for 2d4 minutes, ended early for anyone who attacks or casts a spell."},
+{n:"Efficient Quiver",t:"Wondrous item",r:"Uncommon",d:"Three compartments hold far more than they should: 60 arrows, 18 javelins, and 6 long objects (bows, spears). Always weighs 2 lb; items are ready to draw."},
+{n:"Elemental Gem",t:"Wondrous item",r:"Uncommon",d:"Crush the gem (action) to summon the matching elemental (air/earth/fire/water) as if by conjure elemental. It's uncontrolled unless you maintain the usual concentration — per the spell, the summoned elemental is hostile if your control lapses."},
+{n:"Eyes of the Eagle",t:"Wondrous item",r:"Uncommon",at:1,d:"Advantage on Wisdom (Perception) checks relying on sight. You can make out fine detail at great distance (up to 1 mile in clear conditions)."},
+{n:"Gauntlets of Ogre Power",t:"Wondrous item",r:"Uncommon",at:1,d:"Your Strength score becomes 19 (no effect if already 19+)."},
+{n:"Goggles of Night",t:"Wondrous item",r:"Uncommon",d:"Darkvision 60 ft.; if you already have darkvision, extend its range by 60 ft."},
+{n:"Hat of Disguise",t:"Wondrous item",r:"Uncommon",at:1,d:"Cast disguise self at will. The disguise ends if the hat is removed."},
+{n:"Handy Haversack",t:"Wondrous item",r:"Rare",d:"Backpack with two side pouches (20 lb each) and a center pouch (80 lb / 8 cu ft); always weighs 5 lb. The item you want is always magically on top. Same rupture/astral rules as a bag of holding."},
+{n:"Headband of Intellect",t:"Wondrous item",r:"Uncommon",at:1,d:"Your Intelligence score becomes 19 (no effect if already 19+)."},
+{n:"Immovable Rod",t:"Rod",r:"Uncommon",d:"Press the button: the rod fixes in place, even in midair, holding up to 8,000 lb (more causes it to deactivate and fall). A creature can move it up to 10 ft. with a DC 30 Strength check."},
+{n:"Instant Fortress",t:"Wondrous item",r:"Rare",d:"1-inch cube that grows (action) into a 20-ft.-square, 30-ft.-high adamantine tower; creatures in its way take 10d10 bludgeoning (Dex DC 15 half, pushed out). Knows only its owner's command word. Walls: AC 20, 100 HP per wall section, immune to nonmagical weapon damage."},
+{n:"Javelin of Lightning",t:"Weapon (javelin)",r:"Uncommon",d:"Speak the command word as you throw it: becomes a 120-ft. lightning bolt — each creature in the line (excluding the target) makes a DC 13 Dex save or takes 4d6 lightning (half on success); the target takes the javelin damage + 4d6 lightning. 1/dawn."},
+{n:"Lantern of Revealing",t:"Wondrous item",r:"Uncommon",d:"While lit (6 hrs/pint of oil), bright light 30 ft. reveals invisible creatures and objects within it; dim light 30 ft. beyond."},
+{n:"Mithral Armor",t:"Armor (medium/heavy)",r:"Uncommon",d:"Light, flexible metal: the armor imposes no disadvantage on Stealth and has no Strength requirement."},
+{n:"Adamantine Armor",t:"Armor (medium/heavy)",r:"Uncommon",d:"While wearing it, any critical hit against you becomes a normal hit."},
+{n:"Necklace of Adaptation",t:"Wondrous item",r:"Uncommon",at:1,d:"Breathe normally in any environment; advantage on saves vs. harmful gases and vapors (cloudkill, stinking cloud, inhaled poisons, breath weapons that are gases)."},
+{n:"Necklace of Fireballs",t:"Wondrous item",r:"Rare",d:"1d6+3 beads. Throw a bead up to 60 ft.: it detonates as a 3rd-level fireball (DC 15, 8d6 fire). You can throw multiple beads at once; each extra bead raises the level (and damage die count) by 1."},
+{n:"Pearl of Power",t:"Wondrous item",r:"Uncommon",at:1,d:"Spellcasters only: once per dawn (action), regain one expended spell slot of up to 3rd level."},
+{n:"Periapt of Proof against Poison",t:"Wondrous item",r:"Rare",d:"You are immune to poison damage and the poisoned condition. Poison has no effect on you."},
+{n:"Periapt of Wound Closure",t:"Wondrous item",r:"Uncommon",at:1,d:"You stabilize automatically at the start of your turn while dying. When you roll Hit Dice to heal, double the number rolled on each die."},
+{n:"Pipes of Haunting",t:"Wondrous item",r:"Uncommon",d:"3 charges/dawn. Action: play an eerie melody — creatures of your choice within 30 ft. who hear it make a DC 15 Wis save or are frightened of you for 1 minute (repeat each turn to end; success = immune 24 hrs)."},
+{n:"Portable Hole",t:"Wondrous item",r:"Rare",d:"Unfolds to a 6-ft.-diameter, 10-ft.-deep extradimensional pit you can lay on any surface; folds to a cloth. Air for one breathing creature for 10 minutes. Don't put it in a bag of holding — placing either inside the other tears open a gate to the Astral Plane."},
+{n:"Ring of Evasion",t:"Ring",r:"Rare",at:1,d:"3 charges/dawn. When you fail a Dex save, reaction: spend a charge to succeed instead."},
+{n:"Ring of Jumping",t:"Ring",r:"Uncommon",at:1,d:"Cast jump on yourself at will (bonus action), tripling your jump distance."},
+{n:"Ring of Mind Shielding",t:"Ring",r:"Uncommon",at:1,d:"Immune to magic that reads thoughts, detects lies, or discerns your alignment/creature type. Telepathic communication is allowed only if you permit it. You can turn it invisible. If you die wearing it, your soul may enter it and speak telepathically to the wearer."},
+{n:"Ring of Protection",t:"Ring",r:"Rare",at:1,d:"+1 bonus to AC and saving throws."},
+{n:"Ring of Regeneration",t:"Ring",r:"Very Rare",at:1,d:"Regain 1d6 HP every 10 minutes if you have at least 1 HP. Severed body parts regrow after 1d6+1 days if you have 1+ HP the whole time."},
+{n:"Ring of Spell Storing",t:"Ring",r:"Rare",at:1,d:"Stores up to 5 levels of spells cast into it. The wearer can cast any stored spell (using the original caster's DC/attack/level); it then leaves the ring."},
+{n:"Ring of Swimming",t:"Ring",r:"Uncommon",d:"You have a swimming speed of 40 feet."},
+{n:"Ring of Water Walking",t:"Ring",r:"Uncommon",d:"Stand on and move across any liquid surface as if solid ground."},
+{n:"Rod of Absorption",t:"Rod",r:"Very Rare",at:1,d:"Reaction: absorb a single-target spell aimed at you — negate it and store its level as energy (max 50 total). A spellcaster holder can convert stored levels into slots to cast their own spells (up to their max castable level)."},
+{n:"Rope of Climbing",t:"Wondrous item",r:"Uncommon",d:"60 ft., holds 3,000 lb. On command it moves 10 ft./round, knots itself (shortens to 50 ft., climbing eased), fastens or unfastens. AC 20, 20 HP, regenerates 1 HP/5 min."},
+{n:"Sending Stones",t:"Wondrous item",r:"Uncommon",d:"A pair: once per dawn, cast sending from one to whoever holds the other. If the message goes unanswered, the use is still expended."},
+{n:"Shield, +1",t:"Armor (shield)",r:"Uncommon",d:"+1 AC in addition to the shield's normal +2."},
+{n:"Shield, +2",t:"Armor (shield)",r:"Rare",d:"+2 AC in addition to the shield's normal +2."},
+{n:"Slippers of Spider Climbing",t:"Wondrous item",r:"Uncommon",at:1,d:"Move up, down, and across vertical surfaces and ceilings, hands free; climbing speed equals walking speed. No purchase on slippery surfaces (ice, oil)."},
+{n:"Stone of Good Luck (Luckstone)",t:"Wondrous item",r:"Uncommon",at:1,d:"+1 bonus to ability checks and saving throws while it's on your person."},
+{n:"Wand of Magic Detection",t:"Wand",r:"Uncommon",d:"3 charges/dawn: cast detect magic without a spell slot."},
+{n:"Wand of Magic Missiles",t:"Wand",r:"Uncommon",d:"7 charges. Cast magic missile: 1 charge = 1st level, +1 charge per level up to 7th. Regains 1d6+1 charges at dawn; on the last charge, roll a d20 — on a 1, the wand crumbles."},
+{n:"Wand of Secrets",t:"Wand",r:"Uncommon",d:"3 charges/dawn (1d3 regained). Action: the wand pulses and points at the nearest secret door or trap within 30 ft."},
+{n:"Wand of Web",t:"Wand",r:"Uncommon",at:1,d:"7 charges. 1 charge: cast web (DC 15). Regains 1d6+1 at dawn; on the last charge, d20 — on a 1, it crumbles."},
+{n:"Wand of Fireballs",t:"Wand",r:"Rare",at:1,d:"7 charges. Cast fireball (DC 15): 1 charge = 3rd level, +1 charge per level up to 7th. Regains 1d6+1 charges at dawn; on the last charge, roll a d20 — on a 1, it crumbles to ash."},
+{n:"Wand of Lightning Bolts",t:"Wand",r:"Rare",at:1,d:"7 charges. Cast lightning bolt (DC 15): 1 charge = 3rd level, +1 per level to 7th. Same dawn-recharge and crumble rule as other wands."},
+{n:"Weapon, +1",t:"Weapon (any)",r:"Uncommon",d:"+1 bonus to attack and damage rolls. Counts as magical for overcoming resistance."},
+{n:"Weapon, +2",t:"Weapon (any)",r:"Rare",d:"+2 bonus to attack and damage rolls."},
+{n:"Weapon, +3",t:"Weapon (any)",r:"Very Rare",d:"+3 bonus to attack and damage rolls."},
+{n:"Winged Boots",t:"Wondrous item",r:"Uncommon",at:1,d:"Fly speed equal to walking speed, up to 4 hours total (usable in shorter flights); if flying when time runs out, you descend 30 ft./round. Regain 2 hrs of flight per 12 hrs unworn."},
+{n:"Amulet of Health",t:"Wondrous item",r:"Rare",at:1,d:"Your Constitution score becomes 19 (no effect if already 19+)."},
+{n:"Armor, +1",t:"Armor (any)",r:"Rare",d:"+1 bonus to AC."},
+{n:"Cape of the Mountebank",t:"Wondrous item",r:"Rare",d:"1/day: cast dimension door, vanishing in a puff of smoke (creatures within 5 ft. of your departure or arrival are lightly obscured by it until the end of your next turn)."},
+{n:"Elven Chain",t:"Armor (chain shirt)",r:"Rare",d:"+1 chain shirt that you're considered proficient with even if you lack medium armor proficiency."},
+{n:"Flame Tongue",t:"Weapon (any sword)",r:"Rare",at:1,d:"Bonus action command word: blades erupt in flame — <b>+2d6 fire damage</b> on hits, bright light 40 ft., dim 40 more. Another bonus action (or sheathing) extinguishes it."},
+{n:"Gem of Seeing",t:"Wondrous item",r:"Rare",at:1,d:"3 charges/dawn (1d3 regained). Action: gain truesight 120 ft. through the gem for 10 minutes."},
+{n:"Staff of Healing",t:"Staff",r:"Rare",at:1,d:"Clerics/druids/bards only. 10 charges: cure wounds (1 charge per level, max 4), lesser restoration (2), mass cure wounds (5). Regains 1d6+4/dawn; on last charge, d20 — on 1, it vanishes in light."},
+{n:"Sun Blade",t:"Weapon (longsword)",r:"Rare",at:1,d:"Hilt only until activated (bonus action): a blade of radiance forms. +2 to attack and damage; deals <b>radiant</b> damage; <b>+1d8 extra radiant vs. undead</b>. Finesse. Emits bright light 15 ft. (expandable to 30), dim equal beyond; sunlight for the purpose of vampire-style weaknesses."},
+{n:"Wings of Flying",t:"Wondrous item",r:"Rare",at:1,d:"Action command word: the cloak becomes wings — fly speed 60 ft. for 1 hour; then unusable for 1d12 hours."},
+{n:"Belt of Giant Strength (Hill)",t:"Wondrous item",r:"Rare",at:1,d:"Your Strength score becomes <b>21</b>. (Stronger belts exist: stone/frost 23 — very rare; fire 25 — very rare; cloud 27 — legendary; storm 29 — legendary.)"},
+{n:"Crystal Ball",t:"Wondrous item",r:"Very Rare",at:1,d:"Cast scrying (DC 17) while touching it. Rarer variants add telepathy, true seeing, or mind reading through the sensor."},
+{n:"Dragon Scale Mail",t:"Armor (scale mail)",r:"Very Rare",at:1,d:"+1 scale mail. Advantage on saves vs. the frightful presence and breath weapons of dragons; resistance to one damage type (by the scale's dragon). 1/day: action to magically learn the direction/distance of the closest dragon of that type within 30 miles."},
+{n:"Staff of Fire",t:"Staff",r:"Very Rare",at:1,d:"Attunement by druid, sorcerer, warlock, or wizard. Resistance to fire while held. 10 charges: burning hands (1), fireball (3), wall of fire (4) — DC 15. Regains 1d6+4/dawn; on last charge, d20 — on 1, it blackens and crumbles."},
+{n:"Staff of Power",t:"Staff",r:"Very Rare",at:1,d:"Sorcerer/warlock/wizard. +2 to attack & damage (versatile, 1d6/1d8), +2 AC, saves, and spell attacks. 20 charges: cone of cold (5), fireball 5th (5), globe of invulnerability (6), hold monster (5), levitate (2), lightning bolt 5th (5), magic missile (1), ray of enfeeblement (1), wall of force (5). <b>Retributive strike:</b> break it to detonate — creatures within 30 ft. take damage based on distance (you may be transported to a random plane instead)."},
+{n:"Deck of Many Things",t:"Wondrous item",r:"Legendary",d:"Declare a number of cards, then draw: each card's magic takes effect instantly — wishes, keeps, imprisoned souls, ruined lives. Famous cards: <i>Sun</i> (50,000 XP + a wondrous item), <i>Void</i> (soul imprisoned elsewhere), <i>Donjon</i> (you're imprisoned), <i>Talons</i> (every magic item you own is destroyed). Handle with extreme DM caution — it can end a campaign."},
+{n:"Holy Avenger",t:"Weapon (any sword)",r:"Legendary",at:1,d:"Paladins only. +3 to attack and damage; <b>+2d10 radiant vs. fiends and undead</b>. While you hold it: you and allies within a 10-ft. aura (30 ft. at paladin 17+) have advantage on saving throws against spells and magical effects."},
+{n:"Sphere of Annihilation",t:"Wondrous item",r:"Legendary",d:"A 2-ft. black void that utterly destroys all matter it touches (a creature ending its turn in its space takes 4d10 force… and a body fully inside is annihilated). Control: DC 25 Arcana check (move it 5 ft. × Int mod). Failed control — it moves 10 ft. toward you."},
+{n:"Staff of the Magi",t:"Staff",r:"Legendary",at:1,d:"Sorcerer/warlock/wizard. +2 spell attacks; advantage on saves vs. spells. <b>Absorb spells</b> targeting you (reaction) as charges. 50 charges for a deep spell list (fireball 7th, lightning bolt 7th, wall of fire, telekinesis, plane shift, more) and at-will arcane lock, detect magic, enlarge/reduce, light, mage hand, protection from evil and good. Retributive strike as staff of power, larger blast."},
+{n:"Vorpal Sword",t:"Weapon (any slashing sword)",r:"Legendary",at:1,d:"+3 to attack and damage; ignores resistance to slashing. On a <b>natural 20</b> against a creature with a head: <b>decapitation</b> — the creature dies if it can't survive without its head (creatures too big, headless, or legendary instead take +6d8 slashing)."}
+];
+
+/* ============ ITEMS UI ============ */
+const RARORD={"Common":0,"Uncommon":1,"Rare":2,"Very Rare":3,"Legendary":4};
+ITEMS.sort((a,b)=>RARORD[a.r]-RARORD[b.r]||a.n.localeCompare(b.n));
+let selItem=null;
+function renderItemList(){
+  const q=$("#itemSearch").value.trim().toLowerCase(),f=$("#rarFilter").value,att=$("#attFilter").checked;
+  $("#itemList").innerHTML=ITEMS.filter(it=>(!q||it.n.toLowerCase().includes(q)||it.t.toLowerCase().includes(q))&&(!f||it.r===f)&&(!att||it.at))
+    .map(it=>`<button data-n="${esc(it.n)}" class="${selItem===it.n?'sel':''}">${it.n}<span class="cr rar ${it.r.replace(' ','')}">${it.r}</span></button>`).join("")
+    ||`<p style="padding:12px;color:var(--parch-dim);font-style:italic">The vault is empty…</p>`;
+  $$("#itemList button").forEach(b=>b.addEventListener("click",()=>{selItem=b.dataset.n;renderItemList();renderItem(ITEMS.find(x=>x.n===selItem));toDetail("#itemView")}));
+}
+function renderItem(it){
+  $("#itemView").innerHTML=`<div class="statblock">
+    <h3>${it.n}</h3>
+    <div class="meta">${it.t}, <span style="font-style:italic">${it.r.toLowerCase()}</span>${it.at?" (requires attunement)":""}</div>
+    <div class="taper"></div><p>${it.d}</p></div>`;
+}
+$("#itemSearch").addEventListener("input",renderItemList);
+$("#rarFilter").addEventListener("change",renderItemList);
+$("#attFilter").addEventListener("change",renderItemList);
+renderItemList();
+window.openItem=name=>{
+  const it=ITEMS.find(x=>x.n===name)||ITEMS.find(x=>name.startsWith(x.n))||ITEMS.find(x=>x.n.startsWith(name));
+  if(!it)return;
+  selItem=it.n;$("#itemSearch").value="";$("#rarFilter").value="";$("#attFilter").checked=false;
+  renderItemList();renderItem(it);
+  $$("nav button").find(b=>b.dataset.tab==="items").click();
+  document.querySelector(`#itemList button[data-n="${CSS.escape(it.n)}"]`)?.scrollIntoView({block:"nearest"});
+  toDetail("#itemView");
+};
+
+/* ============ DICE DOCK ============ */
+function rollDie(n){return ri(1,n)}
+function showRoll(html){$("#diceOut").innerHTML=html}
+$$(".dicedock .d[data-die]").forEach(b=>b.addEventListener("click",()=>{
+  const n=+b.dataset.die,v=rollDie(n);
+  const cls=n===20?(v===20?"crit":v===1?"fumb":""):"";
+  showRoll(`<b class="${cls}">${v}</b><small>d${n}${n===20&&v===20?" — natural 20!":n===20&&v===1?" — natural 1…":""}</small>`);
+}));
+$("#advBtn").addEventListener("click",()=>{const a=rollDie(20),b=rollDie(20),v=Math.max(a,b);
+  showRoll(`<b class="${v===20?'crit':''}">${v}</b><small>advantage (${a}, ${b})</small>`)});
+$("#disBtn").addEventListener("click",()=>{const a=rollDie(20),b=rollDie(20),v=Math.min(a,b);
+  showRoll(`<b class="${v===1?'fumb':''}">${v}</b><small>disadvantage (${a}, ${b})</small>`)});
+function rollExpr(){
+  const s=$("#diceExpr").value.trim().toLowerCase();
+  const m=s.match(/^(\d*)d(\d+)\s*([+-]\s*\d+)?$/);
+  if(!m){showRoll(`<small>Try a form like <b>2d6+3</b>.</small>`);return}
+  const c=Math.min(100,+(m[1]||1)),d=+m[2],b=m[3]?+m[3].replace(/\s/g,""):0;
+  const rolls=Array.from({length:c},()=>rollDie(d));
+  const tot=rolls.reduce((x,y)=>x+y,0)+b;
+  showRoll(`<b>${tot}</b><small>${c}d${d}${b?(b>0?"+":"")+b:""} → [${rolls.join(", ")}]${b?" "+(b>0?"+":"")+b:""}</small>`);
+}
+$("#rollExpr").addEventListener("click",rollExpr);
+$("#diceExpr").addEventListener("keydown",e=>{if(e.key==="Enter")rollExpr()});
+</script>
+</body>
+</html>

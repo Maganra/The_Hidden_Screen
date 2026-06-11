@@ -1,0 +1,16 @@
+{
+  "name": "The Hidden Screen",
+  "short_name": "Hidden Screen",
+  "description": "A dungeon master's companion — rules, bestiary, items, combat tracker, generators, dice.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#171310",
+  "theme_color": "#171310",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
