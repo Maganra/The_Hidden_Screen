@@ -222,8 +222,38 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
 .hbform label{font-size:13px;color:var(--parch-dim);display:block;margin-bottom:2px}
 .hbmark{color:var(--brass);font-size:12px}
 
+/* ---------- tracker: sticky toolbar, turn dashboard, group/AoE, temp HP, action drawer ---------- */
+.trk-top{position:sticky;top:0;z-index:40;background:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
+.turn-now{font-family:'Alegreya Sans SC',sans-serif;font-size:13px;color:var(--parch-dim)}
+.turn-now b{color:var(--brass);font-family:'Alegreya',serif;font-weight:700;font-size:15px;margin-right:4px}
+.groupbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-bottom:12px}
+.groupbar>span{font-size:13px;color:var(--parch-dim);font-family:'Alegreya Sans SC',sans-serif}
+.groupbar input{width:72px}
+.selc{display:none}
+.grpmode .selc{display:inline-block;width:auto;margin:0 2px 0 0;align-self:center}
+.combatant .initinp{width:42px;background:transparent;border:1px solid transparent;border-radius:4px;color:var(--brass);font-family:'Cinzel',serif;font-size:18px;text-align:center;padding:2px 0}
+.combatant .initinp:focus{border-color:var(--brass-dim);background:var(--panel2)}
+.hpctl .tnum{width:44px;text-align:center;border-color:#3a5a6e;color:#9ec7dd}
+.thp{color:#7fb4d4;font-weight:700;margin-left:6px}
+.tbadge.bloodied{background:#3a2e16;color:#e6b84e;border:1px solid #6a5526}
+.trkacts{width:100%;margin-top:4px}
+.trkacts>summary{cursor:pointer;color:var(--brass-dim);font-family:'Alegreya Sans SC',sans-serif;font-size:12px;letter-spacing:.06em;list-style:none}
+.trkacts>summary::-webkit-details-marker{display:none}
+.trkacts>summary::before{content:"\25B8 actions"}
+.trkacts[open]>summary::before{content:"\25BE actions"}
+.trkacts-body{color:#d9cdb2;font-size:13.5px;line-height:1.45;border-left:2px solid var(--line);margin:4px 0 2px 4px;padding:2px 0 2px 8px}
+.trkacts-body h5{font-family:'Alegreya Sans SC',sans-serif;font-size:11px;letter-spacing:.1em;color:var(--brass);margin:6px 0 2px}
+.trkacts-body p{margin:3px 0}.trkacts-body b i{color:var(--parch)}
+.dlink{color:var(--brass);border-bottom:1px dotted var(--brass-dim);cursor:pointer}
+.dlink:hover{color:#e3c25a}
+.sb-actions label{font-size:13px;color:var(--parch-dim);display:flex;align-items:center;gap:4px}
+.sb-actions input[type=number]{width:52px}
+.warnbar{background:#3a201c;border:1px solid var(--oxblood);color:#e7b3a9;padding:8px 14px;font-size:14px;display:flex;gap:10px;align-items:center;border-radius:6px;margin-bottom:14px}
+.warnbar button{margin-left:auto}
+
 /* ---------- campaign (DM canon) ---------- */
-.camp .secretline{color:#d98a7f;font-family:'Alegreya Sans SC',sans-serif;font-size:13.5px;letter-spacing:.04em}
+.camp .secretline{color:#d98a7f;font-family:'Alegreya Sans SC',sans-serif;font-size:13.5px;letter-spacing:.04em;filter:blur(5px);cursor:pointer;transition:filter .12s}
+.camp .secretline.shown{filter:none}
 .camp table{border-collapse:collapse;width:100%;font-size:14.5px}
 .camp th{text-align:left;color:var(--brass);font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.05em;padding:3px 10px 3px 0;border-bottom:1px solid var(--line)}
 .camp td{padding:5px 10px 5px 0;border-bottom:1px solid #2e2820;vertical-align:top}
@@ -265,6 +295,7 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
   </nav>
 </header>
 <main>
+  <div id="storeWarn" class="warnbar hidden">⚠ This browser is blocking local storage — your prep won't be saved between visits. Use <b>Export</b> before you close the tab.<button class="btn ghost" onclick="this.parentElement.classList.add('hidden')">dismiss</button></div>
   <section id="tab-rules" class="tab on">
     <div class="searchrow"><input id="ruleSearch" type="search" placeholder="Search rules… (try: grapple, prone, cover, falling)"></div>
     <div id="rulesHost"></div>
@@ -331,8 +362,12 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
   <section id="tab-tracker" class="tab">
     <div class="trk-top">
       <span class="round" id="roundLbl">Round 1</span>
-      <button class="btn" id="nextTurn">Next Turn ▸</button>
+      <button class="btn ghost" id="prevTurn" title="previous turn (P)">◂ Prev</button>
+      <button class="btn" id="nextTurn" title="next turn (N / Space)">Next Turn ▸</button>
+      <span class="turn-now" id="turnNow"></span>
       <button class="btn ghost" id="sortInit">Sort by Initiative</button>
+      <button class="btn ghost" id="groupBtn" title="apply damage/healing to several at once">⚡ Group</button>
+      <button class="btn ghost" id="undoBtn" title="undo (Ctrl+Z)">↶ Undo</button>
       <button class="btn" id="playerViewBtn">⧉ Player View</button>
       <button class="btn ghost" id="exportBtn">Export</button>
       <button class="btn ghost" id="importBtn">Import</button>
@@ -357,6 +392,15 @@ footer{max-width:1100px;margin:30px auto 0;padding:0 20px;color:#6b6049;font-siz
       <select id="cType"><option value="pc">PC</option><option value="npc">NPC</option><option value="monster" selected>Monster</option></select>
       <button class="btn" id="addC">Add</button>
       <span style="color:var(--parch-dim);font-size:13.5px;font-style:italic">…or add monsters straight from the Bestiary.</span>
+    </div>
+    <div class="groupbar hidden" id="groupBar">
+      <span id="grpHint">Tick the targets, then:</span>
+      <input class="num" type="number" id="grpAmt" placeholder="amount" min="0">
+      <button class="btn red" id="grpFull">Full dmg</button>
+      <button class="btn" id="grpHalf">Half (saved)</button>
+      <button class="btn" id="grpHeal">Heal</button>
+      <button class="btn ghost" id="grpFoes">Select foes</button>
+      <button class="btn ghost" id="grpNone">Clear sel.</button>
     </div>
     <div id="trkHost"></div>
   </section>
@@ -498,6 +542,37 @@ const RULES=[
 ["Contests","Both sides roll ability checks; higher total wins. Ties preserve the status quo."],
 ["Group Checks","Everyone rolls; if at least <b>half</b> succeed, the group succeeds."],
 ["Inspiration","DM-awarded. Spend it to gain advantage on one attack roll, saving throw, or ability check. You either have it or you don't — no stockpiling."]
+]},
+{cat:"Common Spells",items:[
+["Bless","<i>1st · enchantment · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> 30 ft · <b>Dur</b> 1 min<br>Up to three creatures add <b>1d4</b> to every attack roll and saving throw."],
+["Command","<i>1st · enchantment</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft · <b>Dur</b> 1 round<br>One creature: <b>Wis save</b> or obey a one-word command — approach, drop, flee, grovel, or halt."],
+["Cone of Cold","<i>5th · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 60-ft cone<br><b>Con save</b>, <b>8d8 cold</b>, half on success (+1d8 per slot above 5th)."],
+["Counterspell","<i>3rd · abjuration</i><br><b>Cast</b> reaction (a creature within 60 ft is casting) · <b>Range</b> 60 ft<br>Interrupts a spell of <b>3rd level or lower</b> automatically; higher level: <b>DC 10 + the spell's level</b> ability check."],
+["Cure Wounds","<i>1st · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> touch<br>Heal <b>1d8 + spellcasting modifier</b> (+1d8 per slot above 1st). No effect on undead or constructs."],
+["Detect Magic","<i>1st · divination (ritual) · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> self (30 ft)<br>Sense the presence of magic within 30 ft; an action to see each aura's school."],
+["Dispel Magic","<i>3rd · abjuration</i><br><b>Cast</b> 1 action · <b>Range</b> 120 ft<br>End one spell on a target: <b>3rd level or lower</b> ends automatically; higher: <b>DC 10 + the spell's level</b> check."],
+["Faerie Fire","<i>1st · evocation · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft · <b>Dur</b> 1 min<br>20-ft cube: <b>Dex save</b> or outlined in light — attacks against them have <b>advantage</b> and they can't be invisible."],
+["Fire Bolt","<i>cantrip · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 120 ft<br>Ranged spell attack: <b>1d10 fire</b> (2d10 at 5th level, 3d10 at 11th, 4d10 at 17th)."],
+["Fireball","<i>3rd · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 150 ft<br>20-ft-radius sphere: <b>Dex save</b>, <b>8d6 fire</b>, half on success (+1d6 per slot above 3rd)."],
+["Fly","<i>3rd · transmutation · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> touch · <b>Dur</b> 10 min<br>Target gains a <b>60-ft flying speed</b>."],
+["Guiding Bolt","<i>1st · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 120 ft · <b>Dur</b> 1 round<br>Ranged spell attack: <b>4d6 radiant</b>; the next attack against the target before your next turn has <b>advantage</b>."],
+["Hold Person","<i>2nd · enchantment · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft · <b>Dur</b> 1 min<br>One humanoid: <b>Wis save</b> or <b>paralyzed</b>; it repeats the save at the end of each of its turns."],
+["Inflict Wounds","<i>1st · necromancy</i><br><b>Cast</b> 1 action · <b>Range</b> touch<br>Melee spell attack: <b>3d10 necrotic</b> (+1d10 per slot above 1st)."],
+["Invisibility","<i>2nd · illusion · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> touch · <b>Dur</b> 1 hr<br>Target turns invisible; ends if it attacks or casts a spell."],
+["Lightning Bolt","<i>3rd · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 100-ft line (5 ft wide)<br><b>Dex save</b>, <b>8d6 lightning</b>, half on success (+1d6 per slot above 3rd)."],
+["Mage Armor","<i>1st · abjuration</i><br><b>Cast</b> 1 action · <b>Range</b> touch · <b>Dur</b> 8 hr<br>An unarmored target's base AC becomes <b>13 + Dex modifier</b>."],
+["Magic Missile","<i>1st · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 120 ft<br>Three darts, <b>1d4+1 force</b> each, automatically hit (+1 dart per slot above 1st)."],
+["Misty Step","<i>2nd · conjuration</i><br><b>Cast</b> bonus action · <b>Range</b> self<br>Teleport up to <b>30 ft</b> to an unoccupied space you can see."],
+["Ray of Frost","<i>cantrip · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft<br>Ranged spell attack: <b>1d8 cold</b> and the target's speed drops <b>10 ft</b> until your next turn (scales by level)."],
+["Sacred Flame","<i>cantrip · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft<br><b>Dex save</b> (no benefit from cover) or <b>1d8 radiant</b> (scales by level)."],
+["Sanctuary","<i>1st · abjuration</i><br><b>Cast</b> bonus action · <b>Range</b> 30 ft · <b>Dur</b> 1 min<br>Attackers must make a <b>Wis save</b> or pick a new target; ends if the warded creature attacks or casts an offensive spell."],
+["Shield","<i>1st · abjuration</i><br><b>Cast</b> reaction (when hit, or targeted by magic missile) · <b>Dur</b> 1 round<br><b>+5 AC</b> (including against the triggering attack) and no damage from magic missile."],
+["Spirit Guardians","<i>3rd · conjuration · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> self (15-ft radius) · <b>Dur</b> 10 min<br>Enemies' speed is halved in the area; <b>Wis save</b>, <b>3d8 radiant</b> (or necrotic), half on success."],
+["Spiritual Weapon","<i>2nd · evocation</i><br><b>Cast</b> bonus action · <b>Range</b> 60 ft · <b>Dur</b> 1 min<br>Conjure a floating weapon; a bonus action moves it 20 ft and attacks: melee spell attack, <b>1d8 + spell modifier force</b>."],
+["Suggestion","<i>2nd · enchantment · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> 30 ft · <b>Dur</b> 8 hr<br>One creature: <b>Wis save</b> or follow a reasonable suggested course of action."],
+["Thunderwave","<i>1st · evocation</i><br><b>Cast</b> 1 action · <b>Range</b> self (15-ft cube)<br><b>Con save</b>, <b>2d8 thunder</b> and pushed 10 ft; on success, half damage and not pushed."],
+["Vicious Mockery","<i>cantrip · enchantment</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft<br><b>Wis save</b> or <b>1d4 psychic</b> and <b>disadvantage</b> on its next attack roll (scales by level)."],
+["Web","<i>2nd · conjuration · concentration</i><br><b>Cast</b> 1 action · <b>Range</b> 60 ft · <b>Dur</b> 1 hr<br>20-ft cube of webbing (difficult terrain); <b>Dex save</b> or <b>restrained</b> (escape with a Strength check)."]
 ]}
 ];
 /* ============ BESTIARY (SRD 5.1) — fields: n name, cr, xp, st subtitle, acx AC, hp, hd dice, sp speed, ab [STR..CHA], sv saves, sk skills, vul, res, imm, cim cond-immune, sen senses, lg langs, tr traits, axn actions, lax legendary ============ */
@@ -598,6 +673,7 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 $$("nav button").forEach(b=>b.addEventListener("click",()=>{
   $$("nav button").forEach(x=>x.classList.toggle("on",x===b));
   $$(".tab").forEach(t=>t.classList.toggle("on",t.id==="tab-"+b.dataset.tab));
+  if(b.dataset.tab==="campaign")$$("#campaignHost .secretline.shown").forEach(s=>s.classList.remove("shown"));   // re-hide secrets on every entry
 }));
 
 /* ============ RULES ============ */
@@ -614,10 +690,14 @@ function renderRules(){
 renderRules();
 $("#ruleSearch").addEventListener("input",e=>{
   const q=e.target.value.trim().toLowerCase();
-  $$("#rulesHost .rule").forEach(r=>{
+  const rules=$$("#rulesHost .rule");
+  const matchCount=q?rules.filter(r=>r.dataset.k.includes(q)).length:0;
+  rules.forEach(r=>{
     const hit=!q||r.dataset.k.includes(q);
     r.classList.toggle("hidden",!hit);
-    if(q&&hit)r.classList.add("open");if(!q)r.classList.remove("open");
+    // auto-expand only when the search narrows to a single rule; otherwise show titles collapsed
+    if(!q)r.classList.remove("open"); else r.classList.toggle("open",hit&&matchCount===1);
+    r.querySelector("button")?.setAttribute("aria-expanded",String(r.classList.contains("open")));
   });
   $$("#rulesHost .cat").forEach(c=>c.classList.toggle("hidden",![...c.querySelectorAll(".rule")].some(r=>!r.classList.contains("hidden"))));
 });
@@ -633,8 +713,10 @@ let PARTY=[                            // saved heroes — prefilled from Blood 
   {name:"Jeremy's Monk",ac:16,max:40,type:"pc"},
   {name:"Xerox",ac:15,max:38,type:"pc"}
 ];
-function flashSaved(){const el=$("#saveInd");if(!el)return;const t=new Date();
-  el.textContent="saved "+t.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+let storageOK=true;   // flipped false by the startup probe if the browser blocks persistence
+function flashSaved(){const el=$("#saveInd");if(!el)return;
+  if(!storageOK){el.textContent="⚠ not saved — Export!";el.style.color="#d98a7f";return}
+  const t=new Date();el.textContent="saved "+t.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
 function bcast(){try{localStorage.setItem("dmscreen:bcast",String(Date.now()))}catch(e){}} // nudge any open Player View
 
 /* ============ BESTIARY ============ */
@@ -668,8 +750,16 @@ function renderStat(m){
     ${m.axn&&m.axn.length?'<h4>Actions</h4>'+m.axn.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
     ${m.lax&&m.lax.length?'<h4>Legendary Actions</h4><p>Three legendary actions per round, one at a time at the end of other turns; regained at the start of its turn.</p>'+m.lax.map(t=>`<p><b><i>${t[0]}.</i></b> ${t[1]}</p>`).join(""):""}
   </div>
-  <div class="sb-actions"><button class="btn" id="sbAddTrk">⚔ Add to Combat Tracker</button></div>`;
-  $("#sbAddTrk").onclick=()=>addMonToTracker(m.n);   // bind in JS so names with apostrophes/quotes can't break the handler
+  <div class="sb-actions"><button class="btn" id="sbAddTrk">⚔ Add to Combat Tracker</button>
+    <label>×<input type="number" id="sbQty" value="1" min="1" max="20" title="how many to add"></label>
+    <label><input type="checkbox" id="sbRoll" style="width:auto"> roll HP</label></div>`;
+  $("#sbAddTrk").onclick=()=>{   // bind in JS so names with apostrophes/quotes can't break the handler
+    const m2=[...MONS,...HOMEBREW].find(x=>x.n===m.n)||m;
+    const qty=Math.max(1,Math.min(20,+$("#sbQty").value||1)),roll=$("#sbRoll").checked;
+    for(let k=0;k<qty;k++)addOneMon(m2,roll);
+    saveTrk();$$("nav button").find(b=>b.dataset.tab==="tracker").click();
+  };
+  linkifyDice($("#monView"));   // make printed dice (damage, hit dice) tappable
 }
 $("#monSearch").addEventListener("input",renderMonList);
 $("#crFilter").addEventListener("change",renderMonList);
@@ -678,13 +768,22 @@ renderMonList();
 /* ============ COMBAT TRACKER ============ */
 let TRK={round:1,turn:0,list:[]};
 let trkHydrated=false;   // true once the saved encounter has loaded — guards the async-storage load race
+let undoStack=[],lastSnap=null;   // undo history of pre-mutation tracker snapshots
+let concQueue=[];                 // pending concentration saves, resolved synchronously after a damage batch
+const openActs=new Set(),grpSel=new Set();   // transient UI state (open drawers, group selection) kept across re-renders
 const CONDS=["Blinded","Charmed","Deafened","Frightened","Grappled","Incapacitated","Invisible","Paralyzed","Petrified","Poisoned","Prone","Restrained","Stunned","Unconscious","Concentrating","Exhaustion"];
-/* save is fire-and-forget so the UI stays snappy; it re-renders, flashes the indicator, nudges the Player View,
-   and only persists once hydration is done so an over-eager early click can't overwrite the saved encounter */
-function saveTrk(){renderTrk();flashSaved();bcast();if(trkHydrated)Promise.resolve(window.storage.set("dmscreen:tracker",JSON.stringify(TRK))).catch(()=>{})}
-async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value&&!trkHydrated)TRK=JSON.parse(r.value)}catch(e){}trkHydrated=true;renderTrk()}
+/* saveTrk pushes the prior state onto the undo stack, re-renders, flashes the indicator, nudges the Player View,
+   and persists fire-and-forget (only once hydration is done, so an early click can't overwrite the saved encounter) */
+function persistTrk(){if(trkHydrated)Promise.resolve(window.storage.set("dmscreen:tracker",JSON.stringify(TRK))).catch(()=>{})}
+function saveTrk(){if(lastSnap!==null){undoStack.push(lastSnap);if(undoStack.length>30)undoStack.shift()}lastSnap=JSON.stringify(TRK);renderTrk();flashSaved();bcast();persistTrk()}
+function commitTrk(){if(lastSnap!==null){undoStack.push(lastSnap);if(undoStack.length>30)undoStack.shift()}lastSnap=JSON.stringify(TRK);flashSaved();bcast();persistTrk()}  // persist + undo snapshot WITHOUT a full re-render (keeps focus/clicks on inline inputs)
+function resolveConc(){while(concQueue.length){const q=concQueue.shift();if(!TRK.list.includes(q.c))continue;if(!confirm(`${q.c.name} is concentrating. Con save DC ${q.dc} (½ of ${q.amt}). Did the save SUCCEED?\n\nOK = kept concentration · Cancel = broken`)){q.c.conc=false;}}}
+function undoTrk(){if(!undoStack.length)return;TRK=JSON.parse(undoStack.pop());lastSnap=JSON.stringify(TRK);if(TRK.turn>=TRK.list.length)TRK.turn=Math.max(0,TRK.list.length-1);renderTrk();flashSaved();bcast();persistTrk()}
+async function loadTrk(){try{const r=await window.storage.get("dmscreen:tracker");if(r&&r.value&&!trkHydrated)TRK=JSON.parse(r.value)}catch(e){}trkHydrated=true;lastSnap=JSON.stringify(TRK);renderTrk()}
 function renderTrk(){
   $("#roundLbl").textContent="Round "+TRK.round;
+  const cur=TRK.list[TRK.turn];
+  const tn=$("#turnNow");if(tn)tn.innerHTML=(TRK.list.length&&cur)?`<b>${esc(cur.name)}</b>${cur.max?` · ${Math.max(0,cur.hp)}/${cur.max} HP`:""}`:"";
   if(!TRK.list.length){$("#trkHost").innerHTML=`<p style="color:var(--parch-dim);font-style:italic">The battlefield is empty. Summon the party, add combatants above, or send in monsters from the Bestiary.</p>`;return}
   $("#trkHost").innerHTML=TRK.list.map((c,i)=>{
     const pct=c.max>0?Math.max(0,Math.min(100,100*c.hp/c.max)):0;
@@ -692,16 +791,20 @@ function renderTrk(){
     const type=c.type||"monster";
     const down=c.hp<=0;
     const dying=down&&type==="pc"&&!c.stableDead;
+    const bloodied=!down&&pct>0&&pct<=50;
     const ds=c.ds||{s:0,f:0};
+    const a=c.acts;
     return `<div class="combatant ${i===TRK.turn?'turn':''} ${down&&!dying?'dead':''} ${dying?'dying':''} ${c.hidden?'ghosted':''}">
-      <div class="init" onclick="setInit(${i})" style="cursor:pointer" title="click to set initiative">${c.init}</div>
-      <div class="nm">${esc(c.name)}<span class="tbadge ${type}">${type==="pc"?"PC":type==="npc"?"NPC":"Foe"}</span>${c.conc?'<span class="hbmark" title="Concentrating"> ◈</span>':''}<small>AC ${c.ac??"—"}</small></div>
-      <div class="hpbar"><div class="lbl"><span>HP</span><span>${c.hp} / ${c.max}</span></div>
+      <input type="checkbox" class="selc" data-i="${i}" ${grpSel.has(i)?"checked":""} onchange="grpToggle(${i},this.checked)" title="select for group effect">
+      <input class="init initinp" type="number" value="${c.init}" onchange="setInitVal(${i},this.value)" title="initiative" aria-label="initiative">
+      <div class="nm">${esc(c.name)}<span class="tbadge ${type}">${type==="pc"?"PC":type==="npc"?"NPC":"Foe"}</span>${bloodied?'<span class="tbadge bloodied">BLOODIED</span>':''}${c.conc?'<span class="hbmark" title="Concentrating">  ◈</span>':''}<small>AC ${c.ac??"—"}</small></div>
+      <div class="hpbar"><div class="lbl"><span>HP</span><span>${c.hp} / ${c.max}${c.tmp>0?`<span class="thp" title="temporary HP">+${c.tmp}</span>`:""}</span></div>
         <div class="bar"><div class="fill ${cls}" style="width:${pct}%"></div></div></div>
       <div class="hpctl">
         <button class="btn red" onclick="hpDelta(${i},-1)">−</button>
         <input type="number" id="amt${i}" value="${c.amt||5}" min="1" aria-label="amount">
         <button class="btn" onclick="hpDelta(${i},1)">+</button>
+        <input type="number" class="tnum" value="${c.tmp||0}" min="0" onchange="setTmp(${i},this.value)" title="temporary HP" aria-label="temporary HP">
         <button class="btn ghost eye ${c.hidden?'off':''}" onclick="toggleHide(${i})" title="${c.hidden?'hidden from players':'visible to players'}">${c.hidden?'🚫':'👁'}</button>
         <button class="btn ghost" onclick="delC(${i})" title="remove">✕</button>
       </div>
@@ -712,33 +815,39 @@ function renderTrk(){
       ${down&&type!=="pc"?`<div class="dsrow"><span class="ded">DEFEATED</span></div>`:""}
       ${dying&&ds.s>=3?`<div class="dsrow"><span class="stab">STABLE</span></div>`:""}
       ${dying&&ds.f>=3?`<div class="dsrow"><span class="ded">DEAD</span></div>`:""}
+      ${a&&((a.tr&&a.tr.length)||(a.axn&&a.axn.length)||(a.lax&&a.lax.length))?`<details class="trkacts" ${openActs.has(i)?"open":""} ontoggle="trkActsToggle(${i},this.open)"><summary></summary><div class="trkacts-body">${(a.tr||[]).map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join("")}${a.axn&&a.axn.length?'<h5>Actions</h5>'+a.axn.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join(""):""}${a.lax&&a.lax.length?'<h5>Legendary Actions</h5>'+a.lax.map(t=>`<p><b><i>${esc(t[0])}.</i></b> ${t[1]}</p>`).join(""):""}</div></details>`:""}
       <div class="condrow">${(c.conds||[]).map((cd,j)=>`<button class="condtag" title="remove" onclick="rmCond(${i},${j})">${cd} ✕</button>`).join("")}
         <select class="condtag add" onchange="addCond(${i},this.value);this.value=''"><option value="">+ condition</option>${CONDS.map(x=>`<option>${x}</option>`).join("")}</select></div>
     </div>`}).join("");
+  linkifyDice($("#trkHost"));
 }
 window.toggleHide=i=>{TRK.list[i].hidden=!TRK.list[i].hidden;saveTrk()};
 window.deathSave=(i,kind,k)=>{const c=TRK.list[i];c.ds=c.ds||{s:0,f:0};
   // clicking a pip sets the count to that index+1, or clears back to it if already exactly that
   c.ds[kind]=(c.ds[kind]===k+1)?k:k+1;saveTrk()};
 window.reviveOne=i=>{const c=TRK.list[i];c.hp=Math.max(1,c.hp);c.ds={s:0,f:0};saveTrk()};
-window.hpDelta=(i,sign)=>{const a=+($("#amt"+i)?.value||1);const c=TRK.list[i];c.amt=a;
-  const wasUp=c.hp>0;
-  c.hp=Math.min(c.max,c.hp+sign*a);if(c.hp<0)c.hp=0;
-  if(sign<0){
-    // concentration check prompt
-    if(c.conc){const dc=Math.max(10,Math.floor(a/2));setTimeout(()=>{
-      if(!confirm(`${c.name} is concentrating. Con save DC ${dc} (½ of ${a}). Did the save SUCCEED?\n\nOK = kept concentration · Cancel = broken`)){c.conc=false;saveTrk();}
-    },30);}
-    // taking damage while already at 0 HP = a death save failure (PCs); ≥ max HP of damage = instant death
-    if(!wasUp&&(c.type==="pc")){c.ds=c.ds||{s:0,f:0};c.ds.f=Math.min(3,c.ds.f+(a>=c.max?3:1));}
+/* core HP change: negative delta = damage (temp HP absorbs the HP loss first, but the full hit still counts
+   for concentration and the death-save-at-0 rule); positive = healing (caps at max, wakes a downed PC) */
+function damageOne(c,delta){
+  if(delta<0){
+    const amt=-delta;const wasUp=c.hp>0;
+    let loss=amt;if(c.tmp>0){const ab=Math.min(c.tmp,loss);c.tmp-=ab;loss-=ab;}
+    c.hp=Math.max(0,c.hp-loss);
+    if(amt>0&&c.conc){concQueue.push({c,dc:Math.max(10,Math.floor(amt/2)),amt});}   // resolved by resolveConc() before the single saveTrk
+    if(amt>0&&!wasUp&&c.type==="pc"){c.ds=c.ds||{s:0,f:0};c.ds.s=0;c.ds.f=Math.min(3,c.ds.f+(amt>=c.max?3:1));}   // damage at 0 HP: no longer stable, add a failure
+  }else if(delta>0){
+    const wasDown=c.hp<=0;c.hp=Math.min(c.max,c.hp+delta);
+    if(wasDown&&c.hp>0&&c.ds){c.ds={s:0,f:0};}   // healing above 0 wakes a downed PC and clears death saves
   }
-  saveTrk()};
-window.delC=i=>{TRK.list.splice(i,1);if(TRK.turn>=TRK.list.length)TRK.turn=0;saveTrk()};
+}
+window.hpDelta=(i,sign)=>{const a=+($("#amt"+i)?.value||1);const c=TRK.list[i];c.amt=a;damageOne(c,sign*a);resolveConc();saveTrk()};
+window.setTmp=(i,v)=>{TRK.list[i].tmp=Math.max(0,+v||0);commitTrk()};
+window.delC=i=>{const c=TRK.list[i];if(!confirm("Remove "+(c?c.name:"this combatant")+" from the encounter?"))return;TRK.list.splice(i,1);if(TRK.turn>=TRK.list.length)TRK.turn=0;grpSel.clear();openActs.clear();saveTrk()};
 window.addCond=(i,v)=>{if(!v)return;const c=TRK.list[i];c.conds=c.conds||[];
   if(v==="Concentrating"){c.conc=true;saveTrk();return;}
   if(!c.conds.includes(v))c.conds.push(v);saveTrk()};
 window.rmCond=(i,j)=>{TRK.list[i].conds.splice(j,1);saveTrk()};
-window.setInit=i=>{const v=prompt("Initiative for "+TRK.list[i].name+":",TRK.list[i].init);if(v!==null){TRK.list[i].init=+v||0;saveTrk()}};
+window.setInitVal=(i,v)=>{TRK.list[i].init=+v||0;commitTrk()};
 $("#addC").addEventListener("click",()=>{
   const n=$("#cName").value.trim();if(!n)return $("#cName").focus();
   const hp=+($("#cHP").value)||10;
@@ -746,15 +855,49 @@ $("#addC").addEventListener("click",()=>{
   ["cName","cInit","cHP","cAC"].forEach(id=>$("#"+id).value="");
   saveTrk();
 });
-$("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;saveTrk()});
+$("#sortInit").addEventListener("click",()=>{TRK.list.sort((a,b)=>b.init-a.init);TRK.turn=0;grpSel.clear();openActs.clear();saveTrk()});
 $("#nextTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn++;if(TRK.turn>=TRK.list.length){TRK.turn=0;TRK.round++}saveTrk()});
-$("#clearTrk").addEventListener("click",()=>{if(!confirm("Clear the whole encounter? (Your saved party and custom creatures are kept.)"))return;TRK={round:1,turn:0,list:[]};saveTrk()});
-window.addMonToTracker=name=>{
-  const m=[...MONS,...HOMEBREW].find(x=>x.n===name);if(!m)return;
+$("#prevTurn").addEventListener("click",()=>{if(!TRK.list.length)return;TRK.turn--;if(TRK.turn<0){if(TRK.round>1){TRK.round--;TRK.turn=TRK.list.length-1}else{TRK.turn=0}}saveTrk()});
+$("#undoBtn").addEventListener("click",undoTrk);
+$("#groupBtn").addEventListener("click",()=>{$("#groupBar").classList.toggle("hidden");$("#tab-tracker").classList.toggle("grpmode")});
+function flashGrpHint(msg){const h=$("#grpHint");if(!h)return;h.textContent=msg;setTimeout(()=>{h.textContent="Tick the targets, then:"},1600);}
+function applyGroup(kind){
+  const amt=Math.max(0,+($("#grpAmt").value)||0);
+  const idxs=[...grpSel].filter(i=>TRK.list[i]);
+  if(!idxs.length){flashGrpHint("↑ tick some targets first");return}
+  if(!amt){$("#grpAmt").focus();return}
+  idxs.forEach(i=>{const c=TRK.list[i];if(!c)return;
+    if(kind==="full")damageOne(c,-amt);
+    else if(kind==="half")damageOne(c,-Math.floor(amt/2));
+    else if(kind==="heal")damageOne(c,amt);});
+  resolveConc();grpSel.clear();saveTrk();
+}
+$("#grpFull").addEventListener("click",()=>applyGroup("full"));
+$("#grpHalf").addEventListener("click",()=>applyGroup("half"));
+$("#grpHeal").addEventListener("click",()=>applyGroup("heal"));
+$("#grpFoes").addEventListener("click",()=>{grpSel.clear();TRK.list.forEach((c,i)=>{if((c.type||"monster")!=="pc")grpSel.add(i)});renderTrk()});
+$("#grpNone").addEventListener("click",()=>{grpSel.clear();renderTrk()});
+window.grpToggle=(i,on)=>{on?grpSel.add(i):grpSel.delete(i)};
+window.trkActsToggle=(i,open)=>{open?openActs.add(i):openActs.delete(i)};
+$("#clearTrk").addEventListener("click",()=>{if(!confirm("Clear the whole encounter? (Your saved party and custom creatures are kept.)"))return;TRK={round:1,turn:0,list:[]};grpSel.clear();openActs.clear();saveTrk()});
+function rollHD(hd,fallback){
+  if(!hd)return fallback;
+  const m=String(hd).replace(/\s/g,"").match(/^(\d+)d(\d+)([+-]\d+)?$/);
+  if(!m)return fallback;
+  const c=+m[1],d=+m[2],b=m[3]?+m[3]:0;let t=b;for(let k=0;k<c;k++)t+=ri(1,d);
+  return Math.max(1,t);
+}
+function addOneMon(m,rollHp){
   const count=TRK.list.filter(c=>c.name===m.n||c.name.startsWith(m.n+" ")).length;
   const init=ri(1,20)+Math.floor((m.ab[1]-10)/2);
-  TRK.list.push({name:count?`${m.n} ${count+1}`:m.n,init,hp:m.hp,max:m.hp,ac:parseInt(m.acx)||10,type:"monster",conds:[]});
-  saveTrk();
+  const hp=rollHp?rollHD(m.hd,m.hp):m.hp;
+  const hasActs=(m.tr&&m.tr.length)||(m.axn&&m.axn.length)||(m.lax&&m.lax.length);
+  TRK.list.push({name:count?`${m.n} ${count+1}`:m.n,init,hp,max:hp,ac:parseInt(m.acx)||10,type:"monster",conds:[],
+    acts:hasActs?{tr:m.tr||[],axn:m.axn||[],lax:m.lax||[]}:null});
+}
+window.addMonToTracker=(name,rollHp)=>{
+  const m=[...MONS,...HOMEBREW].find(x=>x.n===name);if(!m)return;
+  addOneMon(m,rollHp);saveTrk();
   $$("nav button").find(b=>b.dataset.tab==="tracker").click();
 };
 
@@ -774,15 +917,15 @@ $("#ptyToggle").addEventListener("click",()=>{$("#ptyEdit").classList.toggle("hi
 $("#ptyToCombat").addEventListener("click",()=>{
   PARTY.filter(p=>p.name.trim()).forEach(p=>{
     if(TRK.list.some(c=>c.name===p.name))return; // don't double-add
-    const init=prompt(`Initiative for ${p.name}:`,"");
-    TRK.list.push({name:p.name,init:init===null||init===""?ri(1,20):+init,hp:p.max||10,max:p.max||10,ac:p.ac||null,type:"pc",conds:[],ds:{s:0,f:0}});
+    TRK.list.push({name:p.name,init:ri(1,20),hp:p.max||10,max:p.max||10,ac:p.ac||null,type:"pc",conds:[],ds:{s:0,f:0}});
   });
-  saveTrk();
+  saveTrk();   // initiative is seeded with a d20 roll; tap any number to adjust
 });
 
 /* ============ EXPORT / IMPORT ============ */
 $("#exportBtn").addEventListener("click",()=>{
-  const data={v:1,exported:new Date().toISOString(),tracker:TRK,party:PARTY,homebrew:HOMEBREW};
+  const data={v:2,exported:new Date().toISOString(),tracker:TRK,party:PARTY,homebrew:HOMEBREW,
+    npcs:NPCS,campNotes:$("#campNotes")?.value||"",partyNotes:$("#partyNotes")?.value||""};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
   a.download="hidden-screen-"+new Date().toISOString().slice(0,10)+".json";a.click();
@@ -791,11 +934,14 @@ $("#exportBtn").addEventListener("click",()=>{
 $("#importBtn").addEventListener("click",()=>$("#importFile").click());
 $("#importFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;
   const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
-    if(d.tracker){TRK=d.tracker;storeSet("dmscreen:tracker",TRK)}
+    if(d.tracker){TRK=d.tracker;lastSnap=JSON.stringify(TRK);storeSet("dmscreen:tracker",TRK)}
     if(d.party){PARTY=d.party;storeSet("dmscreen:party",PARTY)}
     if(d.homebrew){HOMEBREW=d.homebrew;storeSet("dmscreen:homebrew",HOMEBREW)}
+    if(d.npcs){NPCS=d.npcs;storeSet("dmscreen:npcs",NPCS);renderNPCCards()}
+    if(typeof d.campNotes==="string"){storeSet("dmscreen:campNotes",d.campNotes);if($("#campNotes"))$("#campNotes").value=d.campNotes}
+    if(typeof d.partyNotes==="string"){storeSet("dmscreen:partyNotes",d.partyNotes);if($("#partyNotes"))$("#partyNotes").value=d.partyNotes}
     refreshCRFilter();renderMonList();renderParty();renderTrk();bcast();
-    alert("Encounter, party, and custom creatures loaded.");
+    alert("Loaded: encounter, party, custom creatures, NPC journal, and notes.");
   }catch(err){alert("That file couldn't be read.")}};r.readAsText(f);e.target.value="";});
 
 /* ============ PLAYER VIEW (pop-out window, live-synced) ============ */
@@ -1127,6 +1273,31 @@ function rollExpr(){
 $("#rollExpr").addEventListener("click",rollExpr);
 $("#diceExpr").addEventListener("keydown",e=>{if(e.key==="Enter")rollExpr()});
 
+/* ============ TAPPABLE DICE (rules text, stat blocks, tracker action drawers) ============ */
+function linkifyDice(root){
+  if(!root)return;
+  const rx=/\b\d{0,3}d\d{1,3}(?:\s*[+-]\s*\d{1,3})?\b/g;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);
+  const targets=[];let node;
+  while(node=walker.nextNode()){
+    const p=node.parentNode;if(p&&p.classList&&p.classList.contains("dlink"))continue;
+    rx.lastIndex=0;if(rx.test(node.nodeValue))targets.push(node);
+  }
+  targets.forEach(n=>{
+    const s=n.nodeValue,frag=document.createDocumentFragment();let last=0,m;rx.lastIndex=0;
+    while(m=rx.exec(s)){
+      if(m.index>last)frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+      const sp=document.createElement("span");sp.className="dlink";sp.textContent=m[0];sp.title="tap to roll";
+      frag.appendChild(sp);last=m.index+m[0].length;
+    }
+    if(last<s.length)frag.appendChild(document.createTextNode(s.slice(last)));
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+document.addEventListener("click",e=>{const d=e.target.closest&&e.target.closest(".dlink");if(!d)return;
+  $("#diceExpr").value=d.textContent.replace(/\s+/g,"");rollExpr();});
+linkifyDice($("#rulesHost"));   // rules are rendered above; make their printed dice tappable too
+
 /* ============ CAMPAIGN TAB (Blood in the Bayou — DM canon) ============ */
 $("#campaignHost").innerHTML=`
 <div class="camp">
@@ -1141,7 +1312,7 @@ $("#campaignHost").innerHTML=`
       ["The Harbormaster","Thieves Guild leader","Running a parallel investigation.","SECRET: several victims were Guild members."],
       ["Tim / Timothy","Head of the magic school","The party's current destination.","SECRET: descendant of 'the Mother'; his death breaks the Site 7 seal."]
     ].map(p=>`<div class="rule open"><button>${esc(p[0])}<span class="chev">▸</span></button>
-      <div class="body"><i>${esc(p[1])}</i><br>${esc(p[2])}<br><span class="secretline">${esc(p[3])}</span></div></div>`).join("")}
+      <div class="body"><i>${esc(p[1])}</i><br>${esc(p[2])}<br><span class="secretline" title="tap to reveal / hide">${esc(p[3])}</span></div></div>`).join("")}
   </div></div>
   <div class="cat"><h2>Factions</h2><div class="cards">
     ${[
@@ -1168,6 +1339,8 @@ $("#campaignHost").innerHTML=`
 </div>`;
 (async()=>{const cn=$("#campNotes");if(cn){cn.value=await storeGet("dmscreen:campNotes","");
   cn.addEventListener("input",()=>storeSet("dmscreen:campNotes",cn.value))}})();
+/* secrets render blurred; tap to reveal/hide so you can open this tab in front of players */
+$("#campaignHost").addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".secretline");if(s)s.classList.toggle("shown")});
 
 /* ============ NPC JOURNAL TAB (player-authored) ============ */
 let NPCS=[];
@@ -1232,6 +1405,29 @@ $("#np_name").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.
   const pn=$("#partyNotes");if(pn){pn.value=await storeGet("dmscreen:partyNotes","");
     pn.addEventListener("input",()=>storeSet("dmscreen:partyNotes",pn.value))}
 })();
+
+/* ============ STORAGE HEALTH PROBE — warn if the browser is blocking persistence ============ */
+(async()=>{
+  try{
+    await window.storage.set("dmscreen:_probe","1");
+    const r=await window.storage.get("dmscreen:_probe");
+    if(!r||r.value!=="1")throw 0;
+    try{if(window.storage.delete)await window.storage.delete("dmscreen:_probe")}catch(_){}
+  }catch(e){ storageOK=false; $("#storeWarn")?.classList.remove("hidden"); flashSaved(); }
+})();
+
+/* ============ KEYBOARD SHORTCUTS ============ */
+document.addEventListener("keydown",e=>{
+  const t=e.target;
+  if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable))return;   // don't hijack typing
+  if((e.key==="z"||e.key==="Z")&&(e.ctrlKey||e.metaKey)){e.preventDefault();undoTrk();return}
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key>="1"&&e.key<="9"){const b=$$("nav button")[+e.key-1];if(b){e.preventDefault();b.click()}return}
+  const onTracker=$("#tab-tracker").classList.contains("on");
+  if(onTracker&&(e.key==="n"||e.key==="N")){e.preventDefault();$("#nextTurn").click();return}
+  if(onTracker&&e.key===" "&&t.tagName!=="BUTTON"){e.preventDefault();$("#nextTurn").click();return}   // Space = next turn, but not while a button is focused (it would also re-fire that button)
+  if(onTracker&&(e.key==="p"||e.key==="P")){e.preventDefault();$("#prevTurn").click();return}
+});
 </script>
 </body>
 </html>
